@@ -1,0 +1,30 @@
+<!-- Google Analytics 4 -->
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "GA_MEASUREMENT_ID", {
+    custom_map: { dimension1: "page_location" },
+    send_page_view: true,
+    allow_google_signals: true,
+    allow_ad_personalization_signals: true,
+    anonymize_ip: true,
+  });
+
+  // Enhanced E-commerce tracking for perfume products
+  gtag("config", "GA_MEASUREMENT_ID", {
+    custom_map: {
+      dimension1: "product_category",
+      dimension2: "product_brand",
+      dimension3: "product_volume",
+      metric1: "product_views",
+      metric2: "add_to_cart_events",
+    },
+  });
+</script>

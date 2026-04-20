@@ -1,0 +1,30 @@
+/* humanstxt.org */
+/* The humans responsible & colophon */
+
+/* Team */
+Owner: BK Parfume
+Contact: info@bkparfume.pp.ua
+Website: https://bkparfume.pp.ua
+Location: Ukraine
+
+/* Site */
+Last update: 2026-04-18
+Standards: HTML5, CSS3, JavaScript ES6+
+Components: Responsive Design, SEO Optimized
+Language: Ukrainian
+
+/* Technologies */
+Frontend: HTML5, CSS3, JavaScript
+Data Format: JSON-LD (Schema.org)
+CMS: Static HTML
+Hosting: bkparfume.pp.ua
+
+/* Social */
+Twitter: @bkparfume
+Email: info@bkparfume.pp.ua
+
+/* About */
+Company: BK Parfume
+Description: Наливна парфумерія в Україні - понад 155 ароматів, вигідні ціни та доставка Новою поштою
+Business: E-commerce, Perfume Retail
+Founded: 2024

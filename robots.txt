@@ -1,0 +1,41 @@
+User-agent: *
+Allow: /
+Disallow: /js/
+Disallow: /css/
+Disallow: /images/
+Host: bkparfume.site
+Sitemap: https://bkparfume.site/sitemap.xml
+
+# AI/LLM Bot Rules
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: googlebot-image
+Allow: /images/
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
