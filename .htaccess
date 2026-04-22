@@ -97,9 +97,8 @@
 # 6. CANONICAL HOST + HTTPS REDIRECT
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} !^bkparfume\.site$ [NC]
-  RewriteRule ^(.*)$ https://bkparfume.site/$1 [L,R=301]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
 # 7. SECURITY HEADERS
@@ -109,21 +108,6 @@
   
   # Clickjacking protection
   Header set X-Frame-Options "SAMEORIGIN"
-  
-  # XSS protection
-  Header set X-XSS-Protection "1; mode=block"
-  
-  # Referrer policy
-  Header set Referrer-Policy "strict-origin-when-cross-origin"
-  
-  # Feature policy / Permissions policy
-  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-  
-  # Content Security Policy (CSP)
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://cloudflareinsights.com; frame-ancestors 'self'"
-  
-  # HTTP Strict Transport Security (HSTS)
-  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>
 
 # 8. DEFAULT CHARSET
