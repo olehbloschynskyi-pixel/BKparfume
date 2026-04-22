@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pesbipdg/public_html/
+    - /usr/bin/rsync -avz --exclude='.git' --exclude='.cpanel.yml' * $DEPLOYPATH
