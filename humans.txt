@@ -3,8 +3,8 @@
 
 /* Team */
 Owner: BK Parfume
-Contact: info@bkparfume.pp.ua
-Website: https://bkparfume.pp.ua
+Contact: info@bkparfume.site
+Website: https://bkparfume.site
 Location: Ukraine
 
 /* Site */
@@ -17,11 +17,11 @@ Language: Ukrainian
 Frontend: HTML5, CSS3, JavaScript
 Data Format: JSON-LD (Schema.org)
 CMS: Static HTML
-Hosting: bkparfume.pp.ua
+Hosting: bkparfume.site
 
 /* Social */
 Twitter: @bkparfume
-Email: info@bkparfume.pp.ua
+Email: info@bkparfume.site
 
 /* About */
 Company: BK Parfume

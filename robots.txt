@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /js/
-Disallow: /css/
-Disallow: /images/
 Host: bkparfume.site
 Sitemap: https://bkparfume.site/sitemap.xml
 

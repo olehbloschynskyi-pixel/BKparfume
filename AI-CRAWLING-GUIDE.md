@@ -19,14 +19,14 @@ BK Parfume website is fully optimized for AI crawling and indexing by Large Lang
 
 #### 1. **robots.txt**
 
-Located at: `https://bkparfume.pp.ua/robots.txt`
+Located at: `https://bkparfume.site/robots.txt`
 
 - Explicit permissions for GPTBot, Claude-Web, CCBot, and other AI agents
 - Full crawl access to all public pages
 
 #### 2. **humans.txt**
 
-Located at: `https://bkparfume.pp.ua/humans.txt`
+Located at: `https://bkparfume.site/humans.txt`
 
 - Team and organization information
 - Technology stack details
@@ -34,14 +34,14 @@ Located at: `https://bkparfume.pp.ua/humans.txt`
 
 #### 3. **openai-policy.txt**
 
-Located at: `https://bkparfume.pp.ua/openai-policy.txt`
+Located at: `https://bkparfume.site/openai-policy.txt`
 
 - Explicit policy for OpenAI crawling
 - Confirmation of AI training permissions
 
 #### 4. **ai-index.conf**
 
-Located at: `https://bkparfume.pp.ua/ai-index.conf`
+Located at: `https://bkparfume.site/ai-index.conf`
 
 - Comprehensive AI indexing configuration
 - Permissions for all major AI services
@@ -51,24 +51,24 @@ Located at: `https://bkparfume.pp.ua/ai-index.conf`
 
 ### Main Content
 
-1. **Product Catalog**: https://bkparfume.pp.ua/
+1. **Product Catalog**: https://bkparfume.site/
    - 155+ perfume products with detailed descriptions
    - Price information in UAH
    - Brand and category information
    - Fragrance notes
 
-2. **Blog/Articles**: https://bkparfume.pp.ua/articles.html
+2. **Blog/Articles**: https://bkparfume.site/articles.html
    - Detailed articles about perfumes
    - Selection guides
    - Industry trends
    - Usage tips
 
-3. **Company Information**: https://bkparfume.pp.ua/about.html
+3. **Company Information**: https://bkparfume.site/about.html
    - Company mission and values
    - Quality approach
    - Shipping information
 
-4. **Contact Information**: https://bkparfume.pp.ua/contacts.html
+4. **Contact Information**: https://bkparfume.site/contacts.html
    - Customer support details
    - Contact form
    - Social media links
@@ -86,7 +86,7 @@ The website implements comprehensive structured data:
 ## Sitemap
 
 The website sitemap is available at:
-`https://bkparfume.pp.ua/sitemap.xml`
+`https://bkparfume.site/sitemap.xml`
 
 All pages are included with lastmod and changefreq information.
 
@@ -130,9 +130,9 @@ Please crawl responsibly:
 
 For questions about AI crawling, indexing permissions, or bulk data access:
 
-- **Email**: info@bkparfume.pp.ua
-- **Website**: https://bkparfume.pp.ua/
-- **Contact Form**: https://bkparfume.pp.ua/contacts.html
+- **Email**: info@bkparfume.site
+- **Website**: https://bkparfume.site/
+- **Contact Form**: https://bkparfume.site/contacts.html
 
 ## Disclaimer
 

@@ -105,26 +105,6 @@
       }
     </script>
 
-    <!-- Google Analytics 4 -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "GA_MEASUREMENT_ID", {
-        custom_map: { dimension1: "page_location" },
-        send_page_view: true,
-        allow_google_signals: true,
-        allow_ad_personalization_signals: true,
-        anonymize_ip: true,
-      });
-    </script>
-
     <link
       rel="icon"
       href="images/products/favicon-32.png"
@@ -219,7 +199,20 @@
           </div>
         </div>
 
-        <form class="contact-form" id="contactPageForm" novalidate>
+        <form
+          class="contact-form"
+          id="contactPageForm"
+          action="https://formsubmit.co/bkparfume@ukr.net"
+          method="POST"
+          novalidate
+        >
+          <input
+            type="hidden"
+            name="_subject"
+            value="Нове повідомлення з contacts.html"
+          />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
           <div class="form-group">
             <input
               type="text"
@@ -259,8 +252,13 @@
             ></textarea>
             <label for="contactMessage">Повідомлення</label>
           </div>
-          <button type="submit" class="btn btn--primary form-submit">
+          <button
+            type="submit"
+            class="btn btn--primary form-submit"
+            id="contactPageSubmit"
+          >
             <span class="btn-text">Надіслати</span>
+            <span class="btn-loader"></span>
           </button>
           <p class="form-success" id="contactPageSuccess">
             ✓ Повідомлення надіслано! Ми зв'яжемось з вами найближчим часом.
@@ -295,11 +293,60 @@
 
       const contactPageForm = document.getElementById("contactPageForm");
       const contactPageSuccess = document.getElementById("contactPageSuccess");
+      const contactPageSubmit = document.getElementById("contactPageSubmit");
 
-      contactPageForm?.addEventListener("submit", (e) => {
+      contactPageForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        contactPageSuccess.style.display = "block";
-        contactPageForm.reset();
+
+        const btnText = contactPageSubmit?.querySelector(".btn-text");
+        const btnLoader = contactPageSubmit?.querySelector(".btn-loader");
+
+        if (contactPageSubmit) {
+          contactPageSubmit.disabled = true;
+        }
+
+        if (btnText) {
+          btnText.style.display = "none";
+        }
+
+        if (btnLoader) {
+          btnLoader.style.display = "inline-block";
+        }
+
+        try {
+          const response = await fetch(contactPageForm.action, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+            },
+            body: new FormData(contactPageForm),
+          });
+
+          if (!response.ok) {
+            throw new Error("Form submit failed");
+          }
+
+          contactPageSuccess.style.display = "block";
+          contactPageForm.reset();
+
+          setTimeout(() => {
+            contactPageSuccess.style.display = "none";
+          }, 6000);
+        } catch (error) {
+          contactPageForm.submit();
+        } finally {
+          if (contactPageSubmit) {
+            contactPageSubmit.disabled = false;
+          }
+
+          if (btnText) {
+            btnText.style.display = "inline";
+          }
+
+          if (btnLoader) {
+            btnLoader.style.display = "none";
+          }
+        }
       });
     </script>
   </body>

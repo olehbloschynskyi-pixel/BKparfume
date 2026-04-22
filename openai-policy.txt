@@ -5,19 +5,19 @@ Allow: /
 Disallow: 
 
 # Contact Information
-# For questions about our AI policy, please contact: info@bkparfume.pp.ua
+# For questions about our AI policy, please contact: info@bkparfume.site
 
 # Language: Ukrainian (uk)
-# Website: https://bkparfume.pp.ua
+# Website: https://bkparfume.site
 # E-commerce Site: Yes
-# Blog: Yes (https://bkparfume.pp.ua/articles.html)
+# Blog: Yes (https://bkparfume.site/articles.html)
 
 # AI Model Training
 # BK Parfume permits using site content for AI model training by OpenAI.
 # This includes product descriptions, blog articles, and public pages.
 
 # Important Content
-# Product Catalog: https://bkparfume.pp.ua/
-# Articles/Blog: https://bkparfume.pp.ua/articles.html
-# About: https://bkparfume.pp.ua/about.html
-# Contact: https://bkparfume.pp.ua/contacts.html
+# Product Catalog: https://bkparfume.site/
+# Articles/Blog: https://bkparfume.site/articles.html
+# About: https://bkparfume.site/about.html
+# Contact: https://bkparfume.site/contacts.html

@@ -21,6 +21,7 @@ const BASE_UNIT_PRICE = 160;
 const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
 const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
+const CONTACT_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 
 function getPriceByQty(qty) {
   return PRICING.find((t) => qty >= t.min && qty <= t.max)?.price ?? 160;
@@ -3153,9 +3154,6 @@ DOM.contactForm.addEventListener("submit", async (e) => {
   DOM.formSubmit.disabled = true;
 
   try {
-    // Simulate async submission (replace with real backend)
-    await new Promise((r) => setTimeout(r, 1500));
-
     // Include cart info in message (optional bonus)
     const totalQty = getTotalCartQty();
     const cartInfo =
@@ -3163,13 +3161,20 @@ DOM.contactForm.addEventListener("submit", async (e) => {
         ? `\n\nКошик: ${totalQty} шт × ${getPriceByQty(totalQty)} грн = ${totalQty * getPriceByQty(totalQty)} грн`
         : "";
 
-    console.log("Form submitted:", {
-      name: DOM.formName.value,
-      phone: DOM.formPhone.value,
-      email: DOM.formEmail.value,
-      message: DOM.formMessage.value + cartInfo,
-      cartItems: cart,
+    const formData = new FormData(DOM.contactForm);
+    formData.set("message", `${DOM.formMessage.value}${cartInfo}`);
+
+    const response = await fetch(CONTACT_EMAIL_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData,
     });
+
+    if (!response.ok) {
+      throw new Error("Contact form submit failed");
+    }
 
     // Reset & success
     DOM.contactForm.reset();
@@ -3178,6 +3183,8 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     setTimeout(() => {
       DOM.formSuccess.style.display = "none";
     }, 6000);
+  } catch (error) {
+    DOM.contactForm.submit();
   } finally {
     btnText.style.display = "inline";
     btnLoader.style.display = "none";
@@ -3284,7 +3291,7 @@ function generateProductSchema() {
         "@type": "Brand",
         name: p.brand,
       },
-      image: `https://bkparfume.pp.ua/${p.image}`,
+      image: `https://bkparfume.site/${p.image}`,
       description: p.description,
       category: p.category,
       offers: {
@@ -3292,7 +3299,7 @@ function generateProductSchema() {
         price: String(p.price),
         priceCurrency: "UAH",
         availability: "https://schema.org/InStock",
-        url: `https://bkparfume.pp.ua/#product-${p.id}`,
+        url: `https://bkparfume.site/#product-${p.id}`,
       },
     },
   }));
