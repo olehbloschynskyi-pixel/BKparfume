@@ -213,6 +213,19 @@
           />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_replyto" id="contactReplyTo" value="" />
+          <input
+            type="hidden"
+            name="customer_email"
+            id="contactCustomerEmail"
+            value=""
+          />
+          <input
+            type="hidden"
+            name="customer_page"
+            id="contactCustomerPage"
+            value=""
+          />
           <input
             type="hidden"
             name="customer_ip"
@@ -322,6 +335,36 @@
       const contactPageForm = document.getElementById("contactPageForm");
       const contactPageSuccess = document.getElementById("contactPageSuccess");
       const contactPageSubmit = document.getElementById("contactPageSubmit");
+      const contactEmailInput = document.getElementById("contactEmail");
+      const contactReplyTo = document.getElementById("contactReplyTo");
+      const contactCustomerEmail = document.getElementById(
+        "contactCustomerEmail",
+      );
+      const contactCustomerIp = document.getElementById("contactCustomerIp");
+      const contactCustomerPage = document.getElementById(
+        "contactCustomerPage",
+      );
+
+      function syncSenderFields() {
+        const emailValue = contactEmailInput?.value.trim() || "";
+
+        if (contactReplyTo) {
+          contactReplyTo.value = emailValue;
+        }
+
+        if (contactCustomerEmail) {
+          contactCustomerEmail.value = emailValue;
+        }
+
+        if (contactCustomerPage) {
+          contactCustomerPage.value = window.location.href;
+        }
+
+        return emailValue;
+      }
+
+      contactEmailInput?.addEventListener("input", syncSenderFields);
+      syncSenderFields();
 
       contactPageForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -346,14 +389,18 @@
         }
 
         try {
-          const emailInput = document.getElementById("contactEmail");
-          const emailValue = emailInput?.value.trim() || "";
+          const emailValue = syncSenderFields();
 
           const clientIp = await getClientIp();
+          if (contactCustomerIp) {
+            contactCustomerIp.value = clientIp;
+          }
+
           const formData = new FormData(contactPageForm);
           formData.set("_replyto", emailValue);
           formData.set("customer_email", emailValue);
           formData.set("customer_ip", clientIp);
+          formData.set("customer_page", window.location.href);
 
           const response = await fetch(contactPageForm.action, {
             method: "POST",
@@ -374,14 +421,11 @@
             contactPageSuccess.style.display = "none";
           }, 6000);
         } catch (error) {
-          getClientIp().then((clientIp) => {
-            const ipInput = contactPageForm.querySelector(
-              'input[name="customer_ip"]',
-            );
-            if (ipInput) {
-              ipInput.value = clientIp;
-            }
-          });
+          syncSenderFields();
+          const clientIp = await getClientIp();
+          if (contactCustomerIp) {
+            contactCustomerIp.value = clientIp;
+          }
           contactPageForm.submit();
         } finally {
           if (contactPageSubmit) {

@@ -3072,7 +3072,12 @@ DOM.checkoutPayBtn.addEventListener("click", (e) => {
   DOM.checkoutPayBtn.href = buildCheckoutPaymentUrl();
 });
 
-[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutEmail, DOM.checkoutNpBranch].forEach((input) => {
+[
+  DOM.checkoutName,
+  DOM.checkoutPhone,
+  DOM.checkoutEmail,
+  DOM.checkoutNpBranch,
+].forEach((input) => {
   input.addEventListener("blur", () => {
     validateCartCheckoutForm(true);
     updateCartCheckoutPaymentButton();
