@@ -136,11 +136,13 @@ const DOM = {
   cartCheckoutForm: $("cartCheckoutForm"),
   checkoutName: $("checkoutName"),
   checkoutPhone: $("checkoutPhone"),
+  checkoutEmail: $("checkoutEmail"),
   checkoutNpBranch: $("checkoutNpBranch"),
   checkoutAmount: $("checkoutAmount"),
   checkoutPayBtn: $("checkoutPayBtn"),
   checkoutNameError: $("checkoutNameError"),
   checkoutPhoneError: $("checkoutPhoneError"),
+  checkoutEmailError: $("checkoutEmailError"),
   checkoutNpError: $("checkoutNpError"),
 
   // Form
@@ -2695,6 +2697,7 @@ function resetCartCheckout() {
   [
     [DOM.checkoutName, DOM.checkoutNameError],
     [DOM.checkoutPhone, DOM.checkoutPhoneError],
+    [DOM.checkoutEmail, DOM.checkoutEmailError],
     [DOM.checkoutNpBranch, DOM.checkoutNpError],
   ].forEach(([input, errorEl]) => {
     clearError(input, errorEl);
@@ -2733,6 +2736,21 @@ function validateCartCheckoutForm(showErrors = true) {
     clearError(DOM.checkoutPhone, DOM.checkoutPhoneError);
   }
 
+  const checkoutEmail = DOM.checkoutEmail.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(checkoutEmail)) {
+    if (showErrors) {
+      setError(
+        DOM.checkoutEmail,
+        DOM.checkoutEmailError,
+        "Введіть коректний email",
+      );
+    }
+    isValid = false;
+  } else {
+    clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
+  }
+
   const npBranch = DOM.checkoutNpBranch.value.trim();
   if (npBranch.length < 2) {
     if (showErrors) {
@@ -2760,7 +2778,7 @@ function buildCheckoutPaymentUrl() {
   paymentUrl.searchParams.set("amount", String(total));
   paymentUrl.searchParams.set(
     "comment",
-    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
+    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, Email: ${DOM.checkoutEmail.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
   );
 
   return paymentUrl.toString();
@@ -2784,17 +2802,24 @@ async function notifyOrderByEmail() {
   const { totalQty, unitPrice, total } = getCartPricing();
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
+  const clientIp = await getClientIp();
+  const customerEmail = DOM.checkoutEmail.value.trim();
 
   const payload = {
     _subject: `Нове замовлення ${orderId}`,
+    _replyto: customerEmail,
     name: DOM.checkoutName.value.trim(),
-    email: STORE_EMAIL,
+    email: customerEmail,
+    customer_email: customerEmail,
+    customer_ip: clientIp,
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
     message:
       `Номер замовлення: ${orderId}\n` +
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
+      `Email: ${customerEmail}\n` +
+      `IP клієнта: ${clientIp}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n\n` +
       `Позиції:\n${getCartItemsSummary()}\n\n` +
       `Разом: ${totalQty} шт × ${unitPrice} грн = ${total} грн`,
@@ -3047,7 +3072,7 @@ DOM.checkoutPayBtn.addEventListener("click", (e) => {
   DOM.checkoutPayBtn.href = buildCheckoutPaymentUrl();
 });
 
-[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutNpBranch].forEach((input) => {
+[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutEmail, DOM.checkoutNpBranch].forEach((input) => {
   input.addEventListener("blur", () => {
     validateCartCheckoutForm(true);
     updateCartCheckoutPaymentButton();
@@ -3184,6 +3209,7 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     const clientIp = await getClientIp();
 
     const formData = new FormData(DOM.contactForm);
+    formData.set("_replyto", emailValue);
     formData.set("customer_email", emailValue);
     formData.set("customer_ip", clientIp);
     formData.set(
@@ -3212,7 +3238,9 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     }, 6000);
   } catch (error) {
     getClientIp().then((clientIp) => {
-      const ipInput = DOM.contactForm.querySelector('input[name="customer_ip"]');
+      const ipInput = DOM.contactForm.querySelector(
+        'input[name="customer_ip"]',
+      );
       if (ipInput) {
         ipInput.value = clientIp;
       }

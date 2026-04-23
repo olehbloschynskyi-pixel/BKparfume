@@ -711,7 +711,12 @@
           />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="customer_ip" id="formCustomerIp" value="невідомо" />
+          <input
+            type="hidden"
+            name="customer_ip"
+            id="formCustomerIp"
+            value="невідомо"
+          />
           <div class="form-group">
             <input
               type="text"
@@ -944,6 +949,17 @@
             />
             <label for="checkoutPhone">Телефон *</label>
             <span class="form-error" id="checkoutPhoneError"></span>
+          </div>
+          <div class="form-group cart-checkout__group">
+            <input
+              type="email"
+              id="checkoutEmail"
+              name="checkoutEmail"
+              placeholder=" "
+              autocomplete="email"
+            />
+            <label for="checkoutEmail">Email *</label>
+            <span class="form-error" id="checkoutEmailError"></span>
           </div>
           <div class="form-group cart-checkout__group">
             <input

@@ -213,7 +213,12 @@
           />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="customer_ip" id="contactCustomerIp" value="невідомо" />
+          <input
+            type="hidden"
+            name="customer_ip"
+            id="contactCustomerIp"
+            value="невідомо"
+          />
           <div class="form-group">
             <input
               type="text"
@@ -346,6 +351,7 @@
 
           const clientIp = await getClientIp();
           const formData = new FormData(contactPageForm);
+          formData.set("_replyto", emailValue);
           formData.set("customer_email", emailValue);
           formData.set("customer_ip", clientIp);
 
