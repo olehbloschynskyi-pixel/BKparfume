@@ -213,6 +213,7 @@
           />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="customer_ip" id="contactCustomerIp" value="невідомо" />
           <div class="form-group">
             <input
               type="text"
@@ -240,8 +241,9 @@
               name="email"
               placeholder=" "
               autocomplete="email"
+              required
             />
-            <label for="contactEmail">Email</label>
+            <label for="contactEmail">Email *</label>
           </div>
           <div class="form-group">
             <textarea
@@ -286,6 +288,27 @@
     <script>
       const burgerBtn = document.getElementById("burgerBtn");
       const nav = document.getElementById("nav");
+      const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
+
+      let clientIpPromise = null;
+
+      function getClientIp() {
+        if (!clientIpPromise) {
+          clientIpPromise = fetch(CLIENT_IP_ENDPOINT)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("IP lookup failed");
+              }
+
+              return response.json();
+            })
+            .then((payload) => payload?.ip || "невідомо")
+            .catch(() => "невідомо");
+        }
+
+        return clientIpPromise;
+      }
+
       burgerBtn?.addEventListener("click", () => {
         burgerBtn.classList.toggle("open");
         nav.classList.toggle("open");
@@ -297,6 +320,10 @@
 
       contactPageForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        if (!contactPageForm.reportValidity()) {
+          return;
+        }
 
         const btnText = contactPageSubmit?.querySelector(".btn-text");
         const btnLoader = contactPageSubmit?.querySelector(".btn-loader");
@@ -314,12 +341,20 @@
         }
 
         try {
+          const emailInput = document.getElementById("contactEmail");
+          const emailValue = emailInput?.value.trim() || "";
+
+          const clientIp = await getClientIp();
+          const formData = new FormData(contactPageForm);
+          formData.set("customer_email", emailValue);
+          formData.set("customer_ip", clientIp);
+
           const response = await fetch(contactPageForm.action, {
             method: "POST",
             headers: {
               Accept: "application/json",
             },
-            body: new FormData(contactPageForm),
+            body: formData,
           });
 
           if (!response.ok) {
@@ -333,6 +368,14 @@
             contactPageSuccess.style.display = "none";
           }, 6000);
         } catch (error) {
+          getClientIp().then((clientIp) => {
+            const ipInput = contactPageForm.querySelector(
+              'input[name="customer_ip"]',
+            );
+            if (ipInput) {
+              ipInput.value = clientIp;
+            }
+          });
           contactPageForm.submit();
         } finally {
           if (contactPageSubmit) {

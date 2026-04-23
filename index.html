@@ -711,6 +711,7 @@
           />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="customer_ip" id="formCustomerIp" value="невідомо" />
           <div class="form-group">
             <input
               type="text"
@@ -740,8 +741,9 @@
               name="email"
               placeholder=" "
               autocomplete="email"
+              required
             />
-            <label for="formEmail">Email</label>
+            <label for="formEmail">Email *</label>
             <span class="form-error" id="emailError"></span>
           </div>
           <div class="form-group">

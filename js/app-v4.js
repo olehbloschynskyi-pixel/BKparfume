@@ -22,6 +22,26 @@ const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
 const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const CONTACT_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
+const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
+
+let clientIpPromise = null;
+
+function getClientIp() {
+  if (!clientIpPromise) {
+    clientIpPromise = fetch(CLIENT_IP_ENDPOINT)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("IP lookup failed");
+        }
+
+        return response.json();
+      })
+      .then((payload) => payload?.ip || "невідомо")
+      .catch(() => "невідомо");
+  }
+
+  return clientIpPromise;
+}
 
 function getPriceByQty(qty) {
   return PRICING.find((t) => qty >= t.min && qty <= t.max)?.price ?? 160;
@@ -3098,16 +3118,16 @@ function validateForm() {
     clearError(DOM.formPhone, DOM.phoneError);
   }
 
-  // Email (optional but validate if filled)
+  // Email
   const emailVal = DOM.formEmail.value.trim();
-  if (emailVal) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailVal)) {
-      setError(DOM.formEmail, DOM.emailError, "Введіть коректну email-адресу");
-      valid = false;
-    } else {
-      clearError(DOM.formEmail, DOM.emailError);
-    }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailVal)) {
+    setError(
+      DOM.formEmail,
+      DOM.emailError,
+      "Введіть коректну email-адресу (обов'язково)",
+    );
+    valid = false;
   } else {
     clearError(DOM.formEmail, DOM.emailError);
   }
@@ -3160,9 +3180,16 @@ DOM.contactForm.addEventListener("submit", async (e) => {
       totalQty > 0
         ? `\n\nКошик: ${totalQty} шт × ${getPriceByQty(totalQty)} грн = ${totalQty * getPriceByQty(totalQty)} грн`
         : "";
+    const emailValue = DOM.formEmail.value.trim();
+    const clientIp = await getClientIp();
 
     const formData = new FormData(DOM.contactForm);
-    formData.set("message", `${DOM.formMessage.value}${cartInfo}`);
+    formData.set("customer_email", emailValue);
+    formData.set("customer_ip", clientIp);
+    formData.set(
+      "message",
+      `${DOM.formMessage.value}${cartInfo}\n\nEmail замовника: ${emailValue}\nIP клієнта: ${clientIp}`,
+    );
 
     const response = await fetch(CONTACT_EMAIL_ENDPOINT, {
       method: "POST",
@@ -3184,6 +3211,12 @@ DOM.contactForm.addEventListener("submit", async (e) => {
       DOM.formSuccess.style.display = "none";
     }, 6000);
   } catch (error) {
+    getClientIp().then((clientIp) => {
+      const ipInput = DOM.contactForm.querySelector('input[name="customer_ip"]');
+      if (ipInput) {
+        ipInput.value = clientIp;
+      }
+    });
     DOM.contactForm.submit();
   } finally {
     btnText.style.display = "inline";
