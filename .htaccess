@@ -28,7 +28,7 @@ AddCharset UTF-8 .html .css .js .json .xml
 # HTTPS REDIRECT
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTPS} !=on
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
