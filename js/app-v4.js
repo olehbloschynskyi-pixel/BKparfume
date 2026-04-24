@@ -21,36 +21,6 @@ const BASE_UNIT_PRICE = 160;
 const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
 const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
-const CONTACT_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
-const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
-
-let clientIpPromise = null;
-let resolvedClientIp = "невідомо";
-
-function convertHryvniasToKopiykas(amount) {
-  return Math.round(amount * 100);
-}
-
-function getClientIp() {
-  if (!clientIpPromise) {
-    clientIpPromise = fetch(CLIENT_IP_ENDPOINT)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("IP lookup failed");
-        }
-
-        return response.json();
-      })
-      .then((payload) => payload?.ip || "невідомо")
-      .catch(() => "невідомо")
-      .then((ip) => {
-        resolvedClientIp = ip;
-        return ip;
-      });
-  }
-
-  return clientIpPromise;
-}
 
 function getPriceByQty(qty) {
   return PRICING.find((t) => qty >= t.min && qty <= t.max)?.price ?? 160;
@@ -145,13 +115,11 @@ const DOM = {
   cartCheckoutForm: $("cartCheckoutForm"),
   checkoutName: $("checkoutName"),
   checkoutPhone: $("checkoutPhone"),
-  checkoutEmail: $("checkoutEmail"),
   checkoutNpBranch: $("checkoutNpBranch"),
   checkoutAmount: $("checkoutAmount"),
   checkoutPayBtn: $("checkoutPayBtn"),
   checkoutNameError: $("checkoutNameError"),
   checkoutPhoneError: $("checkoutPhoneError"),
-  checkoutEmailError: $("checkoutEmailError"),
   checkoutNpError: $("checkoutNpError"),
 
   // Form
@@ -2706,7 +2674,6 @@ function resetCartCheckout() {
   [
     [DOM.checkoutName, DOM.checkoutNameError],
     [DOM.checkoutPhone, DOM.checkoutPhoneError],
-    [DOM.checkoutEmail, DOM.checkoutEmailError],
     [DOM.checkoutNpBranch, DOM.checkoutNpError],
   ].forEach(([input, errorEl]) => {
     clearError(input, errorEl);
@@ -2745,21 +2712,6 @@ function validateCartCheckoutForm(showErrors = true) {
     clearError(DOM.checkoutPhone, DOM.checkoutPhoneError);
   }
 
-  const checkoutEmail = DOM.checkoutEmail.value.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(checkoutEmail)) {
-    if (showErrors) {
-      setError(
-        DOM.checkoutEmail,
-        DOM.checkoutEmailError,
-        "Введіть коректний email",
-      );
-    }
-    isValid = false;
-  } else {
-    clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
-  }
-
   const npBranch = DOM.checkoutNpBranch.value.trim();
   if (npBranch.length < 2) {
     if (showErrors) {
@@ -2781,14 +2733,13 @@ function buildCheckoutPaymentUrl() {
   const { total } = getCartPricing();
   const paymentUrl = new URL(PAYMENT_LINK_BASE);
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
-  const totalInKopiykas = convertHryvniasToKopiykas(total);
 
   currentCheckoutOrderId = orderId;
 
-  paymentUrl.searchParams.set("amount", String(totalInKopiykas));
+  paymentUrl.searchParams.set("amount", String(total));
   paymentUrl.searchParams.set(
     "comment",
-    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, Email: ${DOM.checkoutEmail.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
+    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
   );
 
   return paymentUrl.toString();
@@ -2812,25 +2763,17 @@ async function notifyOrderByEmail() {
   const { totalQty, unitPrice, total } = getCartPricing();
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
-  const clientIp =
-    resolvedClientIp !== "невідомо" ? resolvedClientIp : await getClientIp();
-  const customerEmail = DOM.checkoutEmail.value.trim();
 
   const payload = {
     _subject: `Нове замовлення ${orderId}`,
-    _replyto: customerEmail,
     name: DOM.checkoutName.value.trim(),
-    email: customerEmail,
-    customer_email: customerEmail,
-    customer_ip: clientIp,
+    email: STORE_EMAIL,
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
     message:
       `Номер замовлення: ${orderId}\n` +
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
-      `Email: ${customerEmail}\n` +
-      `IP клієнта: ${clientIp}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n\n` +
       `Позиції:\n${getCartItemsSummary()}\n\n` +
       `Разом: ${totalQty} шт × ${unitPrice} грн = ${total} грн`,
@@ -3069,8 +3012,6 @@ DOM.cartOrderBtn.addEventListener("click", (e) => {
 
   if (DOM.cartCheckoutForm.classList.contains("open")) {
     DOM.checkoutName.focus();
-    // Resolve IP early so checkout email has full customer data before redirect.
-    getClientIp();
   }
 });
 
@@ -3085,12 +3026,7 @@ DOM.checkoutPayBtn.addEventListener("click", (e) => {
   DOM.checkoutPayBtn.href = buildCheckoutPaymentUrl();
 });
 
-[
-  DOM.checkoutName,
-  DOM.checkoutPhone,
-  DOM.checkoutEmail,
-  DOM.checkoutNpBranch,
-].forEach((input) => {
+[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutNpBranch].forEach((input) => {
   input.addEventListener("blur", () => {
     validateCartCheckoutForm(true);
     updateCartCheckoutPaymentButton();
@@ -3161,16 +3097,16 @@ function validateForm() {
     clearError(DOM.formPhone, DOM.phoneError);
   }
 
-  // Email
+  // Email (optional but validate if filled)
   const emailVal = DOM.formEmail.value.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(emailVal)) {
-    setError(
-      DOM.formEmail,
-      DOM.emailError,
-      "Введіть коректну email-адресу (обов'язково)",
-    );
-    valid = false;
+  if (emailVal) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailVal)) {
+      setError(DOM.formEmail, DOM.emailError, "Введіть коректну email-адресу");
+      valid = false;
+    } else {
+      clearError(DOM.formEmail, DOM.emailError);
+    }
   } else {
     clearError(DOM.formEmail, DOM.emailError);
   }
@@ -3217,35 +3153,23 @@ DOM.contactForm.addEventListener("submit", async (e) => {
   DOM.formSubmit.disabled = true;
 
   try {
+    // Simulate async submission (replace with real backend)
+    await new Promise((r) => setTimeout(r, 1500));
+
     // Include cart info in message (optional bonus)
     const totalQty = getTotalCartQty();
     const cartInfo =
       totalQty > 0
         ? `\n\nКошик: ${totalQty} шт × ${getPriceByQty(totalQty)} грн = ${totalQty * getPriceByQty(totalQty)} грн`
         : "";
-    const emailValue = DOM.formEmail.value.trim();
-    const clientIp = await getClientIp();
 
-    const formData = new FormData(DOM.contactForm);
-    formData.set("_replyto", emailValue);
-    formData.set("customer_email", emailValue);
-    formData.set("customer_ip", clientIp);
-    formData.set(
-      "message",
-      `${DOM.formMessage.value}${cartInfo}\n\nEmail замовника: ${emailValue}\nIP клієнта: ${clientIp}`,
-    );
-
-    const response = await fetch(CONTACT_EMAIL_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-      body: formData,
+    console.log("Form submitted:", {
+      name: DOM.formName.value,
+      phone: DOM.formPhone.value,
+      email: DOM.formEmail.value,
+      message: DOM.formMessage.value + cartInfo,
+      cartItems: cart,
     });
-
-    if (!response.ok) {
-      throw new Error("Contact form submit failed");
-    }
 
     // Reset & success
     DOM.contactForm.reset();
@@ -3254,16 +3178,6 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     setTimeout(() => {
       DOM.formSuccess.style.display = "none";
     }, 6000);
-  } catch (error) {
-    getClientIp().then((clientIp) => {
-      const ipInput = DOM.contactForm.querySelector(
-        'input[name="customer_ip"]',
-      );
-      if (ipInput) {
-        ipInput.value = clientIp;
-      }
-    });
-    DOM.contactForm.submit();
   } finally {
     btnText.style.display = "inline";
     btnLoader.style.display = "none";

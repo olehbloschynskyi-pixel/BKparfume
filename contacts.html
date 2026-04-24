@@ -199,39 +199,7 @@
           </div>
         </div>
 
-        <form
-          class="contact-form"
-          id="contactPageForm"
-          action="https://formsubmit.co/bkparfume@ukr.net"
-          method="POST"
-          novalidate
-        >
-          <input
-            type="hidden"
-            name="_subject"
-            value="Нове повідомлення з contacts.html"
-          />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_replyto" id="contactReplyTo" value="" />
-          <input
-            type="hidden"
-            name="customer_email"
-            id="contactCustomerEmail"
-            value=""
-          />
-          <input
-            type="hidden"
-            name="customer_page"
-            id="contactCustomerPage"
-            value=""
-          />
-          <input
-            type="hidden"
-            name="customer_ip"
-            id="contactCustomerIp"
-            value="невідомо"
-          />
+        <form class="contact-form" id="contactPageForm" novalidate>
           <div class="form-group">
             <input
               type="text"
@@ -259,9 +227,8 @@
               name="email"
               placeholder=" "
               autocomplete="email"
-              required
             />
-            <label for="contactEmail">Email *</label>
+            <label for="contactEmail">Email</label>
           </div>
           <div class="form-group">
             <textarea
@@ -272,13 +239,8 @@
             ></textarea>
             <label for="contactMessage">Повідомлення</label>
           </div>
-          <button
-            type="submit"
-            class="btn btn--primary form-submit"
-            id="contactPageSubmit"
-          >
+          <button type="submit" class="btn btn--primary form-submit">
             <span class="btn-text">Надіслати</span>
-            <span class="btn-loader"></span>
           </button>
           <p class="form-success" id="contactPageSuccess">
             ✓ Повідомлення надіслано! Ми зв'яжемось з вами найближчим часом.
@@ -306,27 +268,6 @@
     <script>
       const burgerBtn = document.getElementById("burgerBtn");
       const nav = document.getElementById("nav");
-      const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
-
-      let clientIpPromise = null;
-
-      function getClientIp() {
-        if (!clientIpPromise) {
-          clientIpPromise = fetch(CLIENT_IP_ENDPOINT)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("IP lookup failed");
-              }
-
-              return response.json();
-            })
-            .then((payload) => payload?.ip || "невідомо")
-            .catch(() => "невідомо");
-        }
-
-        return clientIpPromise;
-      }
-
       burgerBtn?.addEventListener("click", () => {
         burgerBtn.classList.toggle("open");
         nav.classList.toggle("open");
@@ -334,112 +275,11 @@
 
       const contactPageForm = document.getElementById("contactPageForm");
       const contactPageSuccess = document.getElementById("contactPageSuccess");
-      const contactPageSubmit = document.getElementById("contactPageSubmit");
-      const contactEmailInput = document.getElementById("contactEmail");
-      const contactReplyTo = document.getElementById("contactReplyTo");
-      const contactCustomerEmail = document.getElementById(
-        "contactCustomerEmail",
-      );
-      const contactCustomerIp = document.getElementById("contactCustomerIp");
-      const contactCustomerPage = document.getElementById(
-        "contactCustomerPage",
-      );
 
-      function syncSenderFields() {
-        const emailValue = contactEmailInput?.value.trim() || "";
-
-        if (contactReplyTo) {
-          contactReplyTo.value = emailValue;
-        }
-
-        if (contactCustomerEmail) {
-          contactCustomerEmail.value = emailValue;
-        }
-
-        if (contactCustomerPage) {
-          contactCustomerPage.value = window.location.href;
-        }
-
-        return emailValue;
-      }
-
-      contactEmailInput?.addEventListener("input", syncSenderFields);
-      syncSenderFields();
-
-      contactPageForm?.addEventListener("submit", async (e) => {
+      contactPageForm?.addEventListener("submit", (e) => {
         e.preventDefault();
-
-        if (!contactPageForm.reportValidity()) {
-          return;
-        }
-
-        const btnText = contactPageSubmit?.querySelector(".btn-text");
-        const btnLoader = contactPageSubmit?.querySelector(".btn-loader");
-
-        if (contactPageSubmit) {
-          contactPageSubmit.disabled = true;
-        }
-
-        if (btnText) {
-          btnText.style.display = "none";
-        }
-
-        if (btnLoader) {
-          btnLoader.style.display = "inline-block";
-        }
-
-        try {
-          const emailValue = syncSenderFields();
-
-          const clientIp = await getClientIp();
-          if (contactCustomerIp) {
-            contactCustomerIp.value = clientIp;
-          }
-
-          const formData = new FormData(contactPageForm);
-          formData.set("_replyto", emailValue);
-          formData.set("customer_email", emailValue);
-          formData.set("customer_ip", clientIp);
-          formData.set("customer_page", window.location.href);
-
-          const response = await fetch(contactPageForm.action, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-            },
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error("Form submit failed");
-          }
-
-          contactPageSuccess.style.display = "block";
-          contactPageForm.reset();
-
-          setTimeout(() => {
-            contactPageSuccess.style.display = "none";
-          }, 6000);
-        } catch (error) {
-          syncSenderFields();
-          const clientIp = await getClientIp();
-          if (contactCustomerIp) {
-            contactCustomerIp.value = clientIp;
-          }
-          contactPageForm.submit();
-        } finally {
-          if (contactPageSubmit) {
-            contactPageSubmit.disabled = false;
-          }
-
-          if (btnText) {
-            btnText.style.display = "inline";
-          }
-
-          if (btnLoader) {
-            btnLoader.style.display = "none";
-          }
-        }
+        contactPageSuccess.style.display = "block";
+        contactPageForm.reset();
       });
     </script>
   </body>
