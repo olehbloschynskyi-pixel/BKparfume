@@ -16,6 +16,7 @@ on:
       - robots.txt
       - sitemap.xml
       - humans.txt
+      - .htaccess
       - openai-policy.txt
       - ai-index.conf
       - service-worker.js
