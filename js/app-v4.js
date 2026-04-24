@@ -27,6 +27,10 @@ const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
 let clientIpPromise = null;
 let resolvedClientIp = "невідомо";
 
+function convertHryvniasToKopiykas(amount) {
+  return Math.round(amount * 100);
+}
+
 function getClientIp() {
   if (!clientIpPromise) {
     clientIpPromise = fetch(CLIENT_IP_ENDPOINT)
@@ -2777,10 +2781,11 @@ function buildCheckoutPaymentUrl() {
   const { total } = getCartPricing();
   const paymentUrl = new URL(PAYMENT_LINK_BASE);
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
+  const totalInKopiykas = convertHryvniasToKopiykas(total);
 
   currentCheckoutOrderId = orderId;
 
-  paymentUrl.searchParams.set("amount", String(total));
+  paymentUrl.searchParams.set("amount", String(totalInKopiykas));
   paymentUrl.searchParams.set(
     "comment",
     `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, Email: ${DOM.checkoutEmail.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
