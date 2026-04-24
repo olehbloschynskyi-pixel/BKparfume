@@ -51,6 +51,7 @@ export default {
     const browserClientIp = String(
       input.browser_client_ip || input.client_ip || "",
     ).trim();
+    const customerEmail = normalizeEmail(input.customer_email || input.email);
     const message = appendIpInfo(
       input.message,
       serverClientIp,
@@ -60,7 +61,13 @@ export default {
     const payload = {
       _subject: String(input._subject || "Нове замовлення").trim(),
       name: String(input.name || "").trim(),
-      email: storeEmail,
+      ...(customerEmail
+        ? {
+            email: customerEmail,
+            _replyto: customerEmail,
+            customer_email: customerEmail,
+          }
+        : {}),
       phone: String(input.phone || "").trim(),
       np_branch: String(input.np_branch || "").trim(),
       client_ip: serverClientIp,
@@ -202,4 +209,11 @@ function normalizeUrl(value, fallback = "") {
   }
 
   return String(fallback || "").trim();
+}
+
+function normalizeEmail(value) {
+  const candidate = String(value || "").trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  return emailPattern.test(candidate) ? candidate : "";
 }

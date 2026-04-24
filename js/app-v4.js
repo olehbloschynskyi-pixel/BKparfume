@@ -2800,6 +2800,7 @@ async function notifyOrderByEmail() {
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
   const browserClientIp = await getClientIpAddress();
+  const customerEmail = DOM.checkoutEmail.value.trim();
 
   const pageUrl = window.location.href;
   const referrer = document.referrer || "Прямий вхід";
@@ -2812,8 +2813,13 @@ async function notifyOrderByEmail() {
   const payload = {
     _subject: `Нове замовлення ${orderId}`,
     name: DOM.checkoutName.value.trim(),
-    email: STORE_EMAIL,
-    customer_email: DOM.checkoutEmail.value.trim(),
+    ...(customerEmail
+      ? {
+          email: customerEmail,
+          _replyto: customerEmail,
+          customer_email: customerEmail,
+        }
+      : {}),
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
     client_ip: browserClientIp,
