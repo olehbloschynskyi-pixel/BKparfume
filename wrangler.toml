@@ -1,0 +1,8 @@
+name = "bkparfume-order"
+main = "cloudflare/order-worker.js"
+compatibility_date = "2026-04-24"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://bkparfume.site"
+STORE_EMAIL = "bkparfume@ukr.net"

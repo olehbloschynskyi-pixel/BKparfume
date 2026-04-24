@@ -20,7 +20,9 @@ const PRICING = [
 const BASE_UNIT_PRICE = 160;
 const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
-const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
+const ORDER_EMAIL_PROXY_ENDPOINT =
+  window.BK_CONFIG?.orderWorkerEndpoint?.trim() || "";
+const ORDER_EMAIL_FALLBACK_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const IP_LOOKUP_TIMEOUT_MS = 2000;
 const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
 const IP_LOOKUP_SOURCES = [
@@ -30,6 +32,7 @@ const IP_LOOKUP_SOURCES = [
 ];
 
 let cachedClientIp = null;
+let clientIpPromise = null;
 
 function getPriceByQty(qty) {
   return PRICING.find((t) => qty >= t.min && qty <= t.max)?.price ?? 160;
@@ -2772,7 +2775,7 @@ async function notifyOrderByEmail() {
   const { totalQty, unitPrice, total } = getCartPricing();
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
-  const clientIp = await getClientIpAddress();
+  const browserClientIp = await getClientIpAddress();
 
   const pageUrl = window.location.href;
   const referrer = document.referrer || "Прямий вхід";
@@ -2788,7 +2791,8 @@ async function notifyOrderByEmail() {
     email: STORE_EMAIL,
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
-    client_ip: clientIp,
+    client_ip: browserClientIp,
+    browser_client_ip: browserClientIp,
     user_agent: userAgent,
     device_language: language,
     device_platform: platform,
@@ -2800,7 +2804,7 @@ async function notifyOrderByEmail() {
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n` +
-      `IP клієнта: ${clientIp}\n` +
+      `IP клієнта (browser): ${browserClientIp}\n` +
       `Мова: ${language}\n` +
       `Платформа: ${platform}\n` +
       `Часовий пояс: ${timezone}\n` +
@@ -2810,19 +2814,38 @@ async function notifyOrderByEmail() {
       `Разом: ${totalQty} шт × ${unitPrice} грн = ${total} грн`,
   };
 
-  try {
-    await fetch(ORDER_EMAIL_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-      keepalive: true,
-    });
-  } catch (error) {
-    console.error("Не вдалося надіслати замовлення на пошту:", error);
+  if (ORDER_EMAIL_PROXY_ENDPOINT) {
+    try {
+      await postOrderEmail(ORDER_EMAIL_PROXY_ENDPOINT, payload);
+      return;
+    } catch (error) {
+      console.error("Не вдалося надіслати замовлення через Worker:", error);
+    }
   }
+
+  try {
+    await postOrderEmail(ORDER_EMAIL_FALLBACK_ENDPOINT, payload);
+  } catch (fallbackError) {
+    console.error("Не вдалося надіслати замовлення на пошту:", fallbackError);
+  }
+}
+
+async function postOrderEmail(endpoint, payload) {
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+    keepalive: true,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return response;
 }
 
 async function getClientIpAddress() {
@@ -2830,41 +2853,61 @@ async function getClientIpAddress() {
     return cachedClientIp;
   }
 
-  for (const endpoint of IP_LOOKUP_SOURCES) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        IP_LOOKUP_TIMEOUT_MS,
-      );
-
-      const response = await fetch(endpoint, {
-        method: "GET",
-        signal: controller.signal,
-        cache: "no-store",
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        continue;
-      }
-
-      const data = await response.json();
-      const ip =
-        data?.ip || data?.ipAddress || data?.query || data?.address || null;
-
-      if (ip) {
-        cachedClientIp = ip;
-        return cachedClientIp;
-      }
-    } catch (error) {
-      // Try next provider.
-    }
+  if (clientIpPromise) {
+    return clientIpPromise;
   }
 
-  cachedClientIp = "Не вдалося визначити";
-  return cachedClientIp;
+  clientIpPromise = (async () => {
+    for (const endpoint of IP_LOOKUP_SOURCES) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(
+          () => controller.abort(),
+          IP_LOOKUP_TIMEOUT_MS,
+        );
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          signal: controller.signal,
+          cache: "no-store",
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          continue;
+        }
+
+        const data = await response.json();
+        const ip =
+          data?.ip || data?.ipAddress || data?.query || data?.address || null;
+
+        if (ip) {
+          cachedClientIp = ip;
+          return cachedClientIp;
+        }
+      } catch (error) {
+        // Try next provider.
+      }
+    }
+
+    cachedClientIp = "Не вдалося визначити";
+    return cachedClientIp;
+  })();
+
+  try {
+    return await clientIpPromise;
+  } finally {
+    clientIpPromise = null;
+  }
+}
+
+function warmupClientIpAddress() {
+  if (cachedClientIp || clientIpPromise) {
+    return;
+  }
+
+  void getClientIpAddress();
 }
 
 function updateCartCheckoutPaymentButton(showErrors = false) {
@@ -3424,4 +3467,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initPricingCards();
   animateCounters();
   initSectionReveal();
+
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(() => warmupClientIpAddress());
+  } else {
+    setTimeout(() => warmupClientIpAddress(), 0);
+  }
 });
