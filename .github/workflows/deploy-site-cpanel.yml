@@ -1,0 +1,95 @@
+name: Deploy Site To cPanel
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - index.html
+      - about.html
+      - articles.html
+      - article-*.html
+      - contacts.html
+      - ga4-analytics.html
+      - manifest.json
+      - robots.txt
+      - sitemap.xml
+      - humans.txt
+      - openai-policy.txt
+      - ai-index.conf
+      - service-worker.js
+      - css/**
+      - images/**
+      - js/**
+      - .github/workflows/deploy-site-cpanel.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST || secrets.FTP_HOST || secrets.CPANEL_HOST }}
+      DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME || secrets.FTP_USERNAME || secrets.CPANEL_USERNAME || secrets.CPANEL_USER }}
+      DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD || secrets.FTP_PASSWORD || secrets.CPANEL_PASSWORD }}
+      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || secrets.FTP_PORT || secrets.CPANEL_PORT || '21' }}
+      DEPLOY_PROTOCOL: ${{ secrets.DEPLOY_PROTOCOL || secrets.FTP_PROTOCOL || 'ftps' }}
+      DEPLOY_SERVER_DIR: ${{ secrets.DEPLOY_SERVER_DIR || secrets.FTP_SERVER_DIR || secrets.CPANEL_SERVER_DIR || '/public_html/' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate deploy secrets
+        run: |
+          missing=0
+
+          if [ -z "$DEPLOY_HOST" ]; then
+            echo "Missing deploy host secret. Expected one of: DEPLOY_HOST, FTP_HOST, CPANEL_HOST"
+            missing=1
+          fi
+
+          if [ -z "$DEPLOY_USERNAME" ]; then
+            echo "Missing deploy username secret. Expected one of: DEPLOY_USERNAME, FTP_USERNAME, CPANEL_USERNAME, CPANEL_USER"
+            missing=1
+          fi
+
+          if [ -z "$DEPLOY_PASSWORD" ]; then
+            echo "Missing deploy password secret. Expected one of: DEPLOY_PASSWORD, FTP_PASSWORD, CPANEL_PASSWORD"
+            missing=1
+          fi
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Deploy website files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USERNAME }}
+          password: ${{ env.DEPLOY_PASSWORD }}
+          protocol: ${{ env.DEPLOY_PROTOCOL }}
+          port: ${{ env.DEPLOY_PORT }}
+          local-dir: ./
+          server-dir: ${{ env.DEPLOY_SERVER_DIR }}
+          exclude: |
+            **/.git*/**
+            **/.git*
+            **/.github/**
+            **/node_modules/**
+            **/.DS_Store
+            **/*.zip
+            **/add_pwa_ga4.py
+            **/add_pwa_ga4.sh
+            **/minify-css.js
+            **/package.json
+            **/postcss.config.js
+
+      - name: Publish deploy summary
+        if: success()
+        run: |
+          echo "## cPanel site deploy" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Host: $DEPLOY_HOST" >> "$GITHUB_STEP_SUMMARY"
+          echo "Protocol: $DEPLOY_PROTOCOL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Remote directory: $DEPLOY_SERVER_DIR" >> "$GITHUB_STEP_SUMMARY"
