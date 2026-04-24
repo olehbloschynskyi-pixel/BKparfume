@@ -21,6 +21,15 @@ const BASE_UNIT_PRICE = 160;
 const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
 const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
+const IP_LOOKUP_TIMEOUT_MS = 2000;
+const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
+const IP_LOOKUP_SOURCES = [
+  "https://api.ipify.org?format=json",
+  "https://ipapi.co/json/",
+  "https://ifconfig.co/json",
+];
+
+let cachedClientIp = null;
 
 function getPriceByQty(qty) {
   return PRICING.find((t) => qty >= t.min && qty <= t.max)?.price ?? 160;
@@ -2763,6 +2772,15 @@ async function notifyOrderByEmail() {
   const { totalQty, unitPrice, total } = getCartPricing();
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
+  const clientIp = await getClientIpAddress();
+
+  const pageUrl = window.location.href;
+  const referrer = document.referrer || "Прямий вхід";
+  const userAgent = navigator.userAgent || "Невідомо";
+  const language = navigator.language || "Невідомо";
+  const platform = navigator.platform || "Невідомо";
+  const timezone =
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "Невідомо";
 
   const payload = {
     _subject: `Нове замовлення ${orderId}`,
@@ -2770,11 +2788,24 @@ async function notifyOrderByEmail() {
     email: STORE_EMAIL,
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
+    client_ip: clientIp,
+    user_agent: userAgent,
+    device_language: language,
+    device_platform: platform,
+    page_url: pageUrl,
+    referrer,
+    timezone,
     message:
       `Номер замовлення: ${orderId}\n` +
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
-      `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n\n` +
+      `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n` +
+      `IP клієнта: ${clientIp}\n` +
+      `Мова: ${language}\n` +
+      `Платформа: ${platform}\n` +
+      `Часовий пояс: ${timezone}\n` +
+      `Referrer: ${referrer}\n` +
+      `Сторінка: ${pageUrl}\n\n` +
       `Позиції:\n${getCartItemsSummary()}\n\n` +
       `Разом: ${totalQty} шт × ${unitPrice} грн = ${total} грн`,
   };
@@ -2792,6 +2823,48 @@ async function notifyOrderByEmail() {
   } catch (error) {
     console.error("Не вдалося надіслати замовлення на пошту:", error);
   }
+}
+
+async function getClientIpAddress() {
+  if (cachedClientIp) {
+    return cachedClientIp;
+  }
+
+  for (const endpoint of IP_LOOKUP_SOURCES) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        IP_LOOKUP_TIMEOUT_MS,
+      );
+
+      const response = await fetch(endpoint, {
+        method: "GET",
+        signal: controller.signal,
+        cache: "no-store",
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const data = await response.json();
+      const ip =
+        data?.ip || data?.ipAddress || data?.query || data?.address || null;
+
+      if (ip) {
+        cachedClientIp = ip;
+        return cachedClientIp;
+      }
+    } catch (error) {
+      // Try next provider.
+    }
+  }
+
+  cachedClientIp = "Не вдалося визначити";
+  return cachedClientIp;
 }
 
 function updateCartCheckoutPaymentButton(showErrors = false) {
@@ -3015,15 +3088,30 @@ DOM.cartOrderBtn.addEventListener("click", (e) => {
   }
 });
 
-DOM.checkoutPayBtn.addEventListener("click", (e) => {
+DOM.checkoutPayBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+
   if (!validateCartCheckoutForm(true) || !cart.length) {
-    e.preventDefault();
     updateCartCheckoutPaymentButton(true);
     return;
   }
 
-  notifyOrderByEmail();
-  DOM.checkoutPayBtn.href = buildCheckoutPaymentUrl();
+  const paymentUrl = buildCheckoutPaymentUrl();
+  DOM.checkoutPayBtn.href = paymentUrl;
+
+  DOM.checkoutPayBtn.classList.add("disabled");
+  DOM.checkoutPayBtn.setAttribute("aria-disabled", "true");
+
+  try {
+    await Promise.race([
+      notifyOrderByEmail(),
+      new Promise((resolve) =>
+        setTimeout(resolve, EMAIL_BEFORE_REDIRECT_TIMEOUT_MS),
+      ),
+    ]);
+  } finally {
+    window.location.assign(paymentUrl);
+  }
 });
 
 [DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutNpBranch].forEach((input) => {
