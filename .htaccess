@@ -130,6 +130,3 @@
 AddDefaultCharset UTF-8
 AddCharset UTF-8 .html .css .js .json .xml
 
-# 9. REMOVE SERVER SIGNATURE (Security)
-ServerTokens Prod
-ServerSignature Off
