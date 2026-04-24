@@ -78,8 +78,11 @@ export default {
       message,
     };
 
-    const pageUrl = payload.page_url || String(env.ALLOWED_ORIGIN || "").trim();
-    const referer = payload.referrer || pageUrl;
+    const pageUrl = normalizeUrl(
+      payload.page_url,
+      String(env.ALLOWED_ORIGIN || "").trim(),
+    );
+    const referer = normalizeUrl(payload.referrer, pageUrl);
     const origin = String(env.ALLOWED_ORIGIN || "").trim() || extractOrigin(pageUrl);
 
     const upstream = await fetch(`https://formsubmit.co/ajax/${storeEmail}`, {
@@ -189,4 +192,14 @@ function extractOrigin(url) {
   } catch {
     return "";
   }
+}
+
+function normalizeUrl(value, fallback = "") {
+  const candidate = String(value || "").trim();
+
+  if (extractOrigin(candidate)) {
+    return candidate;
+  }
+
+  return String(fallback || "").trim();
 }
