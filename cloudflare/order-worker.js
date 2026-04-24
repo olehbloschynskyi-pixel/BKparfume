@@ -78,11 +78,17 @@ export default {
       message,
     };
 
+    const pageUrl = payload.page_url || String(env.ALLOWED_ORIGIN || "").trim();
+    const referer = payload.referrer || pageUrl;
+    const origin = String(env.ALLOWED_ORIGIN || "").trim() || extractOrigin(pageUrl);
+
     const upstream = await fetch(`https://formsubmit.co/ajax/${storeEmail}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(origin ? { Origin: origin } : {}),
+        ...(referer ? { Referer: referer } : {}),
       },
       body: JSON.stringify(payload),
     });
@@ -175,4 +181,12 @@ function appendIpInfo(message, serverClientIp, browserClientIp) {
   }
 
   return lines.join("\n");
+}
+
+function extractOrigin(url) {
+  try {
+    return new URL(url).origin;
+  } catch {
+    return "";
+  }
 }
