@@ -25,6 +25,7 @@ const ORDER_EMAIL_PROXY_ENDPOINT =
 const ORDER_EMAIL_FALLBACK_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const IP_LOOKUP_TIMEOUT_MS = 2000;
 const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
+const CUSTOMER_EMAIL_STORAGE_KEY = "bk_customer_email";
 const IP_LOOKUP_SOURCES = [
   "https://api.ipify.org?format=json",
   "https://ipapi.co/json/",
@@ -127,11 +128,13 @@ const DOM = {
   cartCheckoutForm: $("cartCheckoutForm"),
   checkoutName: $("checkoutName"),
   checkoutPhone: $("checkoutPhone"),
+  checkoutEmail: $("checkoutEmail"),
   checkoutNpBranch: $("checkoutNpBranch"),
   checkoutAmount: $("checkoutAmount"),
   checkoutPayBtn: $("checkoutPayBtn"),
   checkoutNameError: $("checkoutNameError"),
   checkoutPhoneError: $("checkoutPhoneError"),
+  checkoutEmailError: $("checkoutEmailError"),
   checkoutNpError: $("checkoutNpError"),
 
   // Form
@@ -2678,6 +2681,7 @@ function resetCartCheckout() {
 
   DOM.cartCheckoutForm.classList.remove("open");
   DOM.cartCheckoutForm.reset();
+  applyRememberedEmail();
   DOM.checkoutPayBtn.href = "#";
   DOM.checkoutPayBtn.classList.add("disabled");
   DOM.checkoutPayBtn.setAttribute("aria-disabled", "true");
@@ -2686,6 +2690,7 @@ function resetCartCheckout() {
   [
     [DOM.checkoutName, DOM.checkoutNameError],
     [DOM.checkoutPhone, DOM.checkoutPhoneError],
+    [DOM.checkoutEmail, DOM.checkoutEmailError],
     [DOM.checkoutNpBranch, DOM.checkoutNpError],
   ].forEach(([input, errorEl]) => {
     clearError(input, errorEl);
@@ -2724,6 +2729,25 @@ function validateCartCheckoutForm(showErrors = true) {
     clearError(DOM.checkoutPhone, DOM.checkoutPhoneError);
   }
 
+  const checkoutEmail = DOM.checkoutEmail.value.trim();
+  if (checkoutEmail) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(checkoutEmail)) {
+      if (showErrors) {
+        setError(
+          DOM.checkoutEmail,
+          DOM.checkoutEmailError,
+          "Введіть коректну email-адресу",
+        );
+      }
+      isValid = false;
+    } else {
+      clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
+    }
+  } else {
+    clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
+  }
+
   const npBranch = DOM.checkoutNpBranch.value.trim();
   if (npBranch.length < 2) {
     if (showErrors) {
@@ -2751,7 +2775,7 @@ function buildCheckoutPaymentUrl() {
   paymentUrl.searchParams.set("amount", String(total));
   paymentUrl.searchParams.set(
     "comment",
-    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
+    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, email клієнта: ${DOM.checkoutEmail.value.trim() || "не вказано"}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
   );
 
   return paymentUrl.toString();
@@ -2789,6 +2813,7 @@ async function notifyOrderByEmail() {
     _subject: `Нове замовлення ${orderId}`,
     name: DOM.checkoutName.value.trim(),
     email: STORE_EMAIL,
+    customer_email: DOM.checkoutEmail.value.trim(),
     phone: DOM.checkoutPhone.value.trim(),
     np_branch: DOM.checkoutNpBranch.value.trim(),
     client_ip: browserClientIp,
@@ -2803,6 +2828,7 @@ async function notifyOrderByEmail() {
       `Номер замовлення: ${orderId}\n` +
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
+      `Email: ${DOM.checkoutEmail.value.trim() || "Не вказано"}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n` +
       `IP клієнта (browser): ${browserClientIp}\n` +
       `Мова: ${language}\n` +
@@ -3123,6 +3149,7 @@ DOM.cartOrderBtn.addEventListener("click", (e) => {
   if (!currentCheckoutOrderId) {
     currentCheckoutOrderId = generateCheckoutOrderId();
   }
+  syncCheckoutEmail();
   DOM.cartCheckoutForm.classList.toggle("open");
   updateCartCheckoutPaymentButton();
 
@@ -3157,12 +3184,14 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
   }
 });
 
-[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutNpBranch].forEach((input) => {
+[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutEmail, DOM.checkoutNpBranch].forEach((input) => {
   input.addEventListener("blur", () => {
+    rememberCustomerEmail();
     validateCartCheckoutForm(true);
     updateCartCheckoutPaymentButton();
   });
   input.addEventListener("input", () => {
+    rememberCustomerEmail();
     if (input.closest(".form-group")?.classList.contains("error")) {
       validateCartCheckoutForm(true);
     }
@@ -3259,6 +3288,9 @@ function clearError(input, errorEl) {
 [DOM.formName, DOM.formPhone, DOM.formEmail].forEach((input) => {
   input.addEventListener("blur", validateForm);
   input.addEventListener("input", () => {
+    if (input === DOM.formEmail) {
+      rememberCustomerEmail();
+    }
     if (input.closest(".form-group").classList.contains("error")) {
       validateForm();
     }
@@ -3275,6 +3307,8 @@ DOM.formPhone.addEventListener("input", (e) => {
 DOM.contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!validateForm()) return;
+
+  rememberCustomerEmail();
 
   // Show loading state
   const btnText = DOM.formSubmit.querySelector(".btn-text");
@@ -3304,6 +3338,7 @@ DOM.contactForm.addEventListener("submit", async (e) => {
 
     // Reset & success
     DOM.contactForm.reset();
+    applyRememberedEmail();
     DOM.formSuccess.style.display = "block";
 
     setTimeout(() => {
@@ -3315,6 +3350,63 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     DOM.formSubmit.disabled = false;
   }
 });
+
+function getRememberedEmail() {
+  return localStorage.getItem(CUSTOMER_EMAIL_STORAGE_KEY)?.trim() || "";
+}
+
+function setRememberedEmail(email) {
+  const normalizedEmail = String(email || "").trim();
+
+  if (!normalizedEmail) {
+    localStorage.removeItem(CUSTOMER_EMAIL_STORAGE_KEY);
+    return;
+  }
+
+  localStorage.setItem(CUSTOMER_EMAIL_STORAGE_KEY, normalizedEmail);
+}
+
+function rememberCustomerEmail() {
+  const email = DOM.checkoutEmail?.value.trim() || DOM.formEmail?.value.trim() || "";
+
+  if (!email) {
+    return;
+  }
+
+  setRememberedEmail(email);
+}
+
+function applyRememberedEmail() {
+  const rememberedEmail = getRememberedEmail();
+
+  if (!rememberedEmail) {
+    return;
+  }
+
+  if (DOM.checkoutEmail && !DOM.checkoutEmail.value.trim()) {
+    DOM.checkoutEmail.value = rememberedEmail;
+  }
+
+  if (DOM.formEmail && !DOM.formEmail.value.trim()) {
+    DOM.formEmail.value = rememberedEmail;
+  }
+}
+
+function syncCheckoutEmail() {
+  if (!DOM.checkoutEmail) {
+    return;
+  }
+
+  if (!DOM.checkoutEmail.value.trim() && DOM.formEmail?.value.trim()) {
+    DOM.checkoutEmail.value = DOM.formEmail.value.trim();
+  }
+
+  if (!DOM.checkoutEmail.value.trim()) {
+    DOM.checkoutEmail.value = getRememberedEmail();
+  }
+}
+
+applyRememberedEmail();
 
 /* ============================================
    SCROLL REVEAL (Intersection Observer)
