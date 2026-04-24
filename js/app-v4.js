@@ -25,6 +25,7 @@ const CONTACT_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const CLIENT_IP_ENDPOINT = "https://api.ipify.org?format=json";
 
 let clientIpPromise = null;
+let resolvedClientIp = "невідомо";
 
 function getClientIp() {
   if (!clientIpPromise) {
@@ -37,7 +38,11 @@ function getClientIp() {
         return response.json();
       })
       .then((payload) => payload?.ip || "невідомо")
-      .catch(() => "невідомо");
+      .catch(() => "невідомо")
+      .then((ip) => {
+        resolvedClientIp = ip;
+        return ip;
+      });
   }
 
   return clientIpPromise;
@@ -2802,7 +2807,8 @@ async function notifyOrderByEmail() {
   const { totalQty, unitPrice, total } = getCartPricing();
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
-  const clientIp = await getClientIp();
+  const clientIp =
+    resolvedClientIp !== "невідомо" ? resolvedClientIp : await getClientIp();
   const customerEmail = DOM.checkoutEmail.value.trim();
 
   const payload = {
@@ -3058,6 +3064,8 @@ DOM.cartOrderBtn.addEventListener("click", (e) => {
 
   if (DOM.cartCheckoutForm.classList.contains("open")) {
     DOM.checkoutName.focus();
+    // Resolve IP early so checkout email has full customer data before redirect.
+    getClientIp();
   }
 });
 
