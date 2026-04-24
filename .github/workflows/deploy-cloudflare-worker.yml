@@ -41,6 +41,8 @@ jobs:
           fi
 
       - name: Deploy Worker
+        id: deploy_worker
+        continue-on-error: true
         run: |
           set -o pipefail
           npm exec --yes wrangler@4.85.0 -- deploy 2>&1 | tee wrangler-deploy.log
@@ -65,9 +67,29 @@ jobs:
           echo "WORKER_URL=$worker_url" >> "$GITHUB_ENV"
           echo "Deployed Worker URL: $worker_url"
 
+      - name: Publish deploy diagnostics
+        if: always()
+        run: |
+          echo "## Cloudflare Worker deploy diagnostics" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Deploy step outcome: ${{ steps.deploy_worker.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f wrangler-deploy.log ]; then
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 120 wrangler-deploy.log >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "wrangler-deploy.log was not created." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Publish Worker URL
-        if: success()
+        if: success() && env.WORKER_URL != ''
         run: |
           echo "## Cloudflare Worker" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "$WORKER_URL" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail workflow if deploy failed
+        if: always() && steps.deploy_worker.outcome != 'success'
+        run: exit 1
