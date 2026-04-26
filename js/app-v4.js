@@ -56,6 +56,8 @@ const CATEGORY_LABELS = {
   unisex: "Унісекс",
 };
 
+const VALID_CATALOG_FILTERS = new Set(["all", "women", "men", "unisex"]);
+
 /* ============================================
    STATE
    ============================================ */
@@ -2432,6 +2434,33 @@ function filterProducts(filter, search = "") {
   renderProducts(filtered);
 }
 
+function syncCatalogControls(filter) {
+  DOM.filterBtns.forEach((button) => {
+    button.classList.toggle("active", button.dataset.filter === filter);
+  });
+
+  DOM.navLinks.forEach((link) => {
+    const linkFilter = link.dataset.filter;
+
+    if (!linkFilter) {
+      return;
+    }
+
+    link.classList.toggle("active", linkFilter === filter);
+  });
+}
+
+function getInitialCatalogFilter() {
+  const bodyFilter = document.body?.dataset?.initialFilter || "";
+  const urlFilter =
+    new URLSearchParams(window.location.search).get("category") || "";
+  const normalizedFilter = (bodyFilter || urlFilter || "all")
+    .trim()
+    .toLowerCase();
+
+  return VALID_CATALOG_FILTERS.has(normalizedFilter) ? normalizedFilter : "all";
+}
+
 // Nav links
 DOM.navLinks.forEach((link) => {
   link.addEventListener("click", (e) => {
@@ -3571,6 +3600,11 @@ if ("serviceWorker" in navigator) {
    ============================================ */
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
+  const initialFilter = getInitialCatalogFilter();
+  if (initialFilter !== "all") {
+    syncCatalogControls(initialFilter);
+    filterProducts(initialFilter, "");
+  }
   generateProductSchema();
   renderCart();
   initPricingCards();

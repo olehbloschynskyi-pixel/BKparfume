@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Статті — BK Parfume | Наливна парфумерія</title>
+    <title>Статті про парфуми та підбір ароматів | BK Parfume</title>
     <meta
       name="description"
-      content="Статті BK Parfume про аромати, підбір парфумів, тренди та корисні поради з використання."
+      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://bkparfume.site/articles.html" />
@@ -15,29 +15,29 @@
     <meta property="og:site_name" content="BK Parfume" />
     <meta
       property="og:title"
-      content="Статті — BK Parfume | Наливна парфумерія"
+      content="Статті про парфуми та підбір ароматів | BK Parfume"
     />
     <meta
       property="og:description"
-      content="Статті BK Parfume про аромати, підбір парфумів, тренди та корисні поради з використання."
+      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
     />
     <meta property="og:url" content="https://bkparfume.site/articles.html" />
     <meta
       property="og:image"
-      content="https://bkparfume.site/images/products/favicon-32.png"
+      content="https://bkparfume.site/images/products/armand-basi-in-red.png"
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Статті — BK Parfume | Наливна парфумерія"
+      content="Статті про парфуми та підбір ароматів | BK Parfume"
     />
     <meta
       name="twitter:description"
-      content="Статті BK Parfume про аромати, підбір парфумів, тренди та корисні поради з використання."
+      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
     />
     <meta
       name="twitter:image"
-      content="https://bkparfume.site/images/products/favicon-32.png"
+      content="https://bkparfume.site/images/products/armand-basi-in-red.png"
     />
     <link
       rel="alternate"
@@ -102,7 +102,7 @@
           },
           "logo": {
             "@type": "ImageObject",
-            "url": "https://bkparfume.site/images/products/favicon-32.png"
+            "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
           }
         }
       }
@@ -150,6 +150,7 @@
 
         <div class="header__actions">
           <button
+            type="button"
             class="btn-icon search-toggle"
             id="searchToggle"
             aria-label="Пошук"
@@ -164,7 +165,7 @@
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
-          <button class="burger" id="burgerBtn" aria-label="Меню">
+          <button type="button" class="burger" id="burgerBtn" aria-label="Меню">
             <span></span><span></span><span></span>
           </button>
         </div>
@@ -180,6 +181,7 @@
             autocomplete="off"
           />
           <button
+            type="button"
             class="btn-icon search-close"
             id="searchClose"
             aria-label="Закрити пошук"
@@ -208,6 +210,26 @@
 
     <section class="articles-section">
       <div class="articles-section__inner">
+        <article class="article-featured article-search-item">
+          <div class="article-featured__content">
+            <div class="article-featured__meta">
+              <span class="article-featured__tag">Підбір ароматів</span>
+              <span class="article-featured__date">Актуально зараз</span>
+            </div>
+            <h2 class="article-featured__title">
+              Швидкі переходи до комерційних розділів
+            </h2>
+            <p class="article-featured__excerpt">
+              Шукаєте конкретний тип парфумів? Перейдіть на сторінки
+              <a href="zhinochi-parfumy.html">жіночих ароматів</a>,
+              <a href="cholovichi-parfumy.html">чоловічих парфумів</a>,
+              <a href="uniseks-parfumy.html">унісекс композицій</a>,
+              <a href="optova-parfumeriya.html">оптових замовлень</a> або
+              <a href="dostavka-i-oplata.html">доставки й оплати</a>.
+            </p>
+          </div>
+        </article>
+
         <article class="article-featured article-search-item">
           <div class="article-featured__content">
             <div class="article-featured__meta">
@@ -638,7 +660,12 @@
       </div>
     </footer>
 
-    <button class="back-to-top" id="backToTop" aria-label="Нагору">
+    <button
+      type="button"
+      class="back-to-top"
+      id="backToTop"
+      aria-label="Нагору"
+    >
       <svg
         viewBox="0 0 24 24"
         fill="none"
