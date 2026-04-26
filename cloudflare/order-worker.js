@@ -52,6 +52,7 @@ export default {
       input.browser_client_ip || input.client_ip || "",
     ).trim();
     const customerEmail = normalizeEmail(input.customer_email || input.email);
+    const deliveryAddress = String(input.address || input.delivery_address || "").trim();
     const message = appendIpInfo(
       input.message,
       serverClientIp,
@@ -69,6 +70,7 @@ export default {
           }
         : {}),
       phone: String(input.phone || "").trim(),
+      address: deliveryAddress,
       np_branch: String(input.np_branch || "").trim(),
       client_ip: serverClientIp,
       browser_client_ip: browserClientIp,
@@ -90,7 +92,8 @@ export default {
       String(env.ALLOWED_ORIGIN || "").trim(),
     );
     const referer = normalizeUrl(payload.referrer, pageUrl);
-    const origin = String(env.ALLOWED_ORIGIN || "").trim() || extractOrigin(pageUrl);
+    const origin =
+      String(env.ALLOWED_ORIGIN || "").trim() || extractOrigin(pageUrl);
 
     const upstream = await fetch(`https://formsubmit.co/ajax/${storeEmail}`, {
       method: "POST",

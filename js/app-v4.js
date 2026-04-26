@@ -129,6 +129,7 @@ const DOM = {
   checkoutName: $("checkoutName"),
   checkoutPhone: $("checkoutPhone"),
   checkoutEmail: $("checkoutEmail"),
+  checkoutAddress: $("checkoutAddress"),
   checkoutNpBranch: $("checkoutNpBranch"),
   checkoutAmount: $("checkoutAmount"),
   checkoutPayBtn: $("checkoutPayBtn"),
@@ -2769,13 +2770,14 @@ function buildCheckoutPaymentUrl() {
   const { total } = getCartPricing();
   const paymentUrl = new URL(PAYMENT_LINK_BASE);
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
+  const deliveryAddress = DOM.checkoutAddress?.value.trim() || "не вказано";
 
   currentCheckoutOrderId = orderId;
 
   paymentUrl.searchParams.set("amount", String(total));
   paymentUrl.searchParams.set(
     "comment",
-    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, email клієнта: ${DOM.checkoutEmail.value.trim() || "не вказано"}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
+    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, email клієнта: ${DOM.checkoutEmail.value.trim() || "не вказано"}, адреса: ${deliveryAddress}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
   );
 
   return paymentUrl.toString();
@@ -2801,6 +2803,7 @@ async function notifyOrderByEmail() {
   currentCheckoutOrderId = orderId;
   const browserClientIp = await getClientIpAddress();
   const customerEmail = DOM.checkoutEmail.value.trim();
+  const deliveryAddress = DOM.checkoutAddress?.value.trim() || "";
 
   const pageUrl = window.location.href;
   const referrer = document.referrer || "Прямий вхід";
@@ -2821,6 +2824,7 @@ async function notifyOrderByEmail() {
         }
       : {}),
     phone: DOM.checkoutPhone.value.trim(),
+    address: deliveryAddress,
     np_branch: DOM.checkoutNpBranch.value.trim(),
     client_ip: browserClientIp,
     browser_client_ip: browserClientIp,
@@ -2835,6 +2839,7 @@ async function notifyOrderByEmail() {
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
       `Email: ${DOM.checkoutEmail.value.trim() || "Не вказано"}\n` +
+      `Адреса доставки: ${deliveryAddress || "Не вказано"}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n` +
       `IP клієнта (browser): ${browserClientIp}\n` +
       `Мова: ${language}\n` +
@@ -3190,7 +3195,12 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
   }
 });
 
-[DOM.checkoutName, DOM.checkoutPhone, DOM.checkoutEmail, DOM.checkoutNpBranch].forEach((input) => {
+[
+  DOM.checkoutName,
+  DOM.checkoutPhone,
+  DOM.checkoutEmail,
+  DOM.checkoutNpBranch,
+].forEach((input) => {
   input.addEventListener("blur", () => {
     rememberCustomerEmail();
     validateCartCheckoutForm(true);
@@ -3373,7 +3383,8 @@ function setRememberedEmail(email) {
 }
 
 function rememberCustomerEmail() {
-  const email = DOM.checkoutEmail?.value.trim() || DOM.formEmail?.value.trim() || "";
+  const email =
+    DOM.checkoutEmail?.value.trim() || DOM.formEmail?.value.trim() || "";
 
   if (!email) {
     return;
