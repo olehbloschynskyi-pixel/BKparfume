@@ -336,6 +336,9 @@ function isHomeCatalogPage() {
   return pathname === "/" || pathname.endsWith("/index.html");
 }
 
+let catalogScrollSyncTimeout = 0;
+let catalogScrollFollowUpTimeouts = [];
+
 function scrollToCatalog(behavior = "smooth") {
   const catalogSection = document.getElementById("catalog");
   const catalogAnchor =
@@ -349,7 +352,9 @@ function scrollToCatalog(behavior = "smooth") {
   const headerHeight = header?.getBoundingClientRect().height || 0;
   const targetTop = Math.max(
     0,
-    window.scrollY + catalogAnchor.getBoundingClientRect().top - (headerHeight + 5),
+    window.scrollY +
+      catalogAnchor.getBoundingClientRect().top -
+      (headerHeight + 5),
   );
 
   window.scrollTo({ top: targetTop, behavior });
@@ -361,6 +366,36 @@ function scrollToCatalog(behavior = "smooth") {
       `${window.location.pathname}${window.location.search}#catalog`,
     );
   }
+}
+
+function syncCatalogScrollPosition(behavior = "smooth") {
+  scrollToCatalog(behavior);
+
+  requestAnimationFrame(() => scrollToCatalog("auto"));
+
+  if (catalogScrollSyncTimeout) {
+    window.clearTimeout(catalogScrollSyncTimeout);
+  }
+
+  catalogScrollFollowUpTimeouts.forEach((timeoutId) => {
+    window.clearTimeout(timeoutId);
+  });
+  catalogScrollFollowUpTimeouts = [];
+
+  catalogScrollSyncTimeout = window.setTimeout(() => {
+    scrollToCatalog("auto");
+    catalogScrollSyncTimeout = 0;
+  }, 300);
+
+  catalogScrollFollowUpTimeouts = [900, 1800, 2800].map((delay, index, all) =>
+    window.setTimeout(() => {
+      scrollToCatalog("auto");
+
+      if (index === all.length - 1) {
+        catalogScrollFollowUpTimeouts = [];
+      }
+    }, delay),
+  );
 }
 
 function initCatalogAnchorLinks() {
@@ -375,7 +410,7 @@ function initCatalogAnchorLinks() {
         }
 
         event.preventDefault();
-        scrollToCatalog(
+        syncCatalogScrollPosition(
           link.classList.contains("hero__btn") ? "auto" : "smooth",
         );
       });
@@ -1566,7 +1601,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initSectionReveal();
 
   if (window.location.hash === "#catalog") {
-    requestAnimationFrame(() => scrollToCatalog("auto"));
+    syncCatalogScrollPosition("auto");
   }
 
   if (typeof window.requestIdleCallback === "function") {
