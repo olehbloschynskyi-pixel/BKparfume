@@ -84,6 +84,7 @@ const DOM = {
 
   // Header
   header: $("header"),
+  headerLogo: document.querySelector("header .logo"),
   burgerBtn: $("burgerBtn"),
   nav: $("nav"),
 
@@ -339,6 +340,18 @@ function isHomeCatalogPage() {
 let catalogScrollSyncTimeout = 0;
 let catalogScrollFollowUpTimeouts = [];
 
+function cancelCatalogScrollSync() {
+  if (catalogScrollSyncTimeout) {
+    window.clearTimeout(catalogScrollSyncTimeout);
+    catalogScrollSyncTimeout = 0;
+  }
+
+  catalogScrollFollowUpTimeouts.forEach((timeoutId) => {
+    window.clearTimeout(timeoutId);
+  });
+  catalogScrollFollowUpTimeouts = [];
+}
+
 function scrollToCatalog(behavior = "smooth") {
   const catalogSection = document.getElementById("catalog");
   const catalogAnchor =
@@ -373,14 +386,7 @@ function syncCatalogScrollPosition(behavior = "smooth") {
 
   requestAnimationFrame(() => scrollToCatalog("auto"));
 
-  if (catalogScrollSyncTimeout) {
-    window.clearTimeout(catalogScrollSyncTimeout);
-  }
-
-  catalogScrollFollowUpTimeouts.forEach((timeoutId) => {
-    window.clearTimeout(timeoutId);
-  });
-  catalogScrollFollowUpTimeouts = [];
+  cancelCatalogScrollSync();
 
   catalogScrollSyncTimeout = window.setTimeout(() => {
     scrollToCatalog("auto");
@@ -396,6 +402,36 @@ function syncCatalogScrollPosition(behavior = "smooth") {
       }
     }, delay),
   );
+}
+
+function scrollToPageTop(behavior = "auto") {
+  cancelCatalogScrollSync();
+  window.scrollTo({ top: 0, behavior });
+
+  if (window.location.hash) {
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`,
+    );
+  }
+}
+
+function initHomeLogoLink() {
+  if (!DOM.headerLogo) {
+    return;
+  }
+
+  DOM.headerLogo.addEventListener("click", (event) => {
+    if (!isHomeCatalogPage()) {
+      return;
+    }
+
+    event.preventDefault();
+    DOM.burgerBtn?.classList.remove("open");
+    DOM.nav?.classList.remove("open");
+    scrollToPageTop("auto");
+  });
 }
 
 function initCatalogAnchorLinks() {
@@ -1570,6 +1606,7 @@ if ("serviceWorker" in navigator) {
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded", async () => {
+  initHomeLogoLink();
   initCatalogAnchorLinks();
   syncMobileCatalogFilters();
   window.addEventListener("resize", syncMobileCatalogFilters, {
