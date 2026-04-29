@@ -247,6 +247,11 @@
       #catalog {
         scroll-margin-top: calc(var(--header-h) + 24px);
       }
+      @media (max-width: 768px) {
+        .catalog__filters .filter-btn[data-filter="all"] {
+          display: none;
+        }
+      }
     </style>
     <link rel="stylesheet" href="css/style.min.css?v=20260424" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
