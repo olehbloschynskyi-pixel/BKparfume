@@ -338,16 +338,18 @@ function isHomeCatalogPage() {
 
 function scrollToCatalog(behavior = "smooth") {
   const catalogSection = document.getElementById("catalog");
+  const catalogAnchor =
+    catalogSection?.querySelector(".catalog__header") || catalogSection;
   const header = document.getElementById("header");
 
-  if (!catalogSection) {
+  if (!catalogAnchor) {
     return;
   }
 
   const headerHeight = header?.getBoundingClientRect().height || 0;
   const targetTop = Math.max(
     0,
-    window.scrollY + catalogSection.getBoundingClientRect().top - (headerHeight + 5),
+    window.scrollY + catalogAnchor.getBoundingClientRect().top - (headerHeight + 5),
   );
 
   window.scrollTo({ top: targetTop, behavior });
