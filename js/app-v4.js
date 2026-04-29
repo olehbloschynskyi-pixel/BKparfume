@@ -346,7 +346,11 @@ function scrollToCatalog(behavior = "smooth") {
   catalogSection.scrollIntoView({ behavior, block: "start" });
 
   if (window.location.hash !== "#catalog") {
-    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#catalog`);
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}#catalog`,
+    );
   }
 }
 
@@ -365,6 +369,20 @@ function initCatalogAnchorLinks() {
         scrollToCatalog();
       });
     });
+}
+
+function syncMobileCatalogFilters() {
+  const allFilterButton = document.querySelector(
+    '.catalog__filters .filter-btn[data-filter="all"]',
+  );
+
+  if (!allFilterButton) {
+    return;
+  }
+
+  allFilterButton.style.display = window.matchMedia("(max-width: 768px)").matches
+    ? "none"
+    : "";
 }
 
 // Nav links
@@ -1506,6 +1524,8 @@ if ("serviceWorker" in navigator) {
    ============================================ */
 document.addEventListener("DOMContentLoaded", async () => {
   initCatalogAnchorLinks();
+  syncMobileCatalogFilters();
+  window.addEventListener("resize", syncMobileCatalogFilters, { passive: true });
 
   try {
     await loadProducts();
