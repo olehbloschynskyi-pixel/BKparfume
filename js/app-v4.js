@@ -331,6 +331,42 @@ function getInitialCatalogFilter() {
   return VALID_CATALOG_FILTERS.has(normalizedFilter) ? normalizedFilter : "all";
 }
 
+function isHomeCatalogPage() {
+  const pathname = window.location.pathname || "/";
+  return pathname === "/" || pathname.endsWith("/index.html");
+}
+
+function scrollToCatalog(behavior = "smooth") {
+  const catalogSection = document.getElementById("catalog");
+
+  if (!catalogSection) {
+    return;
+  }
+
+  catalogSection.scrollIntoView({ behavior, block: "start" });
+
+  if (window.location.hash !== "#catalog") {
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#catalog`);
+  }
+}
+
+function initCatalogAnchorLinks() {
+  document
+    .querySelectorAll(
+      'a[href="#catalog"], a[href="index.html#catalog"], a[href="/index.html#catalog"], a[href="/#catalog"]',
+    )
+    .forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (!isHomeCatalogPage()) {
+          return;
+        }
+
+        event.preventDefault();
+        scrollToCatalog();
+      });
+    });
+}
+
 // Nav links
 DOM.navLinks.forEach((link) => {
   link.addEventListener("click", (e) => {
@@ -1469,6 +1505,8 @@ if ("serviceWorker" in navigator) {
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded", async () => {
+  initCatalogAnchorLinks();
+
   try {
     await loadProducts();
   } catch (error) {
@@ -1492,6 +1530,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   initPricingCards();
   animateCounters();
   initSectionReveal();
+
+  if (window.location.hash === "#catalog") {
+    requestAnimationFrame(() => scrollToCatalog("auto"));
+  }
 
   if (typeof window.requestIdleCallback === "function") {
     window.requestIdleCallback(() => warmupClientIpAddress());
