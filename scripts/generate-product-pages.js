@@ -14,8 +14,10 @@ const CATEGORY_META = {
     categoryUrl: "zhinochi-parfumy.html",
     relatedUrl: "uniseks-parfumy.html",
     relatedLabel: "унісекс ароматами",
-    audience: "для жінок, які шукають аромат на кожен день, побачення або особливу подію",
-    usage: "Для денного використання краще працюють більш свіжі та квіткові композиції, а для вечора варто дивитися на солодші й глибші акорди.",
+    audience:
+      "для жінок, які шукають аромат на кожен день, побачення або особливу подію",
+    usage:
+      "Для денного використання краще працюють більш свіжі та квіткові композиції, а для вечора варто дивитися на солодші й глибші акорди.",
   },
   men: {
     label: "чоловічі парфуми",
@@ -24,8 +26,10 @@ const CATEGORY_META = {
     categoryUrl: "cholovichi-parfumy.html",
     relatedUrl: "uniseks-parfumy.html",
     relatedLabel: "унісекс ароматами",
-    audience: "для чоловіків, яким потрібен аромат на роботу, щодень або вечірній вихід",
-    usage: "На щодень краще підходять свіжі, цитрусові та деревні композиції, а для вечора можна обирати щільніші пряні та амброві варіанти.",
+    audience:
+      "для чоловіків, яким потрібен аромат на роботу, щодень або вечірній вихід",
+    usage:
+      "На щодень краще підходять свіжі, цитрусові та деревні композиції, а для вечора можна обирати щільніші пряні та амброві варіанти.",
   },
   unisex: {
     label: "унісекс аромати",
@@ -34,23 +38,25 @@ const CATEGORY_META = {
     categoryUrl: "uniseks-parfumy.html",
     relatedUrl: "zhinochi-parfumy.html",
     relatedLabel: "жіночими ароматами",
-    audience: "для тих, хто шукає універсальне звучання без жорсткої прив'язки до класичної жіночої або чоловічої групи",
-    usage: "Унісекс-композиції зручно обирати, якщо вам подобаються чисті деревні, мускусні, нішеві або фруктово-амброві профілі.",
+    audience:
+      "для тих, хто шукає універсальне звучання без жорсткої прив'язки до класичної жіночої або чоловічої групи",
+    usage:
+      "Унісекс-композиції зручно обирати, якщо вам подобаються чисті деревні, мускусні, нішеві або фруктово-амброві профілі.",
   },
 };
 
 const FAQ_ITEMS = [
   (product, categoryMeta) => ({
-    question: `Кому підійде ${product.name.replace(/^BK parfume\s+/i, "")}?`,
-    answer: `${product.name} від ${product.brand} підійде ${categoryMeta.audience}. ${categoryMeta.usage}`,
+    question: `Кому підійде ${shortName(product.name)}?`,
+    answer: `${displayName(product.name)} від ${product.brand} підійде ${categoryMeta.audience}. ${categoryMeta.usage}`,
   }),
   (product) => ({
-    question: `Який об'єм і ціна у ${product.name.replace(/^BK parfume\s+/i, "")}?`,
+    question: `Який об'єм і ціна у ${shortName(product.name)}?`,
     answer: `На BK Parfume цей аромат доступний у форматі ${product.volume} за ${product.price} грн. При замовленні кількох позицій діють вигідніші ціни за кількість.`,
   }),
   (product) => ({
-    question: `Чи можна замовити ${product.name.replace(/^BK parfume\s+/i, "")} з доставкою по Україні?`,
-    answer: `Так, ${product.name} можна замовити з доставкою по Україні Новою поштою. Детальні умови дивіться на сторінці доставки та оплати.`,
+    question: `Чи можна замовити ${shortName(product.name)} з доставкою по Україні?`,
+    answer: `Так, ${displayName(product.name)} можна замовити з доставкою по Україні Новою поштою. Детальні умови дивіться на сторінці доставки та оплати.`,
   }),
 ];
 
@@ -78,16 +84,31 @@ function splitNotes(notes) {
     .filter(Boolean);
 }
 
-function cleanName(name) {
-  return String(name || "").replace(/^BK parfume\s+/i, "").trim();
+function normalizeProductName(name) {
+  const normalized = String(name || "")
+    .replace(/^BK\s*parfume\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return normalized ? `BKparfume ${normalized}` : "BKparfume";
+}
+
+function shortName(name) {
+  return normalizeProductName(name)
+    .replace(/^BKparfume\s+/i, "")
+    .trim();
+}
+
+function displayName(name) {
+  return normalizeProductName(name);
 }
 
 function buildMetaTitle(product, categoryMeta) {
-  return `${cleanName(product.name)} купити в Україні, ${categoryMeta.titleLabel} | BK Parfume`;
+  return `${displayName(product.name)} купити в Україні, ${categoryMeta.titleLabel} | BK Parfume`;
 }
 
 function buildMetaDescription(product, categoryMeta) {
-  return `${cleanName(product.name)} від ${product.brand} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
+  return `${displayName(product.name)} від ${product.brand} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
 }
 
 function buildFaq(product, categoryMeta) {
@@ -100,7 +121,7 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
     "@graph": [
       {
         "@type": "Product",
-        name: cleanName(product.name),
+        name: displayName(product.name),
         brand: {
           "@type": "Brand",
           name: product.brand,
@@ -135,7 +156,7 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
           {
             "@type": "ListItem",
             position: 3,
-            name: cleanName(product.name),
+            name: displayName(product.name),
             item: canonicalUrl,
           },
         ],
@@ -157,13 +178,16 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
 
 function buildRelatedProducts(product, products) {
   return products
-    .filter((candidate) => candidate.category === product.category && candidate.id !== product.id)
+    .filter(
+      (candidate) =>
+        candidate.category === product.category && candidate.id !== product.id,
+    )
     .slice(0, 3);
 }
 
 function renderProductPage(product, products) {
   const categoryMeta = CATEGORY_META[product.category] || CATEGORY_META.unisex;
-  const productName = cleanName(product.name);
+  const productName = displayName(product.name);
   const title = buildMetaTitle(product, categoryMeta);
   const description = buildMetaDescription(product, categoryMeta);
   const canonicalPath = `products/${product.slug}.html`;
@@ -181,7 +205,7 @@ function renderProductPage(product, products) {
     .map(
       (item) => `
             <li>
-              <a href="${escapeHtml(item.slug)}.html">${escapeHtml(cleanName(item.name))}</a>
+              <a href="${escapeHtml(item.slug)}.html">${escapeHtml(displayName(item.name))}</a>
             </li>`,
     )
     .join("");
@@ -300,7 +324,9 @@ function main() {
   const pageProducts = products.filter((product) => product.seoPage);
 
   if (!pageProducts.length) {
-    throw new Error("No products marked with seoPage=true in data/products.json");
+    throw new Error(
+      "No products marked with seoPage=true in data/products.json",
+    );
   }
 
   ensureDir(OUTPUT_DIR);
@@ -310,7 +336,9 @@ function main() {
     fs.writeFileSync(outputFile, renderProductPage(product, products));
   }
 
-  console.log(`Generated ${pageProducts.length} product pages in ${path.relative(ROOT_DIR, OUTPUT_DIR)}`);
+  console.log(
+    `Generated ${pageProducts.length} product pages in ${path.relative(ROOT_DIR, OUTPUT_DIR)}`,
+  );
 }
 
 main();
