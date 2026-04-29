@@ -338,12 +338,19 @@ function isHomeCatalogPage() {
 
 function scrollToCatalog(behavior = "smooth") {
   const catalogSection = document.getElementById("catalog");
+  const header = document.getElementById("header");
 
   if (!catalogSection) {
     return;
   }
 
-  catalogSection.scrollIntoView({ behavior, block: "start" });
+  const headerHeight = header?.getBoundingClientRect().height || 0;
+  const targetTop = Math.max(
+    0,
+    window.scrollY + catalogSection.getBoundingClientRect().top - headerHeight,
+  );
+
+  window.scrollTo({ top: targetTop, behavior });
 
   if (window.location.hash !== "#catalog") {
     window.history.replaceState(
@@ -380,7 +387,8 @@ function syncMobileCatalogFilters() {
     return;
   }
 
-  allFilterButton.style.display = window.matchMedia("(max-width: 768px)").matches
+  allFilterButton.style.display = window.matchMedia("(max-width: 768px)")
+    .matches
     ? "none"
     : "";
 }
@@ -401,7 +409,7 @@ DOM.navLinks.forEach((link) => {
     });
     filterProducts(filter, DOM.searchInput.value);
     // Scroll to catalog
-    document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+    scrollToCatalog();
     // Close mobile menu
     DOM.nav.classList.remove("open");
     DOM.burgerBtn.classList.remove("open");
@@ -446,7 +454,7 @@ DOM.searchToggle.addEventListener("click", () => {
   DOM.searchBar.classList.add("open");
   setTimeout(() => DOM.searchInput.focus(), 400);
   // Скрол до каталогу щоб одразу видно парфуми
-  document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+  scrollToCatalog();
 });
 DOM.searchClose.addEventListener("click", () => {
   DOM.searchBar.classList.remove("open");
@@ -1525,7 +1533,9 @@ if ("serviceWorker" in navigator) {
 document.addEventListener("DOMContentLoaded", async () => {
   initCatalogAnchorLinks();
   syncMobileCatalogFilters();
-  window.addEventListener("resize", syncMobileCatalogFilters, { passive: true });
+  window.addEventListener("resize", syncMobileCatalogFilters, {
+    passive: true,
+  });
 
   try {
     await loadProducts();
