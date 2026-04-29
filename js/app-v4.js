@@ -373,7 +373,9 @@ function initCatalogAnchorLinks() {
         }
 
         event.preventDefault();
-        scrollToCatalog();
+        scrollToCatalog(
+          link.classList.contains("hero__btn") ? "auto" : "smooth",
+        );
       });
     });
 }
