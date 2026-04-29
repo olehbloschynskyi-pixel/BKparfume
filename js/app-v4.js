@@ -64,7 +64,7 @@ const VALID_CATALOG_FILTERS = new Set(["all", "women", "men", "unisex"]);
    ============================================ */
 let products = [];
 let cart = JSON.parse(localStorage.getItem("bk_cart") || "[]");
-let currentFilter = "all";
+let currentFilter = "women";
 let currentProductId = null;
 let currentCheckoutOrderId = null;
 
@@ -325,11 +325,13 @@ function getInitialCatalogFilter() {
   const bodyFilter = document.body?.dataset?.initialFilter || "";
   const urlFilter =
     new URLSearchParams(window.location.search).get("category") || "";
-  const normalizedFilter = (bodyFilter || urlFilter || "all")
+  const normalizedFilter = (bodyFilter || urlFilter || "women")
     .trim()
     .toLowerCase();
 
-  return VALID_CATALOG_FILTERS.has(normalizedFilter) ? normalizedFilter : "all";
+  return VALID_CATALOG_FILTERS.has(normalizedFilter)
+    ? normalizedFilter
+    : "women";
 }
 
 function isHomeCatalogPage() {
