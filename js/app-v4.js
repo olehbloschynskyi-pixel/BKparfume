@@ -347,7 +347,7 @@ function scrollToCatalog(behavior = "smooth") {
   const headerHeight = header?.getBoundingClientRect().height || 0;
   const targetTop = Math.max(
     0,
-    window.scrollY + catalogSection.getBoundingClientRect().top - headerHeight,
+    window.scrollY + catalogSection.getBoundingClientRect().top - (headerHeight + 5),
   );
 
   window.scrollTo({ top: targetTop, behavior });
