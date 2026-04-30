@@ -247,7 +247,53 @@
       #catalog {
         scroll-margin-top: calc(var(--header-h) + 5px);
       }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] {
+        background:
+          linear-gradient(180deg, rgba(24, 24, 24, 0.98), rgba(18, 18, 18, 0.98));
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-banner__title {
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+        color: #f3e0c7;
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card {
+        padding: 22px 20px;
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card__qty {
+        margin-bottom: 14px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        color: rgba(242, 215, 186, 0.82);
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card__price {
+        margin-bottom: 0;
+        font-size: 1.55rem;
+        line-height: 1.08;
+        color: #f5ede3;
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card__price span {
+        display: block;
+        margin-top: 12px;
+        font-size: 0.9rem;
+        line-height: 1.65;
+        color: rgba(232, 232, 232, 0.72);
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card--highlight .pricing-card__qty {
+        color: #f6dfb9;
+      }
+      section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card--highlight .pricing-card__price {
+        color: #fff3df;
+      }
       @media (max-width: 768px) {
+        section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-banner__title {
+          text-align: left;
+          font-size: 1.8rem;
+        }
+        section.pricing-banner[aria-labelledby="popular-directions-title"] .pricing-card__price {
+          font-size: 1.35rem;
+        }
         .hero__content {
           padding: 0 16px;
         }
