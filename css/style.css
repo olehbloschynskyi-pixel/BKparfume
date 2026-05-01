@@ -498,6 +498,10 @@ ul { list-style: none; }
   gap: 16px;
 }
 
+.pricing-grid[hidden] {
+  display: none !important;
+}
+
 .pricing-card {
   background: var(--dark-3);
   border: 1px solid var(--border);
