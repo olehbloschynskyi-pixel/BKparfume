@@ -1553,6 +1553,18 @@ ul { list-style: none; }
   padding: 34px 32px;
 }
 
+.article-featured__media {
+  overflow: hidden;
+  border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.article-featured__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .article-featured__catalog-actions {
   display: flex;
   align-items: center;
