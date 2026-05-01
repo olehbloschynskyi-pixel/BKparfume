@@ -1,5 +1,7 @@
 name: Deploy Site To cPanel
 
+# Manual redeploy trigger marker: updated to force a fresh cPanel deploy via GitHub Actions secrets.
+
 on:
   workflow_dispatch:
   push:
