@@ -6,6 +6,7 @@ const DATA_FILE = path.join(ROOT_DIR, "data", "products.json");
 const OUTPUT_DIR = path.join(ROOT_DIR, "products");
 
 const SITE_URL = "https://bkparfume.site";
+const STORE_BRAND = "BKparfume";
 const CATEGORY_META = {
   women: {
     label: "жіночі парфуми",
@@ -108,7 +109,7 @@ function buildMetaTitle(product, categoryMeta) {
 }
 
 function buildMetaDescription(product, categoryMeta) {
-  return `${displayName(product.name)} від ${product.brand} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
+  return `${displayName(product.name)} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
 }
 
 function buildFaq(product, categoryMeta) {
@@ -124,7 +125,7 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
         name: displayName(product.name),
         brand: {
           "@type": "Brand",
-          name: product.brand,
+          name: STORE_BRAND,
         },
         image: `${SITE_URL}/${product.image}`,
         description: product.description,
@@ -243,7 +244,7 @@ function renderProductPage(product, products) {
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/products/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/products/favicon-32.png" />
-    <link rel="stylesheet" href="../css/style.min.css?v=20260501" />
+    <link rel="stylesheet" href="../css/style.min.css?v=20260501-3" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -279,22 +280,35 @@ function renderProductPage(product, products) {
             <img src="../${escapeHtml(product.image)}" alt="${escapeHtml(productName)}" />
           </div>
           <div class="article-featured__content">
-            <p class="article-featured__excerpt"><strong>Бренд:</strong> ${escapeHtml(product.brand)}</p>
+            <p class="article-featured__excerpt"><strong>Бренд:</strong> ${STORE_BRAND}</p>
             <p class="article-featured__excerpt"><strong>Категорія:</strong> ${escapeHtml(categoryMeta.label)}</p>
             <p class="article-featured__excerpt"><strong>Об'єм:</strong> ${escapeHtml(product.volume)}</p>
             <p class="article-featured__excerpt"><strong>Ціна:</strong> ${escapeHtml(String(product.price))} грн</p>
             <p class="article-featured__excerpt">${escapeHtml(product.description)}</p>
-            <p class="article-featured__excerpt">${escapeHtml(productName)} від ${escapeHtml(product.brand)} добре працює ${escapeHtml(categoryMeta.audience)}. Завдяки формату ${escapeHtml(product.volume)} цей аромат зручно брати як основний варіант на сезон або додавати до особистої колекції для окремих ситуацій.</p>
+            <p class="article-featured__excerpt">${escapeHtml(productName)} добре працює ${escapeHtml(categoryMeta.audience)}. Завдяки формату ${escapeHtml(product.volume)} цей аромат зручно брати як основний варіант на сезон або додавати до особистої колекції для окремих ситуацій.</p>
             <p class="article-featured__excerpt">${escapeHtml(categoryMeta.usage)} Якщо ви підбираєте схожі композиції, перегляньте також сторінку з ${escapeHtml(categoryMeta.relatedLabel)} та повний каталог BK Parfume.</p>
+            <div class="article-featured__catalog-actions">
+              <a class="btn btn--primary" href="../${escapeHtml(categoryMeta.catalogUrl)}">Перейти в каталог</a>
+              <button
+                type="button"
+                class="article-featured__quick-add"
+                id="productAddToCart"
+                aria-label="Додати ${escapeHtml(productName)} до кошика"
+                title="Додати до кошика"
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="19" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+              </button>
+            </div>
             <h2 class="article-featured__title">Ноти аромату</h2>
             <ul class="article-featured__excerpt">
 ${notesMarkup}
             </ul>
             <h2 class="article-featured__title">Як замовити</h2>
             <p class="article-featured__excerpt">Ви можете перейти у каталог з уже відкритим релевантним фільтром, додати аромат у кошик та оформити замовлення з доставкою по Україні. Для оптових або комбінованих замовлень також діють вигідніші ціни за кількість.</p>
-            <p class="article-featured__excerpt">
-              <a class="btn btn--primary" href="../${escapeHtml(categoryMeta.catalogUrl)}">Перейти в каталог</a>
-            </p>
           </div>
         </article>
 
@@ -314,6 +328,51 @@ ${faqMarkup}
         </article>
       </div>
     </section>
+    <script>
+      (() => {
+        const button = document.getElementById("productAddToCart");
+        const productId = ${product.id};
+
+        function readCart() {
+          try {
+            const parsed = JSON.parse(localStorage.getItem("bk_cart") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        }
+
+        function writeCart(nextCart) {
+          localStorage.setItem("bk_cart", JSON.stringify(nextCart));
+        }
+
+        function markAdded() {
+          if (!button) return;
+          button.classList.add("is-added");
+          button.setAttribute("aria-label", "Товар додано до кошика");
+          button.setAttribute("title", "Товар додано до кошика");
+          window.setTimeout(() => {
+            button.classList.remove("is-added");
+            button.setAttribute("aria-label", "Додати товар до кошика");
+            button.setAttribute("title", "Додати до кошика");
+          }, 1400);
+        }
+
+        button?.addEventListener("click", () => {
+          const cart = readCart();
+          const existing = cart.find((item) => item.id === productId);
+
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cart.push({ id: productId, qty: 1 });
+          }
+
+          writeCart(cart);
+          markAdded();
+        });
+      })();
+    </script>
   </body>
 </html>
 `;

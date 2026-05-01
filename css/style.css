@@ -1553,6 +1553,57 @@ ul { list-style: none; }
   padding: 34px 32px;
 }
 
+.article-featured__catalog-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.article-featured__catalog-actions .btn {
+  margin-bottom: 0;
+}
+
+.article-featured__catalog-actions .btn--primary {
+  padding: 11px 15px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.article-featured__quick-add {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--gold-light);
+  background: rgba(201, 169, 110, 0.08);
+  border: 1px solid rgba(201, 169, 110, 0.32);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
+}
+
+.article-featured__quick-add svg {
+  width: 16px;
+  height: 16px;
+}
+
+.article-featured__quick-add:hover {
+  color: var(--black);
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.article-featured__quick-add.is-added {
+  color: var(--black);
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  box-shadow: 0 8px 20px rgba(201, 169, 110, 0.24);
+}
+
 .article-featured__image-inline {
   width: min(100%, 420px);
   border-radius: 14px;
@@ -1851,6 +1902,15 @@ ul { list-style: none; }
 
   .article-featured__content {
     padding: 18px 14px;
+  }
+
+  .article-featured__catalog-actions {
+    gap: 10px;
+  }
+
+  .article-featured__catalog-actions .btn {
+    flex: 0 0 auto;
+    min-width: auto;
   }
 
   .article-featured__image-inline {
