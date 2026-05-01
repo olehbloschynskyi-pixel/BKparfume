@@ -1736,8 +1736,8 @@ ul { list-style: none; }
 
 .article-breadcrumbs {
   max-width: 980px;
-  margin: calc(var(--header-h) + 8px) auto -10px;
-  padding: 0 24px;
+  margin: 0 auto -10px;
+  padding: calc(var(--header-h) + 8px) 24px 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1784,8 +1784,8 @@ ul { list-style: none; }
 
 @media (max-width: 680px) {
   .article-breadcrumbs {
-    margin: calc(var(--header-h) + 8px) auto -8px;
-    padding: 0 16px;
+    margin: 0 auto -8px;
+    padding: calc(var(--header-h) + 8px) 16px 0;
     gap: 6px;
     font-size: 0.58rem;
     letter-spacing: 0.06em;
