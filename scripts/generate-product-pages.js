@@ -332,6 +332,7 @@ ${faqMarkup}
       (() => {
         const button = document.getElementById("productAddToCart");
         const productId = ${product.id};
+        const cartRedirectUrl = "../${escapeHtml(categoryMeta.catalogUrl)}";
 
         function readCart() {
           try {
@@ -370,6 +371,16 @@ ${faqMarkup}
 
           writeCart(cart);
           markAdded();
+
+          try {
+            sessionStorage.setItem("bk_open_cart", "1");
+          } catch {
+            // Ignore sessionStorage access issues and continue with redirect.
+          }
+
+          window.setTimeout(() => {
+            window.location.href = cartRedirectUrl;
+          }, 180);
         });
       })();
     </script>

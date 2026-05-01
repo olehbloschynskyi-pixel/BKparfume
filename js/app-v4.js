@@ -1178,6 +1178,17 @@ function openCartPanel() {
   DOM.cartOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
 }
+
+function consumePendingCartOpen() {
+  try {
+    if (sessionStorage.getItem("bk_open_cart") !== "1") return;
+    sessionStorage.removeItem("bk_open_cart");
+    openCartPanel();
+  } catch {
+    // Ignore sessionStorage access issues.
+  }
+}
+
 function closeCartPanel() {
   DOM.cartPanel.classList.remove("open");
   DOM.cartOverlay.classList.remove("open");
@@ -1635,6 +1646,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   generateProductSchema();
   renderCart();
+  consumePendingCartOpen();
   initPricingCards();
   animateCounters();
   initSectionReveal();
