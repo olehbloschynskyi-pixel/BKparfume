@@ -137,7 +137,7 @@
     "image": "images/products/good-girl.png",
     "badge": "Хіт",
     "slug": "carolina-herrera-good-girl",
-    "seoPage": false
+    "seoPage": true
   },
   {
     "id": 11,
@@ -641,7 +641,7 @@
     "image": "images/products/limperatrice-3.png",
     "badge": "",
     "slug": "dolce-and-gabbana-imperatrice-3",
-    "seoPage": false
+    "seoPage": true
   },
   {
     "id": 47,
@@ -1047,7 +1047,7 @@
     "image": "images/products/versace-bright-crystal.png",
     "badge": "Хіт",
     "slug": "versace-bright-crystal",
-    "seoPage": false
+    "seoPage": true
   },
   {
     "id": 76,

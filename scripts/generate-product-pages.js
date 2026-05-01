@@ -243,7 +243,7 @@ function renderProductPage(product, products) {
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/products/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/products/favicon-32.png" />
-    <link rel="stylesheet" href="../css/style.min.css?v=20260424" />
+    <link rel="stylesheet" href="../css/style.min.css?v=20260501" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
