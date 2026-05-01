@@ -1,9 +1,51 @@
 const fs = require("fs");
 const path = require("path");
 
+function normalizeCalcExpressions(css) {
+  let result = "";
+  let index = 0;
+
+  while (index < css.length) {
+    const calcStart = css.indexOf("calc(", index);
+
+    if (calcStart === -1) {
+      result += css.slice(index);
+      break;
+    }
+
+    result += css.slice(index, calcStart);
+
+    let depth = 0;
+    let cursor = calcStart;
+
+    while (cursor < css.length) {
+      const char = css[cursor];
+
+      if (char === "(") depth += 1;
+      if (char === ")") {
+        depth -= 1;
+        if (depth === 0) {
+          cursor += 1;
+          break;
+        }
+      }
+
+      cursor += 1;
+    }
+
+    const expression = css.slice(calcStart + 5, cursor - 1);
+    const normalizedExpression = expression.replace(/\s*\+\s*/g, " + ").trim();
+
+    result += `calc(${normalizedExpression})`;
+    index = cursor;
+  }
+
+  return result;
+}
+
 // Простий CSS мінімайзер
 function minifyCSS(input) {
-  return (
+  return normalizeCalcExpressions(
     input
       // Видаляємо коментарі
       .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -13,7 +55,7 @@ function minifyCSS(input) {
       // Видаляємо пробіли перед {
       .replace(/\{\s*/g, "{")
       .replace(/\}\s*/g, "}")
-      .trim()
+      .trim(),
   );
 }
 

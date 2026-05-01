@@ -1450,10 +1450,14 @@ ul { list-style: none; }
 
 /* ── ARTICLES PAGE ── */
 .articles-hero {
-  padding: 18px 24px 42px;
+  padding: calc(var(--header-h) + 18px) 24px 42px;
   max-width: 980px;
   margin: 0 auto;
   text-align: center;
+}
+
+.article-breadcrumbs + .articles-hero {
+  padding-top: 18px;
 }
 
 .articles-hero__label {
@@ -1792,7 +1796,11 @@ ul { list-style: none; }
   }
 
   .articles-hero {
-    padding: 12px 16px 30px;
+    padding: calc(var(--header-h) + 12px) 16px 30px;
+  }
+
+  .article-breadcrumbs + .articles-hero {
+    padding-top: 12px;
   }
 
   .articles-section {
