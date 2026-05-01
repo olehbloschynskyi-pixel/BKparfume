@@ -449,6 +449,11 @@ ul { list-style: none; }
   color: var(--gold);
 }
 
+#popular-directions-title {
+  color: var(--gold);
+  text-align: center;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

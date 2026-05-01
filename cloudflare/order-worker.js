@@ -52,7 +52,9 @@ export default {
       input.browser_client_ip || input.client_ip || "",
     ).trim();
     const customerEmail = normalizeEmail(input.customer_email || input.email);
-    const deliveryAddress = String(input.address || input.delivery_address || "").trim();
+    const deliveryAddress = String(
+      input.address || input.delivery_address || "",
+    ).trim();
     const message = appendIpInfo(
       input.message,
       serverClientIp,
