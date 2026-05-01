@@ -736,6 +736,14 @@ function resetCartCheckout() {
   });
 }
 
+function clearCartAfterCheckout() {
+  cart = [];
+  saveCart();
+  renderCart();
+  resetCartCheckout();
+  closeCartPanel();
+}
+
 function validateCartCheckoutForm(showErrors = true) {
   let isValid = true;
 
@@ -1240,6 +1248,7 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
       ),
     ]);
   } finally {
+    clearCartAfterCheckout();
     window.location.assign(paymentUrl);
   }
 });
