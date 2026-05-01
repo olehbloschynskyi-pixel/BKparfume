@@ -440,6 +440,44 @@ ul { list-style: none; }
   max-width: 980px;
   margin: 0 auto;
 }
+
+.pricing-banner__subsection {
+  padding-top: 28px;
+}
+
+.pricing-banner__title--toggle {
+  margin-bottom: 0;
+}
+
+.pricing-banner__toggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--gold);
+  font: inherit;
+}
+
+.pricing-banner__toggle:hover {
+  color: var(--gold-light);
+}
+
+.pricing-banner__toggle-icon {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.pricing-banner__toggle[aria-expanded="true"] .pricing-banner__toggle-icon {
+  transform: rotate(45deg);
+}
+
+.pricing-grid--collapsible {
+  margin-top: 24px;
+}
+
 .pricing-banner__title {
   font-family: var(--font-serif);
   font-size: 1.8rem;
