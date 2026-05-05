@@ -71,6 +71,7 @@ let currentProductId = null;
 let currentCheckoutOrderId = null;
 let productsRenderPassId = 0;
 let lastFocusedElement = null;
+let cartBadgeAnimationFrameId = 0;
 
 /* ============================================
    DOM REFS
@@ -362,7 +363,11 @@ function handleProductImageError(image) {
   const primarySrc = image.dataset.imageSrc || "";
   const originalSrc = image.dataset.originalSrc || primarySrc;
 
-  if (!image.dataset.fallbackTried && primarySrc && primarySrc !== originalSrc) {
+  if (
+    !image.dataset.fallbackTried &&
+    primarySrc &&
+    primarySrc !== originalSrc
+  ) {
     image.dataset.fallbackTried = "1";
     image.src = originalSrc;
     return;
@@ -1430,9 +1435,23 @@ DOM.checkoutPhone.addEventListener("input", (e) => {
    ANIMATE CART BADGE
    ============================================ */
 function animateCartBadge() {
+  if (!DOM.cartBadge) {
+    return;
+  }
+
+  if (cartBadgeAnimationFrameId) {
+    cancelAnimationFrame(cartBadgeAnimationFrameId);
+    cartBadgeAnimationFrameId = 0;
+  }
+
   DOM.cartBadge.style.animation = "none";
-  DOM.cartBadge.offsetHeight; // reflow
-  DOM.cartBadge.style.animation = "pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+  cartBadgeAnimationFrameId = requestAnimationFrame(() => {
+    cartBadgeAnimationFrameId = requestAnimationFrame(() => {
+      DOM.cartBadge.style.animation =
+        "pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      cartBadgeAnimationFrameId = 0;
+    });
+  });
 }
 
 /* ============================================

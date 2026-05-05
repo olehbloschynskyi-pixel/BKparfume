@@ -254,14 +254,6 @@
       #catalog {
         scroll-margin-top: calc(var(--header-h) + 5px);
       }
-      .catalog,
-      .about,
-      .contact,
-      .footer,
-      .pricing-banner[aria-labelledby="trust-title"] {
-        content-visibility: auto;
-        contain-intrinsic-size: 900px;
-      }
       section.pricing-banner[aria-labelledby="popular-directions-title"] {
         background: linear-gradient(
           180deg,
@@ -335,34 +327,13 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="css/style.min.css?v=20260506-2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="preload"
-      href="css/style.min.css?v=20260505-6"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
     />
-    <noscript>
-      <link rel="stylesheet" href="css/style.min.css?v=20260505-6" />
-    </noscript>
-    <script>
-      window.addEventListener(
-        "load",
-        () => {
-          const fontsLink = document.createElement("link");
-          fontsLink.rel = "stylesheet";
-          fontsLink.href =
-            "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap";
-          document.head.appendChild(fontsLink);
-        },
-        { once: true },
-      );
-    </script>
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
-      />
-    </noscript>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -607,7 +578,13 @@
             </svg>
             <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
           </button>
-          <button class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false" aria-controls="nav">
+          <button
+            class="burger"
+            id="burgerBtn"
+            aria-label="Меню"
+            aria-expanded="false"
+            aria-controls="nav"
+          >
             <span></span><span></span><span></span>
           </button>
         </div>
@@ -646,397 +623,421 @@
     <main id="main-content">
       <!-- HERO -->
       <section class="hero">
-      <div class="hero__content">
-        <p class="hero__label">Колекція 2026</p>
-        <h1 class="hero__title">
-          Аромати,<br />що розповідають<br /><em>твою</em> історію
-        </h1>
-        <p class="hero__desc">
-          Наливна парфумерія преміум-брендів.<br />
-          Від 110 мл за доступною ціною.
-        </p>
-        <a href="#catalog" class="btn btn--primary hero__btn"
-          >Переглянути колекцію</a
-        >
-      </div>
-      <div class="hero__decor">
-        <div class="hero__circle hero__circle--1"></div>
-        <div class="hero__circle hero__circle--2"></div>
-        <div class="hero__circle hero__circle--3"></div>
-      </div>
-    </section>
-
-    <!-- PRICING BANNER -->
-    <section class="pricing-banner">
-      <div class="pricing-banner__inner">
-        <h2 class="pricing-banner__title">Ціни на парфумерію</h2>
-        <div class="pricing-grid">
-          <div class="pricing-card" data-qty="1-2">
-            <div class="pricing-card__qty">1–2 шт</div>
-            <div class="pricing-card__price">160 <span>грн/шт</span></div>
-          </div>
-          <div class="pricing-card" data-qty="3-4">
-            <div class="pricing-card__qty">3–4 шт</div>
-            <div class="pricing-card__price">150 <span>грн/шт</span></div>
-            <div class="pricing-card__save">Економія 10 грн</div>
-          </div>
-          <div class="pricing-card" data-qty="5-9">
-            <div class="pricing-card__qty">5–9 шт</div>
-            <div class="pricing-card__price">140 <span>грн/шт</span></div>
-            <div class="pricing-card__save">Економія 20 грн</div>
-          </div>
-          <div class="pricing-card" data-qty="10-24">
-            <div class="pricing-card__qty">10–24 шт</div>
-            <div class="pricing-card__price">130 <span>грн/шт</span></div>
-            <div class="pricing-card__save">Економія 30 грн</div>
-          </div>
-          <div class="pricing-card pricing-card--highlight" data-qty="25+">
-            <div class="pricing-card__qty">від 25 шт</div>
-            <div class="pricing-card__price">120 <span>грн/шт</span></div>
-            <div class="pricing-card__save">Найвигідніше!</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="pricing-banner" aria-labelledby="popular-directions-title">
-      <div class="pricing-banner__inner">
-        <h2 class="pricing-banner__title" id="popular-directions-title">
-          Популярні напрямки для пошуку
-        </h2>
-        <div class="pricing-grid">
-          <a
-            class="pricing-card pricing-card--highlight"
-            href="zhinochi-parfumy.html"
+        <div class="hero__content">
+          <p class="hero__label">Колекція 2026</p>
+          <h1 class="hero__title">
+            Аромати,<br />що розповідають<br /><em>твою</em> історію
+          </h1>
+          <p class="hero__desc">
+            Наливна парфумерія преміум-брендів.<br />
+            Від 110 мл за доступною ціною.
+          </p>
+          <a href="#catalog" class="btn btn--primary hero__btn"
+            >Переглянути колекцію</a
           >
-            <div class="pricing-card__qty">Жіночі парфуми</div>
-            <div class="pricing-card__price">
-              <span>Підбір ароматів для щодня та подій</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="cholovichi-parfumy.html">
-            <div class="pricing-card__qty">Чоловічі парфуми</div>
-            <div class="pricing-card__price">
-              <span>Свіжі, деревні та вечірні композиції</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="uniseks-parfumy.html">
-            <div class="pricing-card__qty">Унісекс аромати</div>
-            <div class="pricing-card__price">
-              <span>Нішеві та універсальні композиції</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="optova-parfumeriya.html">
-            <div class="pricing-card__qty">Опт</div>
-            <div class="pricing-card__price">
-              <span>Ціни для закупівель від 10 і 25 штук</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="dostavka-i-oplata.html">
-            <div class="pricing-card__qty">Доставка й оплата</div>
-            <div class="pricing-card__price">
-              <span>Умови, FAQ та замовлення по Україні</span>
-            </div>
-          </a>
         </div>
+        <div class="hero__decor">
+          <div class="hero__circle hero__circle--1"></div>
+          <div class="hero__circle hero__circle--2"></div>
+          <div class="hero__circle hero__circle--3"></div>
+        </div>
+      </section>
 
-        <div class="pricing-banner__subsection">
-          <h2 class="pricing-banner__title pricing-banner__title--toggle">
-            <button
-              type="button"
-              class="pricing-banner__toggle"
-              id="featuredProductsToggle"
-              aria-expanded="false"
-              aria-controls="featuredProductsContent"
-            >
-              <span>Популярні сторінки ароматів</span>
-              <span class="pricing-banner__toggle-icon" aria-hidden="true"
-                >+</span
-              >
-            </button>
+      <!-- PRICING BANNER -->
+      <section class="pricing-banner">
+        <div class="pricing-banner__inner">
+          <h2 class="pricing-banner__title">Ціни на парфумерію</h2>
+          <div class="pricing-grid">
+            <div class="pricing-card" data-qty="1-2">
+              <div class="pricing-card__qty">1–2 шт</div>
+              <div class="pricing-card__price">160 <span>грн/шт</span></div>
+            </div>
+            <div class="pricing-card" data-qty="3-4">
+              <div class="pricing-card__qty">3–4 шт</div>
+              <div class="pricing-card__price">150 <span>грн/шт</span></div>
+              <div class="pricing-card__save">Економія 10 грн</div>
+            </div>
+            <div class="pricing-card" data-qty="5-9">
+              <div class="pricing-card__qty">5–9 шт</div>
+              <div class="pricing-card__price">140 <span>грн/шт</span></div>
+              <div class="pricing-card__save">Економія 20 грн</div>
+            </div>
+            <div class="pricing-card" data-qty="10-24">
+              <div class="pricing-card__qty">10–24 шт</div>
+              <div class="pricing-card__price">130 <span>грн/шт</span></div>
+              <div class="pricing-card__save">Економія 30 грн</div>
+            </div>
+            <div class="pricing-card pricing-card--highlight" data-qty="25+">
+              <div class="pricing-card__qty">від 25 шт</div>
+              <div class="pricing-card__price">120 <span>грн/шт</span></div>
+              <div class="pricing-card__save">Найвигідніше!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="pricing-banner"
+        aria-labelledby="popular-directions-title"
+      >
+        <div class="pricing-banner__inner">
+          <h2 class="pricing-banner__title" id="popular-directions-title">
+            Популярні напрямки для пошуку
           </h2>
-          <div
-            class="pricing-grid pricing-grid--collapsible"
-            id="featuredProductsContent"
-            hidden
-          >
-            <a class="pricing-card" href="products/giorgio-armani-si.html">
-              <div class="pricing-card__qty">BKparfume Si</div>
-              <div class="pricing-card__price">
-                <span>Жіночий аромат на кожен день і вечір</span>
-              </div>
-            </a>
-            <a class="pricing-card" href="products/gucci-flora.html">
-              <div class="pricing-card__qty">BKparfume Flora</div>
-              <div class="pricing-card__price">
-                <span>Квітковий жіночий аромат для подарунка</span>
-              </div>
-            </a>
-            <a
-              class="pricing-card"
-              href="products/lanco-me-la-vie-est-belle.html"
-            >
-              <div class="pricing-card__qty">BKparfume La Vie Est Belle</div>
-              <div class="pricing-card__price">
-                <span>Солодкий популярний жіночий аромат</span>
-              </div>
-            </a>
-            <a
-              class="pricing-card"
-              href="products/yves-saint-laurent-black-opium.html"
-            >
-              <div class="pricing-card__qty">BKparfume Black Opium</div>
-              <div class="pricing-card__price">
-                <span>Вечірня композиція з кавовими нотами</span>
-              </div>
-            </a>
-            <a
-              class="pricing-card"
-              href="products/paco-rabanne-lady-million.html"
-            >
-              <div class="pricing-card__qty">BKparfume Lady Million</div>
-              <div class="pricing-card__price">
-                <span>Яскравий жіночий аромат з виразним шлейфом</span>
-              </div>
-            </a>
-            <a class="pricing-card" href="products/versace-bright-crystal.html">
-              <div class="pricing-card__qty">BKparfume Bright Crystal</div>
-              <div class="pricing-card__price">
-                <span>Свіжий кришталевий аромат з гранатом і лотосом</span>
-              </div>
-            </a>
-            <a
-              class="pricing-card"
-              href="products/dolce-and-gabbana-imperatrice-3.html"
-            >
-              <div class="pricing-card__qty">BKparfume Imperatrice</div>
-              <div class="pricing-card__price">
-                <span
-                  >Фруктово-квіткова композиція для легкого щоденного
-                  настрою</span
-                >
-              </div>
-            </a>
-            <a
-              class="pricing-card"
-              href="products/carolina-herrera-good-girl.html"
-            >
-              <div class="pricing-card__qty">BKparfume Good Girl</div>
-              <div class="pricing-card__price">
-                <span
-                  >Спокусливий жасминово-кавовий аромат для вечора і подій</span
-                >
-              </div>
-            </a>
+          <div class="pricing-grid">
             <a
               class="pricing-card pricing-card--highlight"
               href="zhinochi-parfumy.html"
             >
-              <div class="pricing-card__qty">Усі жіночі сторінки</div>
+              <div class="pricing-card__qty">Жіночі парфуми</div>
               <div class="pricing-card__price">
-                <span>Ще більше статичних SEO-сторінок у категорії</span>
+                <span>Підбір ароматів для щодня та подій</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="cholovichi-parfumy.html">
+              <div class="pricing-card__qty">Чоловічі парфуми</div>
+              <div class="pricing-card__price">
+                <span>Свіжі, деревні та вечірні композиції</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="uniseks-parfumy.html">
+              <div class="pricing-card__qty">Унісекс аромати</div>
+              <div class="pricing-card__price">
+                <span>Нішеві та універсальні композиції</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="optova-parfumeriya.html">
+              <div class="pricing-card__qty">Опт</div>
+              <div class="pricing-card__price">
+                <span>Ціни для закупівель від 10 і 25 штук</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="dostavka-i-oplata.html">
+              <div class="pricing-card__qty">Доставка й оплата</div>
+              <div class="pricing-card__price">
+                <span>Умови, FAQ та замовлення по Україні</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="pricing-banner__subsection">
+            <h2 class="pricing-banner__title pricing-banner__title--toggle">
+              <button
+                type="button"
+                class="pricing-banner__toggle"
+                id="featuredProductsToggle"
+                aria-expanded="false"
+                aria-controls="featuredProductsContent"
+              >
+                <span>Популярні сторінки ароматів</span>
+                <span class="pricing-banner__toggle-icon" aria-hidden="true"
+                  >+</span
+                >
+              </button>
+            </h2>
+            <div
+              class="pricing-grid pricing-grid--collapsible"
+              id="featuredProductsContent"
+              hidden
+            >
+              <a class="pricing-card" href="products/giorgio-armani-si.html">
+                <div class="pricing-card__qty">BKparfume Si</div>
+                <div class="pricing-card__price">
+                  <span>Жіночий аромат на кожен день і вечір</span>
+                </div>
+              </a>
+              <a class="pricing-card" href="products/gucci-flora.html">
+                <div class="pricing-card__qty">BKparfume Flora</div>
+                <div class="pricing-card__price">
+                  <span>Квітковий жіночий аромат для подарунка</span>
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/lanco-me-la-vie-est-belle.html"
+              >
+                <div class="pricing-card__qty">BKparfume La Vie Est Belle</div>
+                <div class="pricing-card__price">
+                  <span>Солодкий популярний жіночий аромат</span>
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/yves-saint-laurent-black-opium.html"
+              >
+                <div class="pricing-card__qty">BKparfume Black Opium</div>
+                <div class="pricing-card__price">
+                  <span>Вечірня композиція з кавовими нотами</span>
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/paco-rabanne-lady-million.html"
+              >
+                <div class="pricing-card__qty">BKparfume Lady Million</div>
+                <div class="pricing-card__price">
+                  <span>Яскравий жіночий аромат з виразним шлейфом</span>
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/versace-bright-crystal.html"
+              >
+                <div class="pricing-card__qty">BKparfume Bright Crystal</div>
+                <div class="pricing-card__price">
+                  <span>Свіжий кришталевий аромат з гранатом і лотосом</span>
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/dolce-and-gabbana-imperatrice-3.html"
+              >
+                <div class="pricing-card__qty">BKparfume Imperatrice</div>
+                <div class="pricing-card__price">
+                  <span
+                    >Фруктово-квіткова композиція для легкого щоденного
+                    настрою</span
+                  >
+                </div>
+              </a>
+              <a
+                class="pricing-card"
+                href="products/carolina-herrera-good-girl.html"
+              >
+                <div class="pricing-card__qty">BKparfume Good Girl</div>
+                <div class="pricing-card__price">
+                  <span
+                    >Спокусливий жасминово-кавовий аромат для вечора і
+                    подій</span
+                  >
+                </div>
+              </a>
+              <a
+                class="pricing-card pricing-card--highlight"
+                href="zhinochi-parfumy.html"
+              >
+                <div class="pricing-card__qty">Усі жіночі сторінки</div>
+                <div class="pricing-card__price">
+                  <span>Ще більше статичних SEO-сторінок у категорії</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATALOG -->
+      <section class="catalog" id="catalog">
+        <div class="catalog__inner">
+          <div class="catalog__header">
+            <h2 class="catalog__title">Наша колекція</h2>
+            <div class="catalog__filters" id="filterButtons">
+              <button class="filter-btn" data-filter="all" aria-pressed="false">
+                Всі
+              </button>
+              <button
+                class="filter-btn active"
+                data-filter="women"
+                aria-pressed="true"
+              >
+                Жіночі
+              </button>
+              <button
+                class="filter-btn"
+                data-filter="unisex"
+                aria-pressed="false"
+              >
+                Унісекс
+              </button>
+              <button class="filter-btn" data-filter="men" aria-pressed="false">
+                Чоловічі
+              </button>
+            </div>
+          </div>
+          <div class="products-grid" id="productsGrid">
+            <!-- Products rendered by JS -->
+          </div>
+          <p class="no-results" id="noResults">Нічого не знайдено 😔</p>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="about">
+        <div class="about__inner">
+          <div class="about__text">
+            <h2 class="about__title">
+              Чому
+              <span class="logo"
+                ><span class="logo__bk">BK</span
+                ><span class="logo__store">PARFUME</span></span
+              >?
+            </h2>
+            <p>
+              Ми пропонуємо наливну парфумерію від оригінальних флаконів відомих
+              брендів. Без підробок та розведень.
+            </p>
+            <ul class="about__list">
+              <li>✦ 100% оригінальна продукція</li>
+              <li>✦ Флакони від 110 мл</li>
+              <li>✦ Доставка по всій Україні</li>
+              <li>✦ Вигідні ціни при оптовій купівлі</li>
+            </ul>
+            <p>
+              Шукаєте окремий розділ? Перейдіть на
+              <a href="zhinochi-parfumy.html">жіночі парфуми</a>,
+              <a href="cholovichi-parfumy.html">чоловічі парфуми</a>,
+              <a href="uniseks-parfumy.html">унісекс аромати</a> або сторінку
+              <a href="optova-parfumeriya.html">оптових замовлень</a>.
+            </p>
+          </div>
+          <div class="about__stats">
+            <div class="stat">
+              <span class="stat__num" data-target="500">0</span
+              ><span class="stat__label">Ароматів у колекції</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num" data-target="2000">0</span
+              ><span class="stat__label">Задоволених клієнтів</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num" data-target="5">0</span
+              ><span class="stat__label">Років на ринку</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="contact" id="contact">
+        <div class="contact__inner">
+          <div class="contact__info">
+            <h2 class="contact__title">Зв'язатись з нами</h2>
+            <p class="contact__desc">
+              Є питання або хочете зробити оптове замовлення? Напишіть нам!
+            </p>
+            <div class="contact__details">
+              <a href="tel:0683313339" class="contact__link">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.63 19.79 19.79 0 01.12 1a2 2 0 012-2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.41a16 16 0 006.48 6.48l1.48-1.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                  ></path>
+                </svg>
+                068-331-33-39
+              </a>
+              <a href="mailto:bkparfume@ukr.net" class="contact__link">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  ></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                bkparfume@ukr.net
+              </a>
+            </div>
+          </div>
+          <form class="contact-form" id="contactForm" novalidate="">
+            <div class="form-group">
+              <input
+                type="text"
+                id="formName"
+                name="name"
+                placeholder=" "
+                autocomplete="name"
+              />
+              <label for="formName">Ваше ім'я *</label>
+              <span class="form-error" id="nameError"></span>
+            </div>
+            <div class="form-group">
+              <input
+                type="tel"
+                id="formPhone"
+                name="phone"
+                placeholder=" "
+                autocomplete="tel"
+              />
+              <label for="formPhone">Телефон *</label>
+              <span class="form-error" id="phoneError"></span>
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                id="formEmail"
+                name="email"
+                placeholder=" "
+                autocomplete="email"
+              />
+              <label for="formEmail">Email</label>
+              <span class="form-error" id="emailError"></span>
+            </div>
+            <div class="form-group">
+              <textarea
+                id="formMessage"
+                name="message"
+                placeholder=" "
+                rows="4"
+              ></textarea>
+              <label for="formMessage">Повідомлення</label>
+            </div>
+            <button
+              type="submit"
+              class="btn btn--primary form-submit"
+              id="formSubmit"
+            >
+              <span class="btn-text">Надіслати</span>
+              <span class="btn-loader"></span>
+            </button>
+            <p class="form-success" id="formSuccess">
+              ✓ Повідомлення надіслано! Ми зв'яжемось з вами найближчим часом.
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <section class="pricing-banner" aria-labelledby="trust-title">
+        <div class="pricing-banner__inner">
+          <h2 class="pricing-banner__title" id="trust-title">
+            Замовлення, доставка та довіра
+          </h2>
+          <div class="pricing-grid">
+            <a class="pricing-card" href="dostavka-i-oplata.html">
+              <div class="pricing-card__qty">Нова пошта по Україні</div>
+              <div class="pricing-card__price">
+                <span>Відправляємо замовлення по всій Україні</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="contacts.html">
+              <div class="pricing-card__qty">Швидкий зв'язок</div>
+              <div class="pricing-card__price">
+                <span>Телефон, email та форма для консультацій</span>
+              </div>
+            </a>
+            <a class="pricing-card" href="about.html">
+              <div class="pricing-card__qty">Про BK Parfume</div>
+              <div class="pricing-card__price">
+                <span>Про асортимент, досвід і підхід до сервісу</span>
+              </div>
+            </a>
+            <a
+              class="pricing-card pricing-card--highlight"
+              href="articles.html"
+            >
+              <div class="pricing-card__qty">Статті та поради</div>
+              <div class="pricing-card__price">
+                <span>Підбір ароматів, тренди та рекомендації</span>
               </div>
             </a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- CATALOG -->
-    <section class="catalog" id="catalog">
-      <div class="catalog__inner">
-        <div class="catalog__header">
-          <h2 class="catalog__title">Наша колекція</h2>
-          <div class="catalog__filters" id="filterButtons">
-            <button class="filter-btn" data-filter="all" aria-pressed="false">Всі</button>
-            <button class="filter-btn active" data-filter="women" aria-pressed="true">
-              Жіночі
-            </button>
-            <button class="filter-btn" data-filter="unisex" aria-pressed="false">Унісекс</button>
-            <button class="filter-btn" data-filter="men" aria-pressed="false">Чоловічі</button>
-          </div>
-        </div>
-        <div class="products-grid" id="productsGrid">
-          <!-- Products rendered by JS -->
-        </div>
-        <p class="no-results" id="noResults">Нічого не знайдено 😔</p>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="about">
-      <div class="about__inner">
-        <div class="about__text">
-          <h2 class="about__title">
-            Чому
-            <span class="logo"
-              ><span class="logo__bk">BK</span
-              ><span class="logo__store">PARFUME</span></span
-            >?
-          </h2>
-          <p>
-            Ми пропонуємо наливну парфумерію від оригінальних флаконів відомих
-            брендів. Без підробок та розведень.
-          </p>
-          <ul class="about__list">
-            <li>✦ 100% оригінальна продукція</li>
-            <li>✦ Флакони від 110 мл</li>
-            <li>✦ Доставка по всій Україні</li>
-            <li>✦ Вигідні ціни при оптовій купівлі</li>
-          </ul>
-          <p>
-            Шукаєте окремий розділ? Перейдіть на
-            <a href="zhinochi-parfumy.html">жіночі парфуми</a>,
-            <a href="cholovichi-parfumy.html">чоловічі парфуми</a>,
-            <a href="uniseks-parfumy.html">унісекс аромати</a> або сторінку
-            <a href="optova-parfumeriya.html">оптових замовлень</a>.
-          </p>
-        </div>
-        <div class="about__stats">
-          <div class="stat">
-            <span class="stat__num" data-target="500">0</span
-            ><span class="stat__label">Ароматів у колекції</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num" data-target="2000">0</span
-            ><span class="stat__label">Задоволених клієнтів</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num" data-target="5">0</span
-            ><span class="stat__label">Років на ринку</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact">
-      <div class="contact__inner">
-        <div class="contact__info">
-          <h2 class="contact__title">Зв'язатись з нами</h2>
-          <p class="contact__desc">
-            Є питання або хочете зробити оптове замовлення? Напишіть нам!
-          </p>
-          <div class="contact__details">
-            <a href="tel:0683313339" class="contact__link">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path
-                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.63 19.79 19.79 0 01.12 1a2 2 0 012-2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.41a16 16 0 006.48 6.48l1.48-1.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
-                ></path>
-              </svg>
-              068-331-33-39
-            </a>
-            <a href="mailto:bkparfume@ukr.net" class="contact__link">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path
-                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                ></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-              bkparfume@ukr.net
-            </a>
-          </div>
-        </div>
-        <form class="contact-form" id="contactForm" novalidate="">
-          <div class="form-group">
-            <input
-              type="text"
-              id="formName"
-              name="name"
-              placeholder=" "
-              autocomplete="name"
-            />
-            <label for="formName">Ваше ім'я *</label>
-            <span class="form-error" id="nameError"></span>
-          </div>
-          <div class="form-group">
-            <input
-              type="tel"
-              id="formPhone"
-              name="phone"
-              placeholder=" "
-              autocomplete="tel"
-            />
-            <label for="formPhone">Телефон *</label>
-            <span class="form-error" id="phoneError"></span>
-          </div>
-          <div class="form-group">
-            <input
-              type="email"
-              id="formEmail"
-              name="email"
-              placeholder=" "
-              autocomplete="email"
-            />
-            <label for="formEmail">Email</label>
-            <span class="form-error" id="emailError"></span>
-          </div>
-          <div class="form-group">
-            <textarea
-              id="formMessage"
-              name="message"
-              placeholder=" "
-              rows="4"
-            ></textarea>
-            <label for="formMessage">Повідомлення</label>
-          </div>
-          <button
-            type="submit"
-            class="btn btn--primary form-submit"
-            id="formSubmit"
-          >
-            <span class="btn-text">Надіслати</span>
-            <span class="btn-loader"></span>
-          </button>
-          <p class="form-success" id="formSuccess">
-            ✓ Повідомлення надіслано! Ми зв'яжемось з вами найближчим часом.
-          </p>
-        </form>
-      </div>
-    </section>
-
-      <section class="pricing-banner" aria-labelledby="trust-title">
-      <div class="pricing-banner__inner">
-        <h2 class="pricing-banner__title" id="trust-title">
-          Замовлення, доставка та довіра
-        </h2>
-        <div class="pricing-grid">
-          <a class="pricing-card" href="dostavka-i-oplata.html">
-            <div class="pricing-card__qty">Нова пошта по Україні</div>
-            <div class="pricing-card__price">
-              <span>Відправляємо замовлення по всій Україні</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="contacts.html">
-            <div class="pricing-card__qty">Швидкий зв'язок</div>
-            <div class="pricing-card__price">
-              <span>Телефон, email та форма для консультацій</span>
-            </div>
-          </a>
-          <a class="pricing-card" href="about.html">
-            <div class="pricing-card__qty">Про BK Parfume</div>
-            <div class="pricing-card__price">
-              <span>Про асортимент, досвід і підхід до сервісу</span>
-            </div>
-          </a>
-          <a class="pricing-card pricing-card--highlight" href="articles.html">
-            <div class="pricing-card__qty">Статті та поради</div>
-            <div class="pricing-card__price">
-              <span>Підбір ароматів, тренди та рекомендації</span>
-            </div>
-          </a>
-        </div>
-      </div>
       </section>
     </main>
 
@@ -1147,7 +1148,14 @@
 
     <!-- CART PANEL -->
     <div class="cart-overlay" id="cartOverlay" aria-hidden="true" hidden></div>
-    <aside class="cart-panel" id="cartPanel" aria-label="Кошик" aria-hidden="true" tabindex="-1" hidden>
+    <aside
+      class="cart-panel"
+      id="cartPanel"
+      aria-label="Кошик"
+      aria-hidden="true"
+      tabindex="-1"
+      hidden
+    >
       <div class="cart-panel__header">
         <h3>Мій кошик</h3>
         <button
@@ -1305,6 +1313,6 @@
     </script>
 
     <script defer src="js/site-config.js?v=20260424-3"></script>
-    <script defer src="js/app-v4.min.js?v=20260506-1"></script>
+    <script defer src="js/app-v4.min.js?v=20260506-2"></script>
   </body>
 </html>
