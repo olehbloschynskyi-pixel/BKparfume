@@ -7,6 +7,11 @@ const OUTPUT_DIR = path.join(ROOT_DIR, "products");
 
 const SITE_URL = "https://bkparfume.site";
 const STORE_BRAND = "BKparfume";
+const STORE_NAME = "BK Parfume";
+const STORE_CURRENCY = "UAH";
+const OFFER_AVAILABILITY = "https://schema.org/InStock";
+const ITEM_CONDITION = "https://schema.org/NewCondition";
+const PRICE_VALID_UNTIL = "2026-12-31";
 const CATEGORY_META = {
   women: {
     label: "жіночі парфуми",
@@ -117,26 +122,38 @@ function buildFaq(product, categoryMeta) {
 }
 
 function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
+  const productImageUrl = `${SITE_URL}/${product.image}`;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Product",
+        "@id": `${canonicalUrl}#product`,
         name: displayName(product.name),
+        url: canonicalUrl,
         brand: {
           "@type": "Brand",
-          name: STORE_BRAND,
+          name: STORE_NAME,
         },
-        image: `${SITE_URL}/${product.image}`,
+        image: [productImageUrl],
         description: product.description,
         category: categoryMeta.label,
         sku: String(product.id),
+        mpn: product.slug,
         offers: {
           "@type": "Offer",
-          price: String(product.price),
-          priceCurrency: "UAH",
-          availability: "https://schema.org/InStock",
           url: canonicalUrl,
+          price: String(product.price),
+          priceCurrency: STORE_CURRENCY,
+          priceValidUntil: PRICE_VALID_UNTIL,
+          availability: OFFER_AVAILABILITY,
+          itemCondition: ITEM_CONDITION,
+          seller: {
+            "@type": "Organization",
+            name: STORE_NAME,
+            url: SITE_URL,
+          },
         },
       },
       {

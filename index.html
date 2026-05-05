@@ -320,13 +320,35 @@
         }
       }
     </style>
-    <link rel="stylesheet" href="css/style.min.css?v=20260501-2" />
+    <link
+      rel="preload"
+      href="css/style.min.css?v=20260505-1"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript>
+      <link rel="stylesheet" href="css/style.min.css?v=20260505-1" />
+    </noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <link
       rel="icon"
       href="images/products/favicon-32.png"
@@ -614,12 +636,11 @@
       <div class="hero__video-wrap">
         <video
           class="hero__video"
-          autoplay
           muted
           loop
           playsinline
-          preload="metadata"
-          poster="images/hero-poster.jpg"
+          preload="none"
+          data-autoplay="true"
         >
           <source
             src="images/products/6639659-uhd_4096_2160_25fps.mp4"
@@ -781,10 +802,7 @@
                 <span>Яскравий жіночий аромат з виразним шлейфом</span>
               </div>
             </a>
-            <a
-              class="pricing-card"
-              href="products/versace-bright-crystal.html"
-            >
+            <a class="pricing-card" href="products/versace-bright-crystal.html">
               <div class="pricing-card__qty">BKparfume Bright Crystal</div>
               <div class="pricing-card__price">
                 <span>Свіжий кришталевий аромат з гранатом і лотосом</span>
@@ -796,7 +814,10 @@
             >
               <div class="pricing-card__qty">BKparfume Imperatrice</div>
               <div class="pricing-card__price">
-                <span>Фруктово-квіткова композиція для легкого щоденного настрою</span>
+                <span
+                  >Фруктово-квіткова композиція для легкого щоденного
+                  настрою</span
+                >
               </div>
             </a>
             <a
@@ -805,7 +826,9 @@
             >
               <div class="pricing-card__qty">BKparfume Good Girl</div>
               <div class="pricing-card__price">
-                <span>Спокусливий жасминово-кавовий аромат для вечора і подій</span>
+                <span
+                  >Спокусливий жасминово-кавовий аромат для вечора і подій</span
+                >
               </div>
             </a>
             <a
@@ -1282,7 +1305,7 @@
     </script>
 
     <script defer src="js/site-config.js?v=20260424-3"></script>
-    <script defer src="js/app-v4.js?v=20260429-10"></script>
+    <script defer src="js/app-v4.js?v=20260505-1"></script>
     <script
       defer
       src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516"

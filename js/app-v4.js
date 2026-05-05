@@ -223,6 +223,9 @@ function createCard(p, delay = 0) {
   const badgeHtml = p.badge
     ? `<span class="product-card__badge">${p.badge}</span>`
     : "";
+  const imagePath = normalizeCatalogImagePath(p.image);
+  const imageLoading = delay < 6 ? "eager" : "lazy";
+  const imageFetchPriority = delay < 2 ? "high" : "auto";
 
   // Генеруємо описовий alt текст для SEO
   const altText = `${p.name} від ${p.brand} - парфум для ${CATEGORY_LABELS[p.category] || p.category} ${p.volume}`;
@@ -231,21 +234,24 @@ function createCard(p, delay = 0) {
     <div class="product-card__image-wrap">
       <img
         class="product-card__image"
-        src="${p.image}"
+        src="${imagePath}"
+        data-image-src="${imagePath}"
         alt="${altText}"
         title="${p.name}"
-        loading="lazy"
+        loading="${imageLoading}"
+        fetchpriority="${imageFetchPriority}"
         decoding="async"
         width="300"
         height="300"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        onload="handleProductImageLoad(this)"
+        onerror="handleProductImageError(this)"
       />
       <div class="product-card__placeholder" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
           <path d="M12 2C9.2 2 7 4.7 7 8c0 4.5 5 12 5 12s5-7.5 5-12c0-3.3-2.2-6-5-6z"/>
           <circle cx="12" cy="8" r="2"/>
         </svg>
-        <span>Фото завантажується</span>
+        <span>Фото тимчасово недоступне</span>
       </div>
       ${badgeHtml}
       <div class="product-card__overlay">
@@ -272,6 +278,41 @@ function createCard(p, delay = 0) {
     </div>
   `;
   return div;
+}
+
+function normalizeCatalogImagePath(imagePath) {
+  if (!imagePath) {
+    return "/images/products/favicon-32.png";
+  }
+
+  return imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
+}
+
+function handleProductImageLoad(image) {
+  const placeholder = image.nextElementSibling;
+
+  if (placeholder) {
+    placeholder.style.display = "none";
+  }
+
+  image.style.display = "block";
+}
+
+function handleProductImageError(image) {
+  const originalSrc = image.dataset.imageSrc;
+
+  if (!image.dataset.retry && originalSrc) {
+    image.dataset.retry = "1";
+    image.src = `${originalSrc}?v=${Date.now()}`;
+    return;
+  }
+
+  image.style.display = "none";
+
+  const placeholder = image.nextElementSibling;
+  if (placeholder) {
+    placeholder.style.display = "flex";
+  }
 }
 
 /* ============================================
@@ -1571,29 +1612,53 @@ function initSectionReveal() {
    GENERATE PRODUCT SCHEMA (для AI індексації)
    ============================================ */
 function generateProductSchema() {
-  // Генеруємо Product Schema JSON-LD для всіх продуктів
-  const itemListElement = products.map((p, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    item: {
-      "@type": "Product",
-      name: p.name,
-      brand: {
-        "@type": "Brand",
-        name: p.brand,
+  const siteUrl = "https://bkparfume.site";
+  const categoryUrls = {
+    women: `${siteUrl}/zhinochi-parfumy.html`,
+    men: `${siteUrl}/cholovichi-parfumy.html`,
+    unisex: `${siteUrl}/uniseks-parfumy.html`,
+  };
+
+  const itemListElement = products.map((p, index) => {
+    const productUrl = p.seoPage
+      ? `${siteUrl}/products/${p.slug}.html`
+      : categoryUrls[p.category] || `${siteUrl}/#catalog`;
+
+    return {
+      "@type": "ListItem",
+      position: index + 1,
+      url: productUrl,
+      item: {
+        "@type": "Product",
+        "@id": `${productUrl}#product`,
+        name: p.name,
+        url: productUrl,
+        brand: {
+          "@type": "Brand",
+          name: "BK Parfume",
+        },
+        image: [`${siteUrl}${normalizeCatalogImagePath(p.image)}`],
+        description: p.description,
+        sku: String(p.id),
+        mpn: p.slug,
+        category: CATEGORY_LABELS[p.category] || p.category,
+        offers: {
+          "@type": "Offer",
+          url: productUrl,
+          price: String(p.price),
+          priceCurrency: "UAH",
+          priceValidUntil: "2026-12-31",
+          availability: "https://schema.org/InStock",
+          itemCondition: "https://schema.org/NewCondition",
+          seller: {
+            "@type": "Organization",
+            name: "BK Parfume",
+            url: siteUrl,
+          },
+        },
       },
-      image: `https://bkparfume.site/${p.image}`,
-      description: p.description,
-      category: p.category,
-      offers: {
-        "@type": "Offer",
-        price: String(p.price),
-        priceCurrency: "UAH",
-        availability: "https://schema.org/InStock",
-        url: `https://bkparfume.site/#product-${p.id}`,
-      },
-    },
-  }));
+    };
+  });
 
   const schema = {
     "@context": "https://schema.org",
@@ -1606,6 +1671,49 @@ function generateProductSchema() {
   script.type = "application/ld+json";
   script.textContent = JSON.stringify(schema);
   document.head.appendChild(script);
+}
+
+function runWhenIdle(callback, timeout = 1200) {
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(callback, { timeout });
+    return;
+  }
+
+  setTimeout(callback, 0);
+}
+
+function startHeroVideo() {
+  const heroVideo = document.querySelector(
+    ".hero__video[data-autoplay='true']",
+  );
+
+  if (!heroVideo) {
+    return;
+  }
+
+  const playHeroVideo = () => {
+    const playAttempt = heroVideo.play();
+
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(() => {});
+    }
+  };
+
+  if (document.readyState === "complete") {
+    playHeroVideo();
+    return;
+  }
+
+  window.addEventListener("load", playHeroVideo, { once: true });
+}
+
+function scheduleNonCriticalPageWork() {
+  runWhenIdle(() => {
+    generateProductSchema();
+    initPricingCards();
+    animateCounters();
+    initSectionReveal();
+  });
 }
 
 /* ============================================
@@ -1631,6 +1739,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHomeLogoLink();
   initCatalogAnchorLinks();
   syncMobileCatalogFilters();
+  startHeroVideo();
   window.addEventListener("resize", syncMobileCatalogFilters, {
     passive: true,
   });
@@ -1653,20 +1762,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncCatalogControls(initialFilter);
     filterProducts(initialFilter, "");
   }
-  generateProductSchema();
   renderCart();
   consumePendingCartOpen();
-  initPricingCards();
-  animateCounters();
-  initSectionReveal();
+  scheduleNonCriticalPageWork();
 
   if (window.location.hash === "#catalog") {
     syncCatalogScrollPosition("auto");
   }
 
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(() => warmupClientIpAddress());
-  } else {
-    setTimeout(() => warmupClientIpAddress(), 0);
-  }
+  runWhenIdle(() => warmupClientIpAddress());
 });
