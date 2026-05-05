@@ -255,6 +255,14 @@
       #catalog {
         scroll-margin-top: calc(var(--header-h) + 5px);
       }
+      .catalog,
+      .about,
+      .contact,
+      .footer,
+      .pricing-banner[aria-labelledby="trust-title"] {
+        content-visibility: auto;
+        contain-intrinsic-size: 900px;
+      }
       section.pricing-banner[aria-labelledby="popular-directions-title"] {
         background: linear-gradient(
           180deg,
