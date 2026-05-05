@@ -198,11 +198,14 @@ function renderProducts(list) {
         return;
       }
 
-      setTimeout(() => {
-        if (renderPassId === productsRenderPassId) {
-          element.classList.add("visible");
-        }
-      }, Math.min(index, 8) * 30);
+      setTimeout(
+        () => {
+          if (renderPassId === productsRenderPassId) {
+            element.classList.add("visible");
+          }
+        },
+        Math.min(index, 8) * 30,
+      );
     });
   };
 
@@ -254,7 +257,8 @@ function createCard(p, delay = 0) {
   const badgeHtml = p.badge
     ? `<span class="product-card__badge">${p.badge}</span>`
     : "";
-  const imagePath = normalizeCatalogImagePath(p.image);
+  const originalImagePath = normalizeCatalogImagePath(p.image);
+  const imagePath = getCatalogCardImagePath(p.image);
   const imageLoading = delay < 6 ? "eager" : "lazy";
   const imageFetchPriority = delay < 2 ? "high" : "auto";
 
@@ -267,6 +271,7 @@ function createCard(p, delay = 0) {
         class="product-card__image"
         src="${imagePath}"
         data-image-src="${imagePath}"
+        data-original-src="${originalImagePath}"
         alt="${altText}"
         title="${p.name}"
         loading="${imageLoading}"
@@ -319,6 +324,29 @@ function normalizeCatalogImagePath(imagePath) {
   return imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
 }
 
+function getCatalogCardImagePath(imagePath) {
+  const normalizedPath = normalizeCatalogImagePath(imagePath);
+
+  if (!normalizedPath.startsWith("/images/products/")) {
+    return normalizedPath;
+  }
+
+  const fileName = normalizedPath.split("/").pop() || "";
+  if (
+    !fileName.endsWith(".png") ||
+    fileName.startsWith("article-") ||
+    fileName.startsWith("favicon-") ||
+    fileName === "apple-touch-icon.png" ||
+    fileName === "icon-bk.png"
+  ) {
+    return normalizedPath;
+  }
+
+  return normalizedPath
+    .replace("/images/products/", "/images/products/thumbs/")
+    .replace(/\.png$/i, ".jpg");
+}
+
 function handleProductImageLoad(image) {
   const placeholder = image.nextElementSibling;
 
@@ -330,7 +358,14 @@ function handleProductImageLoad(image) {
 }
 
 function handleProductImageError(image) {
-  const originalSrc = image.dataset.imageSrc;
+  const primarySrc = image.dataset.imageSrc || "";
+  const originalSrc = image.dataset.originalSrc || primarySrc;
+
+  if (!image.dataset.fallbackTried && primarySrc && primarySrc !== originalSrc) {
+    image.dataset.fallbackTried = "1";
+    image.src = originalSrc;
+    return;
+  }
 
   if (!image.dataset.retry && originalSrc) {
     image.dataset.retry = "1";
