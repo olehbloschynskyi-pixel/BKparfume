@@ -27,6 +27,8 @@ const IP_LOOKUP_TIMEOUT_MS = 2000;
 const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
 const CUSTOMER_EMAIL_STORAGE_KEY = "bk_customer_email";
 const PRODUCTS_DATA_URL = "/data/products.json";
+const INITIAL_RENDER_COUNT = 8;
+const RENDER_CHUNK_SIZE = 12;
 const IP_LOOKUP_SOURCES = [
   "https://api.ipify.org?format=json",
   "https://ipapi.co/json/",
@@ -67,6 +69,7 @@ let cart = JSON.parse(localStorage.getItem("bk_cart") || "[]");
 let currentFilter = "women";
 let currentProductId = null;
 let currentCheckoutOrderId = null;
+let productsRenderPassId = 0;
 
 /* ============================================
    DOM REFS
@@ -169,13 +172,15 @@ async function loadProducts() {
   }
 
   products = await response.json();
-  renderProducts(products);
 }
 
 /* ============================================
    RENDER PRODUCTS
    ============================================ */
 function renderProducts(list) {
+  productsRenderPassId += 1;
+  const renderPassId = productsRenderPassId;
+
   // Remove loader
   if (DOM.loader) DOM.loader.remove();
 
@@ -187,18 +192,44 @@ function renderProducts(list) {
   }
   DOM.noResults.style.display = "none";
 
-  list.forEach((p, i) => {
-    const card = createCard(p, i);
-    DOM.productsGrid.appendChild(card);
-  });
+  const revealCard = (element, index) => {
+    requestAnimationFrame(() => {
+      if (renderPassId !== productsRenderPassId) {
+        return;
+      }
 
-  // Force-reveal all product cards (they're above the fold or at it)
-  // This prevents the IntersectionObserver timing issue from hiding products
-  requestAnimationFrame(() => {
-    DOM.productsGrid.querySelectorAll(".reveal").forEach((el, i) => {
-      setTimeout(() => el.classList.add("visible"), i * 30);
+      setTimeout(() => {
+        if (renderPassId === productsRenderPassId) {
+          element.classList.add("visible");
+        }
+      }, Math.min(index, 8) * 30);
     });
-  });
+  };
+
+  const appendChunk = (startIndex, chunkSize) => {
+    if (renderPassId !== productsRenderPassId) {
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    const endIndex = Math.min(startIndex + chunkSize, list.length);
+
+    for (let index = startIndex; index < endIndex; index += 1) {
+      const card = createCard(list[index], index);
+      fragment.appendChild(card);
+      revealCard(card, index);
+    }
+
+    DOM.productsGrid.appendChild(fragment);
+
+    if (endIndex >= list.length) {
+      return;
+    }
+
+    runWhenIdle(() => appendChunk(endIndex, RENDER_CHUNK_SIZE), 600);
+  };
+
+  appendChunk(0, INITIAL_RENDER_COUNT);
 
   // Also run general reveal for other sections
   observeReveal();
@@ -1682,31 +1713,6 @@ function runWhenIdle(callback, timeout = 1200) {
   setTimeout(callback, 0);
 }
 
-function startHeroVideo() {
-  const heroVideo = document.querySelector(
-    ".hero__video[data-autoplay='true']",
-  );
-
-  if (!heroVideo) {
-    return;
-  }
-
-  const playHeroVideo = () => {
-    const playAttempt = heroVideo.play();
-
-    if (playAttempt && typeof playAttempt.catch === "function") {
-      playAttempt.catch(() => {});
-    }
-  };
-
-  if (document.readyState === "complete") {
-    playHeroVideo();
-    return;
-  }
-
-  window.addEventListener("load", playHeroVideo, { once: true });
-}
-
 function scheduleNonCriticalPageWork() {
   runWhenIdle(() => {
     generateProductSchema();
@@ -1739,7 +1745,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHomeLogoLink();
   initCatalogAnchorLinks();
   syncMobileCatalogFilters();
-  startHeroVideo();
   window.addEventListener("resize", syncMobileCatalogFilters, {
     passive: true,
   });
@@ -1758,10 +1763,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const initialFilter = getInitialCatalogFilter();
-  if (initialFilter !== "all") {
-    syncCatalogControls(initialFilter);
-    filterProducts(initialFilter, "");
-  }
+  syncCatalogControls(initialFilter);
+  filterProducts(initialFilter, "");
   renderCart();
   consumePendingCartOpen();
   scheduleNonCriticalPageWork();

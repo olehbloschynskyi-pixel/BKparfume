@@ -12,6 +12,7 @@ const STORE_CURRENCY = "UAH";
 const OFFER_AVAILABILITY = "https://schema.org/InStock";
 const ITEM_CONDITION = "https://schema.org/NewCondition";
 const PRICE_VALID_UNTIL = "2026-12-31";
+const STYLE_VERSION = "20260505-3";
 const CATEGORY_META = {
   women: {
     label: "жіночі парфуми",
@@ -261,7 +262,7 @@ function renderProductPage(product, products) {
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/products/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/products/favicon-32.png" />
-    <link rel="stylesheet" href="../css/style.min.css?v=20260501-3" />
+    <link rel="stylesheet" href="../css/style.min.css?v=${STYLE_VERSION}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
