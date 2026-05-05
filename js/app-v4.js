@@ -1649,23 +1649,6 @@ function observeReveal() {
   );
 
   document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-
-  // Immediately reveal elements already visible in the current viewport
-  setTimeout(() => {
-    const elementsToReveal = [];
-
-    document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
-      if (el.getBoundingClientRect().top < window.innerHeight + 300) {
-        elementsToReveal.push(el);
-      }
-    });
-
-    requestAnimationFrame(() => {
-      elementsToReveal.forEach((el) => {
-        el.classList.add("visible");
-      });
-    });
-  }, 100);
 }
 
 /* ============================================
