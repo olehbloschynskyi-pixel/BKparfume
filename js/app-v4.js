@@ -70,6 +70,7 @@ let currentFilter = "women";
 let currentProductId = null;
 let currentCheckoutOrderId = null;
 let productsRenderPassId = 0;
+let lastFocusedElement = null;
 
 /* ============================================
    DOM REFS
@@ -415,6 +416,10 @@ function filterProducts(filter, search = "") {
 function syncCatalogControls(filter) {
   DOM.filterBtns.forEach((button) => {
     button.classList.toggle("active", button.dataset.filter === filter);
+    button.setAttribute(
+      "aria-pressed",
+      String(button.dataset.filter === filter),
+    );
   });
 
   DOM.navLinks.forEach((link) => {
@@ -635,15 +640,21 @@ DOM.searchInput.addEventListener("keydown", (e) => {
    SEARCH BAR TOGGLE
    ============================================ */
 DOM.searchToggle.addEventListener("click", () => {
+  lastFocusedElement = document.activeElement;
+  DOM.searchBar.hidden = false;
   DOM.searchBar.classList.add("open");
+  DOM.searchToggle.setAttribute("aria-expanded", "true");
   setTimeout(() => DOM.searchInput.focus(), 400);
   // Скрол до каталогу щоб одразу видно парфуми
   scrollToCatalog();
 });
 DOM.searchClose.addEventListener("click", () => {
   DOM.searchBar.classList.remove("open");
+  DOM.searchBar.hidden = true;
+  DOM.searchToggle.setAttribute("aria-expanded", "false");
   DOM.searchInput.value = "";
   filterProducts(currentFilter, "");
+  lastFocusedElement?.focus?.();
 });
 
 /* ============================================
@@ -652,6 +663,10 @@ DOM.searchClose.addEventListener("click", () => {
 DOM.burgerBtn.addEventListener("click", () => {
   DOM.burgerBtn.classList.toggle("open");
   DOM.nav.classList.toggle("open");
+  DOM.burgerBtn.setAttribute(
+    "aria-expanded",
+    String(DOM.nav.classList.contains("open")),
+  );
 });
 
 /* ============================================
@@ -707,7 +722,10 @@ function openModal(productId) {
   DOM.qtyInput.value = 1;
   updateModalPrice(1);
 
+  lastFocusedElement = document.activeElement;
   DOM.modalOverlay.classList.add("open");
+  DOM.modalOverlay.hidden = false;
+  DOM.modalOverlay.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
 
   // Focus close button for accessibility
@@ -725,8 +743,11 @@ function updateModalPrice(qty) {
    ============================================ */
 function closeModal() {
   DOM.modalOverlay.classList.remove("open");
+  DOM.modalOverlay.hidden = true;
+  DOM.modalOverlay.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
   currentProductId = null;
+  lastFocusedElement?.focus?.();
 }
 
 DOM.modalClose.addEventListener("click", closeModal);
@@ -1296,9 +1317,16 @@ DOM.cartBody.addEventListener("click", (e) => {
    ============================================ */
 function openCartPanel() {
   renderCart();
+  lastFocusedElement = document.activeElement;
   DOM.cartPanel.classList.add("open");
   DOM.cartOverlay.classList.add("open");
+  DOM.cartPanel.hidden = false;
+  DOM.cartOverlay.hidden = false;
+  DOM.cartPanel.setAttribute("aria-hidden", "false");
+  DOM.cartOverlay.setAttribute("aria-hidden", "false");
+  DOM.cartToggle.setAttribute("aria-expanded", "true");
   document.body.style.overflow = "hidden";
+  setTimeout(() => DOM.cartPanelClose.focus(), 50);
 }
 
 function consumePendingCartOpen() {
@@ -1314,7 +1342,13 @@ function consumePendingCartOpen() {
 function closeCartPanel() {
   DOM.cartPanel.classList.remove("open");
   DOM.cartOverlay.classList.remove("open");
+  DOM.cartPanel.hidden = true;
+  DOM.cartOverlay.hidden = true;
+  DOM.cartPanel.setAttribute("aria-hidden", "true");
+  DOM.cartOverlay.setAttribute("aria-hidden", "true");
+  DOM.cartToggle.setAttribute("aria-expanded", "false");
   document.body.style.overflow = "";
+  lastFocusedElement?.focus?.();
 }
 
 DOM.cartToggle.addEventListener("click", () => {

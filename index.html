@@ -576,6 +576,8 @@
             class="btn-icon search-toggle"
             id="searchToggle"
             aria-label="Пошук"
+            aria-expanded="false"
+            aria-controls="searchBar"
           >
             <svg
               viewBox="0 0 24 24"
@@ -591,6 +593,8 @@
             class="btn-icon cart-toggle"
             id="cartToggle"
             aria-label="Кошик"
+            aria-expanded="false"
+            aria-controls="cartPanel"
           >
             <svg
               viewBox="0 0 24 24"
@@ -602,16 +606,16 @@
               <line x1="3" y1="6" x2="21" y2="6"></line>
               <path d="M16 10a4 4 0 01-8 0"></path>
             </svg>
-            <span class="cart-badge" id="cartBadge">0</span>
+            <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
           </button>
-          <button class="burger" id="burgerBtn" aria-label="Меню">
+          <button class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false" aria-controls="nav">
             <span></span><span></span><span></span>
           </button>
         </div>
       </div>
 
       <!-- Search bar -->
-      <div class="search-bar" id="searchBar">
+      <div class="search-bar" id="searchBar" hidden>
         <form class="search-bar__inner" onsubmit="return false;">
           <input
             type="search"
@@ -845,12 +849,12 @@
         <div class="catalog__header">
           <h2 class="catalog__title">Наша колекція</h2>
           <div class="catalog__filters" id="filterButtons">
-            <button class="filter-btn" data-filter="all">Всі</button>
-            <button class="filter-btn active" data-filter="women">
+            <button class="filter-btn" data-filter="all" aria-pressed="false">Всі</button>
+            <button class="filter-btn active" data-filter="women" aria-pressed="true">
               Жіночі
             </button>
-            <button class="filter-btn" data-filter="unisex">Унісекс</button>
-            <button class="filter-btn" data-filter="men">Чоловічі</button>
+            <button class="filter-btn" data-filter="unisex" aria-pressed="false">Унісекс</button>
+            <button class="filter-btn" data-filter="men" aria-pressed="false">Чоловічі</button>
           </div>
         </div>
         <div class="products-grid" id="productsGrid">
@@ -1061,6 +1065,8 @@
       role="dialog"
       aria-modal="true"
       aria-label="Деталі товару"
+      aria-hidden="true"
+      hidden
     >
       <div class="modal" id="modal">
         <button
@@ -1141,8 +1147,8 @@
     </div>
 
     <!-- CART PANEL -->
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <aside class="cart-panel" id="cartPanel" aria-label="Кошик">
+    <div class="cart-overlay" id="cartOverlay" aria-hidden="true" hidden></div>
+    <aside class="cart-panel" id="cartPanel" aria-label="Кошик" aria-hidden="true" tabindex="-1" hidden>
       <div class="cart-panel__header">
         <h3>Мій кошик</h3>
         <button
@@ -1300,6 +1306,6 @@
     </script>
 
     <script defer src="js/site-config.js?v=20260424-3"></script>
-    <script defer src="js/app-v4.min.js?v=20260505-5"></script>
+    <script defer src="js/app-v4.min.js?v=20260506-1"></script>
   </body>
 </html>
