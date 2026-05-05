@@ -1308,7 +1308,7 @@ function openCartPanel() {
   DOM.cartOverlay.classList.add("open");
   DOM.cartPanel.hidden = false;
   DOM.cartOverlay.hidden = false;
-  DOM.cartPanel.setAttribute("aria-hidden", "false");
+  DOM.cartPanel.removeAttribute("inert");
   DOM.cartOverlay.setAttribute("aria-hidden", "false");
   DOM.cartToggle.setAttribute("aria-expanded", "true");
   document.body.style.overflow = "hidden";
@@ -1328,9 +1328,9 @@ function consumePendingCartOpen() {
 function closeCartPanel() {
   DOM.cartPanel.classList.remove("open");
   DOM.cartOverlay.classList.remove("open");
+  DOM.cartPanel.setAttribute("inert", "");
   DOM.cartPanel.hidden = true;
   DOM.cartOverlay.hidden = true;
-  DOM.cartPanel.setAttribute("aria-hidden", "true");
   DOM.cartOverlay.setAttribute("aria-hidden", "true");
   DOM.cartToggle.setAttribute("aria-expanded", "false");
   document.body.style.overflow = "";
