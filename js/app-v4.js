@@ -1266,6 +1266,12 @@ function renderCart() {
   }
 }
 
+function syncCartBadge() {
+  const { totalQty } = getCartPricing();
+  DOM.cartBadge.textContent = totalQty;
+  DOM.cartBadge.classList.toggle("visible", totalQty > 0);
+}
+
 // Cart body event delegation
 DOM.cartBody.addEventListener("click", (e) => {
   const removeBtn = e.target.closest("[data-remove]");
@@ -1289,6 +1295,7 @@ DOM.cartBody.addEventListener("click", (e) => {
    CART PANEL TOGGLE
    ============================================ */
 function openCartPanel() {
+  renderCart();
   DOM.cartPanel.classList.add("open");
   DOM.cartOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -1749,12 +1756,21 @@ function runWhenIdle(callback, timeout = 1200) {
 }
 
 function scheduleNonCriticalPageWork() {
-  runWhenIdle(() => {
-    generateProductSchema();
-    initPricingCards();
-    animateCounters();
-    initSectionReveal();
-  });
+  const runDeferredTasks = () => {
+    runWhenIdle(() => {
+      generateProductSchema();
+      initPricingCards();
+      animateCounters();
+      initSectionReveal();
+    }, 1800);
+  };
+
+  if (document.readyState === "complete") {
+    runDeferredTasks();
+    return;
+  }
+
+  window.addEventListener("load", runDeferredTasks, { once: true });
 }
 
 /* ============================================
@@ -1800,7 +1816,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const initialFilter = getInitialCatalogFilter();
   syncCatalogControls(initialFilter);
   filterProducts(initialFilter, "");
-  renderCart();
+  syncCartBadge();
   consumePendingCartOpen();
   scheduleNonCriticalPageWork();
 
