@@ -1,7 +1,7 @@
 // Service Worker for BK Parfume PWA
-const CACHE_NAME = "bk-parfume-v1.0.19";
-const STATIC_CACHE = "bk-parfume-static-v1.0.19";
-const DYNAMIC_CACHE = "bk-parfume-dynamic-v1.0.19";
+const CACHE_NAME = "bk-parfume-v1.0.20";
+const STATIC_CACHE = "bk-parfume-static-v1.0.20";
+const DYNAMIC_CACHE = "bk-parfume-dynamic-v1.0.20";
 
 // Files to cache immediately
 const STATIC_FILES = [
