@@ -345,14 +345,19 @@
     <noscript>
       <link rel="stylesheet" href="css/style.min.css?v=20260505-3" />
     </noscript>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
+    <script>
+      window.addEventListener(
+        "load",
+        () => {
+          const fontsLink = document.createElement("link");
+          fontsLink.rel = "stylesheet";
+          fontsLink.href =
+            "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap";
+          document.head.appendChild(fontsLink);
+        },
+        { once: true },
+      );
+    </script>
     <noscript>
       <link
         rel="stylesheet"
