@@ -530,7 +530,8 @@ ul { list-style: none; }
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: #e3d5b4;
+  font-weight: 600;
   margin-bottom: 12px;
 }
 .pricing-card__price {
@@ -1078,7 +1079,7 @@ ul { list-style: none; }
 }
 .logo--footer .logo__bk { font-size: 1.5rem; }
 .logo--footer .logo__store { font-size: 0.55rem; }
-.footer__copy { font-size: 0.75rem; color: var(--text-dim); }
+.footer__copy { font-size: 0.75rem; color: #a9a9a9; }
 .footer__contacts { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
 .footer__contacts a { font-size: 0.8rem; color: var(--text-muted); transition: color 0.3s; }
 .footer__contacts a:hover { color: var(--gold); }
