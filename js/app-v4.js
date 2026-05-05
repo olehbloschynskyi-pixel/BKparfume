@@ -1671,11 +1671,18 @@ function observeReveal() {
 
   // Immediately reveal elements already visible in the current viewport
   setTimeout(() => {
+    const elementsToReveal = [];
+
     document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight + 300) {
-        el.classList.add("visible");
+      if (el.getBoundingClientRect().top < window.innerHeight + 300) {
+        elementsToReveal.push(el);
       }
+    });
+
+    requestAnimationFrame(() => {
+      elementsToReveal.forEach((el) => {
+        el.classList.add("visible");
+      });
     });
   }, 100);
 }
