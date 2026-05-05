@@ -194,23 +194,6 @@ function renderProducts(list) {
   }
   DOM.noResults.style.display = "none";
 
-  const revealCard = (element, index) => {
-    requestAnimationFrame(() => {
-      if (renderPassId !== productsRenderPassId) {
-        return;
-      }
-
-      setTimeout(
-        () => {
-          if (renderPassId === productsRenderPassId) {
-            element.classList.add("visible");
-          }
-        },
-        Math.min(index, 8) * 30,
-      );
-    });
-  };
-
   const appendChunk = (startIndex, chunkSize) => {
     if (renderPassId !== productsRenderPassId) {
       return;
@@ -222,7 +205,6 @@ function renderProducts(list) {
     for (let index = startIndex; index < endIndex; index += 1) {
       const card = createCard(list[index], index);
       fragment.appendChild(card);
-      revealCard(card, index);
     }
 
     DOM.productsGrid.appendChild(fragment);
@@ -242,8 +224,7 @@ function renderProducts(list) {
 
 function createCard(p, delay = 0) {
   const div = document.createElement("div");
-  div.className = "product-card reveal";
-  div.style.animationDelay = `${delay * 0.07}s`;
+  div.className = "product-card";
 
   div.dataset.id = p.id;
   div.dataset.name = p.name;

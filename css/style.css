@@ -353,7 +353,6 @@ ul { list-style: none; }
 .hero__content {
   max-width: 600px;
   z-index: 2;
-  animation: fadeInUp 0.9s ease both;
 }
 
 .hero__label {
@@ -384,7 +383,7 @@ ul { list-style: none; }
   font-weight: 300;
 }
 
-.hero__btn { animation: fadeInUp 0.9s 0.2s ease both; }
+.hero__btn { }
 
 /* Hero decor circles */
 .hero__decor {
@@ -404,14 +403,12 @@ ul { list-style: none; }
   width: 400px; height: 400px;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  animation: rotate 30s linear infinite;
   border-color: rgba(201, 169, 110, 0.15);
 }
 .hero__circle--2 {
   width: 550px; height: 550px;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  animation: rotate 45s linear infinite reverse;
   border-color: rgba(201, 169, 110, 0.07);
 }
 .hero__circle--3 {
@@ -420,7 +417,6 @@ ul { list-style: none; }
   transform: translate(-50%, -50%);
   background: radial-gradient(circle at center, rgba(201, 169, 110, 0.08) 0%, transparent 70%);
   border: none;
-  animation: pulse 6s ease-in-out infinite;
 }
 
 /* ── PRICING BANNER ── */
@@ -621,7 +617,6 @@ ul { list-style: none; }
   overflow: hidden;
   cursor: pointer;
   transition: var(--transition);
-  animation: fadeInUp 0.5s ease both;
   position: relative;
 }
 .product-card:hover {
