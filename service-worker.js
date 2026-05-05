@@ -7,6 +7,7 @@ const DYNAMIC_CACHE = "bk-parfume-dynamic-v1.0.16";
 const STATIC_FILES = [
   "/",
   "/index.html",
+  "/favicon.ico",
   "/favicon.png",
   "/articles.html",
   "/about.html",
