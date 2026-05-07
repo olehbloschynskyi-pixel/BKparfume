@@ -1,4 +1,4 @@
-name: Update Cloudflare DMARC
+name: Update DMARC DNS
 
 on:
   workflow_dispatch:
@@ -14,19 +14,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
       DOMAIN_NAME: bkparfume.site
-      RECORD_NAME: _dmarc.bkparfume.site
+      RECORD_NAME: _dmarc.bkparfume.site.
+      CPANEL_API_HOST: ${{ secrets.CPANEL_HOST || secrets.DEPLOY_HOST || secrets.FTP_HOST }}
+      CPANEL_USERNAME: ${{ secrets.CPANEL_USERNAME || secrets.CPANEL_USER || secrets.DEPLOY_USERNAME || secrets.FTP_USERNAME }}
+      CPANEL_PASSWORD: ${{ secrets.CPANEL_PASSWORD || secrets.DEPLOY_PASSWORD || secrets.FTP_PASSWORD }}
+      CPANEL_PORT: ${{ secrets.CPANEL_PORT || '2083' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate Cloudflare token
+      - name: Validate cPanel secrets
         run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "CLOUDFLARE_API_TOKEN is not set"
+          if [ -z "$CPANEL_API_HOST" ]; then
+            echo "cPanel host secret is not set"
+            exit 1
+          fi
+
+          if [ -z "$CPANEL_USERNAME" ]; then
+            echo "cPanel username secret is not set"
+            exit 1
+          fi
+
+          if [ -z "$CPANEL_PASSWORD" ]; then
+            echo "cPanel password secret is not set"
             exit 1
           fi
 
@@ -48,46 +60,40 @@ jobs:
         run: |
           set -euo pipefail
 
-          call_cloudflare() {
-            local method="$1"
-            local url="$2"
-            local payload="${3:-}"
+          call_cpanel() {
+            local function_name="$1"
+            shift
             local response
 
-            if [ -n "$payload" ]; then
-              response=$(curl -sS -X "$method" \
-                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-                -H "Content-Type: application/json" \
-                --data "$payload" \
-                "$url")
-            else
-              response=$(curl -sS -X "$method" \
-                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-                -H "Content-Type: application/json" \
-                "$url")
-            fi
+            response=$(curl -sS --fail-with-body -u "$CPANEL_USERNAME:$CPANEL_PASSWORD" \
+              --get "https://$CPANEL_API_HOST:$CPANEL_PORT/execute/ZoneEdit/$function_name" \
+              "$@")
 
-            printf '%s' "$response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); if (!json.success) { const errors = (json.errors || []).map(item => item.message || JSON.stringify(item)).join('; '); console.error(errors || 'Cloudflare API request failed'); process.exit(1); } process.stdout.write(JSON.stringify(json)); });"
+            printf '%s' "$response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const status = json.status ?? json.result?.status; if (status !== 1) { const errors = [ ...(json.errors || []), ...(json.messages || []), ...(json.result?.errors || []) ].filter(Boolean).join('; '); console.error(errors || 'cPanel ZoneEdit request failed'); process.exit(1); } process.stdout.write(JSON.stringify(json)); });"
           }
 
-          zone_id="$CLOUDFLARE_ZONE_ID"
+          record_response=$(call_cpanel fetchzone_records \
+            --data-urlencode "domain=$DOMAIN_NAME" \
+            --data-urlencode "name=$RECORD_NAME" \
+            --data-urlencode "type=TXT")
 
-          if [ -z "$zone_id" ]; then
-            zone_response=$(call_cloudflare GET "https://api.cloudflare.com/client/v4/zones?name=$DOMAIN_NAME&status=active")
+          record_line=$(printf '%s' "$record_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const records = json.data || json.result?.data || []; const record = records.find(item => (item.name === process.env.RECORD_NAME || item.name === process.env.RECORD_NAME.replace(/\.$/, '')) && item.type === 'TXT'); process.stdout.write(record?.line ? String(record.line) : ''); });")
 
-            zone_id=$(printf '%s' "$zone_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const zone = json.result?.[0]; if (!zone?.id) { console.error('Cloudflare zone lookup returned no active zone. Add CLOUDFLARE_ZONE_ID secret or grant Zone:Read.'); process.exit(1); } process.stdout.write(zone.id); });")
-          fi
-
-          record_response=$(call_cloudflare GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?type=TXT&name=$RECORD_NAME")
-
-          record_id=$(printf '%s' "$record_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const record = json.result?.[0]; process.stdout.write(record?.id || ''); });")
-
-          payload=$(node -e "const payload = { type: 'TXT', name: process.env.RECORD_NAME, content: process.env.RECORD_CONTENT, ttl: 1 }; process.stdout.write(JSON.stringify(payload));")
-
-          if [ -n "$record_id" ]; then
-            call_cloudflare PUT "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" "$payload" > /dev/null
+          if [ -n "$record_line" ]; then
+            call_cpanel edit_zone_record \
+              --data-urlencode "domain=$DOMAIN_NAME" \
+              --data-urlencode "line=$record_line" \
+              --data-urlencode "name=$RECORD_NAME" \
+              --data-urlencode "type=TXT" \
+              --data-urlencode "ttl=14400" \
+              --data-urlencode "txtdata=$RECORD_CONTENT" > /dev/null
           else
-            call_cloudflare POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" "$payload" > /dev/null
+            call_cpanel add_zone_record \
+              --data-urlencode "domain=$DOMAIN_NAME" \
+              --data-urlencode "name=$RECORD_NAME" \
+              --data-urlencode "type=TXT" \
+              --data-urlencode "ttl=14400" \
+              --data-urlencode "txtdata=$RECORD_CONTENT" > /dev/null
           fi
 
       - name: Publish summary
@@ -95,7 +101,7 @@ jobs:
         env:
           RECORD_CONTENT: ${{ steps.read_policy.outputs.record_content }}
         run: |
-          echo "## Cloudflare DMARC" >> "$GITHUB_STEP_SUMMARY"
+          echo "## DMARC DNS" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Record: $RECORD_NAME" >> "$GITHUB_STEP_SUMMARY"
           echo "Value: $RECORD_CONTENT" >> "$GITHUB_STEP_SUMMARY"
