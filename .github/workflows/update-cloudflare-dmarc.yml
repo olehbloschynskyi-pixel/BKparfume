@@ -1,0 +1,87 @@
+name: Update Cloudflare DMARC
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - cloudflare/dmarc-record.txt
+      - .github/workflows/update-cloudflare-dmarc.yml
+
+jobs:
+  update-dmarc:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      DOMAIN_NAME: bkparfume.site
+      RECORD_NAME: _dmarc.bkparfume.site
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Cloudflare token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "CLOUDFLARE_API_TOKEN is not set"
+            exit 1
+          fi
+
+      - name: Read DMARC policy from repository
+        id: read_policy
+        run: |
+          record_content=$(tr -d '\r' < cloudflare/dmarc-record.txt | sed 's/[[:space:]]*$//')
+
+          if [ -z "$record_content" ]; then
+            echo "cloudflare/dmarc-record.txt is empty"
+            exit 1
+          fi
+
+          echo "record_content=$record_content" >> "$GITHUB_OUTPUT"
+
+      - name: Upsert DMARC TXT record
+        env:
+          RECORD_CONTENT: ${{ steps.read_policy.outputs.record_content }}
+        run: |
+          set -euo pipefail
+
+          zone_response=$(curl -fsS \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.cloudflare.com/client/v4/zones?name=$DOMAIN_NAME&status=active")
+
+          zone_id=$(printf '%s' "$zone_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const zone = json.result?.[0]; if (!json.success || !zone?.id) process.exit(1); process.stdout.write(zone.id); });")
+
+          record_response=$(curl -fsS \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?type=TXT&name=$RECORD_NAME")
+
+          record_id=$(printf '%s' "$record_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); if (!json.success) process.exit(1); const record = json.result?.[0]; process.stdout.write(record?.id || ''); });")
+
+          payload=$(node -e "const payload = { type: 'TXT', name: process.env.RECORD_NAME, content: process.env.RECORD_CONTENT, ttl: 1 }; process.stdout.write(JSON.stringify(payload));")
+
+          if [ -n "$record_id" ]; then
+            curl -fsS -X PUT \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "$payload" \
+              "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id"
+          else
+            curl -fsS -X POST \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "$payload" \
+              "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records"
+          fi
+
+      - name: Publish summary
+        if: always()
+        env:
+          RECORD_CONTENT: ${{ steps.read_policy.outputs.record_content }}
+        run: |
+          echo "## Cloudflare DMARC" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Record: $RECORD_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "Value: $RECORD_CONTENT" >> "$GITHUB_STEP_SUMMARY"
