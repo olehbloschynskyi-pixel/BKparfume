@@ -66,10 +66,14 @@ jobs:
             local response
 
             response=$(curl -sS --fail-with-body -u "$CPANEL_USERNAME:$CPANEL_PASSWORD" \
-              --get "https://$CPANEL_API_HOST:$CPANEL_PORT/execute/ZoneEdit/$function_name" \
+              --get "https://$CPANEL_API_HOST:$CPANEL_PORT/json-api/cpanel" \
+              --data-urlencode "cpanel_jsonapi_user=$CPANEL_USERNAME" \
+              --data-urlencode "cpanel_jsonapi_apiversion=2" \
+              --data-urlencode "cpanel_jsonapi_module=ZoneEdit" \
+              --data-urlencode "cpanel_jsonapi_func=$function_name" \
               "$@")
 
-            printf '%s' "$response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const status = json.status ?? json.result?.status; if (status !== 1) { const errors = [ ...(json.errors || []), ...(json.messages || []), ...(json.result?.errors || []) ].filter(Boolean).join('; '); console.error(errors || 'cPanel ZoneEdit request failed'); process.exit(1); } process.stdout.write(JSON.stringify(json)); });"
+            printf '%s' "$response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const result = json.cpanelresult?.event?.result; if (result !== 1) { const errors = [ ...(json.cpanelresult?.error ? [json.cpanelresult.error] : []), ...(json.cpanelresult?.data || []).flatMap(item => item?.statusmsg ? [item.statusmsg] : []), ...(json.error ? [json.error] : []) ].filter(Boolean).join('; '); console.error(errors || 'cPanel API2 ZoneEdit request failed'); process.exit(1); } process.stdout.write(JSON.stringify(json)); });"
           }
 
           record_response=$(call_cpanel fetchzone_records \
@@ -77,7 +81,7 @@ jobs:
             --data-urlencode "name=$RECORD_NAME" \
             --data-urlencode "type=TXT")
 
-          record_line=$(printf '%s' "$record_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const records = json.data || json.result?.data || []; const record = records.find(item => (item.name === process.env.RECORD_NAME || item.name === process.env.RECORD_NAME.replace(/\.$/, '')) && item.type === 'TXT'); process.stdout.write(record?.line ? String(record.line) : ''); });")
+          record_line=$(printf '%s' "$record_response" | node -e "let data=''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => { const json = JSON.parse(data); const records = json.cpanelresult?.data || []; const record = records.find(item => (item.name === process.env.RECORD_NAME || item.name === process.env.RECORD_NAME.replace(/\.$/, '')) && item.type === 'TXT'); process.stdout.write(record?.line ? String(record.line) : ''); });")
 
           if [ -n "$record_line" ]; then
             call_cpanel edit_zone_record \
