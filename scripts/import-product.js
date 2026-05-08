@@ -17,7 +17,9 @@ function writeJson(filePath, value) {
 function parseArgs(argv) {
   const fileIndex = argv.indexOf("--file");
   if (fileIndex === -1 || !argv[fileIndex + 1]) {
-    throw new Error("Usage: node scripts/import-product.js --file path/to/product.json");
+    throw new Error(
+      "Usage: node scripts/import-product.js --file path/to/product.json",
+    );
   }
 
   return {
@@ -34,7 +36,11 @@ function normalizeSlug(value) {
 }
 
 function assertRequired(product, fieldName) {
-  if (product[fieldName] === undefined || product[fieldName] === null || product[fieldName] === "") {
+  if (
+    product[fieldName] === undefined ||
+    product[fieldName] === null ||
+    product[fieldName] === ""
+  ) {
     throw new Error(`Missing required field: ${fieldName}`);
   }
 }
@@ -124,7 +130,9 @@ function main() {
   contentEntries.push({
     id: contentId,
     shortDescription: String(input.shortDescription).trim(),
-    longDescription: String(input.longDescription || input.shortDescription).trim(),
+    longDescription: String(
+      input.longDescription || input.shortDescription,
+    ).trim(),
     metaDescription: String(input.metaDescription || "").trim(),
   });
 

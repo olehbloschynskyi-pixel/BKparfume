@@ -186,8 +186,7 @@ function mergeCatalogData(baseProducts, fragranceProfiles, productContent) {
 
     return {
       ...product,
-      description:
-        content.shortDescription || content.longDescription || "",
+      description: content.shortDescription || content.longDescription || "",
       longDescription:
         content.longDescription || content.shortDescription || "",
       metaDescription: content.metaDescription || "",

@@ -94,8 +94,7 @@ function readProducts() {
 
     return {
       ...product,
-      description:
-        content.shortDescription || content.longDescription || "",
+      description: content.shortDescription || content.longDescription || "",
       longDescription:
         content.longDescription || content.shortDescription || "",
       metaDescription: content.metaDescription || "",

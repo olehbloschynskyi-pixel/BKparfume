@@ -54,7 +54,9 @@ function splitNoteGroups(notes) {
 
   groups.forEach((group) => {
     const [label, value] = group.split(":");
-    const normalizedLabel = String(label || "").trim().toLowerCase();
+    const normalizedLabel = String(label || "")
+      .trim()
+      .toLowerCase();
     const values = String(value || "")
       .split(",")
       .map((item) => item.trim())
@@ -146,7 +148,8 @@ function normalizeProducts(products) {
   const productContent = [];
 
   products.forEach((product) => {
-    const fragranceId = product.fragranceId || buildRelationId(product, "profile");
+    const fragranceId =
+      product.fragranceId || buildRelationId(product, "profile");
     const contentId = product.contentId || buildRelationId(product, "content");
     const existingFragrance = existingFragrances.get(fragranceId) || {};
     const existingProductContent = existingContent.get(contentId) || {};
