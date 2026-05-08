@@ -23,8 +23,10 @@ on:
       - ai-index.conf
       - service-worker.js
       - css/**
+      - data/**
       - images/**
       - js/**
+      - products/**
       - .github/workflows/deploy-site-cpanel.yml
 
 jobs:

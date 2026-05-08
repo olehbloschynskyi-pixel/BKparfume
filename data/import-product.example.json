@@ -1,0 +1,18 @@
+{
+  "id": 300,
+  "name": "BKparfume Example Aroma",
+  "brand": "Example Brand",
+  "category": "unisex",
+  "volume": "110 мл",
+  "price": 160,
+  "image": "images/products/example-aroma.png",
+  "badge": "Новинка",
+  "slug": "example-aroma",
+  "seoPage": false,
+  "shortDescription": "Короткий опис аромату для каталогу та картки товару.",
+  "longDescription": "Розширений опис аромату для SEO-сторінки, де можна детально пояснити характер композиції, доречність сезону та сценарії використання.",
+  "metaDescription": "Example Aroma у BK Parfume: унісекс аромат 110 мл за 160 грн з доставкою по Україні.",
+  "topNotes": ["бергамот", "мандарин"],
+  "heartNotes": ["жасмин", "ірис"],
+  "baseNotes": ["кедр", "мускус", "ваніль"]
+}

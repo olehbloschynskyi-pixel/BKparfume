@@ -27,6 +27,8 @@ const IP_LOOKUP_TIMEOUT_MS = 2000;
 const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
 const CUSTOMER_EMAIL_STORAGE_KEY = "bk_customer_email";
 const PRODUCTS_DATA_URL = "/data/products.json";
+const FRAGRANCE_PROFILES_URL = "/data/fragrance-profiles.json";
+const PRODUCT_CONTENT_URL = "/data/product-content.json";
 const INITIAL_RENDER_COUNT = 8;
 const RENDER_CHUNK_SIZE = 12;
 const IP_LOOKUP_SOURCES = [
@@ -166,14 +168,61 @@ const DOM = {
 /* ============================================
    LOAD PRODUCTS
    ============================================ */
-async function loadProducts() {
-  const response = await fetch(PRODUCTS_DATA_URL, { cache: "no-store" });
+function indexCatalogEntries(entries) {
+  return new Map(
+    entries
+      .filter((entry) => entry && entry.id)
+      .map((entry) => [entry.id, entry]),
+  );
+}
+
+function mergeCatalogData(baseProducts, fragranceProfiles, productContent) {
+  const fragranceById = indexCatalogEntries(fragranceProfiles);
+  const contentById = indexCatalogEntries(productContent);
+
+  return baseProducts.map((product) => {
+    const fragrance = fragranceById.get(product.fragranceId) || {};
+    const content = contentById.get(product.contentId) || {};
+
+    return {
+      ...product,
+      description:
+        content.shortDescription || content.longDescription || "",
+      longDescription:
+        content.longDescription || content.shortDescription || "",
+      metaDescription: content.metaDescription || "",
+      notes: fragrance.rawNotes || "",
+      notesProfile: {
+        topNotes: Array.isArray(fragrance.topNotes) ? fragrance.topNotes : [],
+        heartNotes: Array.isArray(fragrance.heartNotes)
+          ? fragrance.heartNotes
+          : [],
+        baseNotes: Array.isArray(fragrance.baseNotes)
+          ? fragrance.baseNotes
+          : [],
+      },
+    };
+  });
+}
+
+async function loadJsonResource(url) {
+  const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error(`Unable to load catalog: ${response.status}`);
+    throw new Error(`Unable to load ${url}: ${response.status}`);
   }
 
-  products = await response.json();
+  return response.json();
+}
+
+async function loadProducts() {
+  const [baseProducts, fragranceProfiles, productContent] = await Promise.all([
+    loadJsonResource(PRODUCTS_DATA_URL),
+    loadJsonResource(FRAGRANCE_PROFILES_URL),
+    loadJsonResource(PRODUCT_CONTENT_URL),
+  ]);
+
+  products = mergeCatalogData(baseProducts, fragranceProfiles, productContent);
 }
 
 /* ============================================
@@ -1803,7 +1852,7 @@ function scheduleNonCriticalPageWork() {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/service-worker.js?v=20260506-2")
+      .register("/service-worker.js?v=20260508-1")
       .then((registration) => {
         console.log("SW registered: ", registration);
       })

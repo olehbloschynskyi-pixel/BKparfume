@@ -1,7 +1,7 @@
 // Service Worker for BK Parfume PWA
-const CACHE_NAME = "bk-parfume-v1.0.21";
-const STATIC_CACHE = "bk-parfume-static-v1.0.21";
-const DYNAMIC_CACHE = "bk-parfume-dynamic-v1.0.21";
+const CACHE_NAME = "bk-parfume-v1.0.22";
+const STATIC_CACHE = "bk-parfume-static-v1.0.22";
+const DYNAMIC_CACHE = "bk-parfume-dynamic-v1.0.22";
 
 // Files to cache immediately
 const STATIC_FILES = [
@@ -13,10 +13,13 @@ const STATIC_FILES = [
   "/about.html",
   "/contacts.html",
   "/css/style.min.css",
-  "/css/style.min.css?v=20260506-3",
+  "/css/style.min.css?v=20260508-1",
   "/css/critical.min.css",
   "/js/app-v4.js",
   "/js/app-v4.min.js",
+  "/data/products.json",
+  "/data/fragrance-profiles.json",
+  "/data/product-content.json",
   "/manifest.json",
   "/images/products/favicon-16.png",
   "/images/products/favicon-32.png",
@@ -94,7 +97,7 @@ self.addEventListener("fetch", (event) => {
   // Cache-first strategy for static assets
   if (
     STATIC_FILES.some((file) => url.pathname === file) ||
-    url.pathname.match(/\.(css|js|png|jpg|jpeg|webp|svg|woff|woff2)$/)
+    url.pathname.match(/\.(css|js|json|png|jpg|jpeg|webp|svg|woff|woff2)$/)
   ) {
     event.respondWith(
       caches.match(event.request).then((response) => {

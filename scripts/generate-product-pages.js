@@ -2,7 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT_DIR = path.resolve(__dirname, "..");
-const DATA_FILE = path.join(ROOT_DIR, "data", "products.json");
+const PRODUCTS_FILE = path.join(ROOT_DIR, "data", "products.json");
+const FRAGRANCES_FILE = path.join(ROOT_DIR, "data", "fragrance-profiles.json");
+const CONTENT_FILE = path.join(ROOT_DIR, "data", "product-content.json");
 const OUTPUT_DIR = path.join(ROOT_DIR, "products");
 
 const SITE_URL = "https://bkparfume.site";
@@ -12,7 +14,7 @@ const STORE_CURRENCY = "UAH";
 const OFFER_AVAILABILITY = "https://schema.org/InStock";
 const ITEM_CONDITION = "https://schema.org/NewCondition";
 const PRICE_VALID_UNTIL = "2026-12-31";
-const STYLE_VERSION = "20260505-3";
+const STYLE_VERSION = "20260508-1";
 const CATEGORY_META = {
   women: {
     label: "жіночі парфуми",
@@ -67,8 +69,48 @@ const FAQ_ITEMS = [
   }),
 ];
 
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function indexCatalogEntries(entries) {
+  return new Map(
+    entries
+      .filter((entry) => entry && entry.id)
+      .map((entry) => [entry.id, entry]),
+  );
+}
+
 function readProducts() {
-  return JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+  const baseProducts = readJson(PRODUCTS_FILE);
+  const fragranceProfiles = readJson(FRAGRANCES_FILE);
+  const productContent = readJson(CONTENT_FILE);
+  const fragranceById = indexCatalogEntries(fragranceProfiles);
+  const contentById = indexCatalogEntries(productContent);
+
+  return baseProducts.map((product) => {
+    const fragrance = fragranceById.get(product.fragranceId) || {};
+    const content = contentById.get(product.contentId) || {};
+
+    return {
+      ...product,
+      description:
+        content.shortDescription || content.longDescription || "",
+      longDescription:
+        content.longDescription || content.shortDescription || "",
+      metaDescription: content.metaDescription || "",
+      notes: fragrance.rawNotes || "",
+      notesProfile: {
+        topNotes: Array.isArray(fragrance.topNotes) ? fragrance.topNotes : [],
+        heartNotes: Array.isArray(fragrance.heartNotes)
+          ? fragrance.heartNotes
+          : [],
+        baseNotes: Array.isArray(fragrance.baseNotes)
+          ? fragrance.baseNotes
+          : [],
+      },
+    };
+  });
 }
 
 function ensureDir(dirPath) {
@@ -115,6 +157,10 @@ function buildMetaTitle(product, categoryMeta) {
 }
 
 function buildMetaDescription(product, categoryMeta) {
+  if (product.metaDescription) {
+    return product.metaDescription;
+  }
+
   return `${displayName(product.name)} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
 }
 
@@ -302,7 +348,7 @@ function renderProductPage(product, products) {
             <p class="article-featured__excerpt"><strong>Категорія:</strong> ${escapeHtml(categoryMeta.label)}</p>
             <p class="article-featured__excerpt"><strong>Об'єм:</strong> ${escapeHtml(product.volume)}</p>
             <p class="article-featured__excerpt"><strong>Ціна:</strong> ${escapeHtml(String(product.price))} грн</p>
-            <p class="article-featured__excerpt">${escapeHtml(product.description)}</p>
+            <p class="article-featured__excerpt">${escapeHtml(product.longDescription || product.description)}</p>
             <p class="article-featured__excerpt">${escapeHtml(productName)} добре працює ${escapeHtml(categoryMeta.audience)}. Завдяки формату ${escapeHtml(product.volume)} цей аромат зручно брати як основний варіант на сезон або додавати до особистої колекції для окремих ситуацій.</p>
             <p class="article-featured__excerpt">${escapeHtml(categoryMeta.usage)} Якщо ви підбираєте схожі композиції, перегляньте також сторінку з ${escapeHtml(categoryMeta.relatedLabel)} та повний каталог BK Parfume.</p>
             <div class="article-featured__catalog-actions">
