@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Оптова наливна парфумерія купити в Україні | BK Parfume</title>
+    <title>Оптова парфумерія від 10 і 25 штук | BK Parfume</title>
     <meta
       name="description"
-      content="Оптова наливна парфумерія купити в Україні від BK Parfume: вигідні ціни від 10 та 25 штук, консультація, асортимент і доставка по Україні."
+      content="Оптова парфумерія BK Parfume: замовлення від 10 і 25 штук, жіночі, чоловічі та унісекс аромати, консультація і доставка по Україні."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link
@@ -18,11 +18,11 @@
     <meta property="og:site_name" content="BK Parfume" />
     <meta
       property="og:title"
-      content="Оптова наливна парфумерія купити в Україні | BK Parfume"
+      content="Оптова парфумерія від 10 і 25 штук | BK Parfume"
     />
     <meta
       property="og:description"
-      content="Ціни для оптових замовлень, швидкий зв'язок і доставка по Україні для закупівель наливної парфумерії."
+      content="Оптові замовлення парфумерії від 10 і 25 штук, швидкий зв'язок і доставка по Україні від BK Parfume."
     />
     <meta
       property="og:url"
@@ -35,11 +35,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Оптова наливна парфумерія купити в Україні | BK Parfume"
+      content="Оптова парфумерія від 10 і 25 штук | BK Parfume"
     />
     <meta
       name="twitter:description"
-      content="Оптові умови BK Parfume для закупівель наливної парфумерії в Україні."
+      content="Оптові умови BK Parfume для замовлень парфумерії від 10 і 25 штук з доставкою по Україні."
     />
     <meta
       name="twitter:image"
@@ -48,9 +48,23 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/products/favicon-16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/products/favicon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/products/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/products/favicon-16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/products/favicon-32.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/products/apple-touch-icon.png"
+    />
     <link rel="stylesheet" href="css/style.min.css?v=20260505-3" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -63,15 +77,81 @@
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "Organization",
+            "@id": "https://bkparfume.site/#organization",
+            "name": "BK Parfume",
+            "url": "https://bkparfume.site/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://bkparfume.site/images/products/favicon-32.png"
+            }
+          },
+          {
             "@type": "Service",
+            "@id": "https://bkparfume.site/optova-parfumeriya.html#service",
             "name": "Оптова наливна парфумерія BK Parfume",
-            "provider": { "@type": "Organization", "name": "BK Parfume" },
+            "provider": { "@id": "https://bkparfume.site/#organization" },
             "areaServed": "UA",
             "url": "https://bkparfume.site/optova-parfumeriya.html",
             "description": "Оптові замовлення наливної парфумерії від BK Parfume по Україні."
           },
           {
+            "@type": "CollectionPage",
+            "@id": "https://bkparfume.site/optova-parfumeriya.html#page",
+            "name": "Оптова наливна парфумерія купити в Україні | BK Parfume",
+            "url": "https://bkparfume.site/optova-parfumeriya.html",
+            "description": "Оптова наливна парфумерія BK Parfume: вигідні умови закупівель, змішані набори ароматів і доставка по Україні.",
+            "inLanguage": "uk-UA",
+            "about": {
+              "@id": "https://bkparfume.site/optova-parfumeriya.html#service"
+            },
+            "mainEntity": {
+              "@id": "https://bkparfume.site/optova-parfumeriya.html#start-path"
+            },
+            "significantLink": [
+              "https://bkparfume.site/zhinochi-parfumy.html",
+              "https://bkparfume.site/cholovichi-parfumy.html",
+              "https://bkparfume.site/uniseks-parfumy.html",
+              "https://bkparfume.site/contacts.html",
+              "https://bkparfume.site/dostavka-i-oplata.html"
+            ]
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://bkparfume.site/optova-parfumeriya.html#start-path",
+            "name": "Як почати оптове замовлення",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 4,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "url": "https://bkparfume.site/zhinochi-parfumy.html",
+                "name": "Жіночі парфуми"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "url": "https://bkparfume.site/cholovichi-parfumy.html",
+                "name": "Чоловічі парфуми"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "url": "https://bkparfume.site/uniseks-parfumy.html",
+                "name": "Унісекс аромати"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "url": "https://bkparfume.site/dostavka-i-oplata.html",
+                "name": "Доставка й оплата"
+              }
+            ]
+          },
+          {
             "@type": "FAQPage",
+            "@id": "https://bkparfume.site/optova-parfumeriya.html#faq",
             "mainEntity": [
               {
                 "@type": "Question",
@@ -128,7 +208,11 @@
           </ul>
         </nav>
         <div class="header__actions">
-          <button class="burger" id="burgerBtn" aria-label="Меню">
+          <button
+            class="burger"
+            id="burgerBtn"
+            aria-label="Відкрити меню сайту"
+          >
             <span></span><span></span><span></span>
           </button>
         </div>
@@ -196,11 +280,91 @@
             >
             <p class="article-featured__excerpt">
               Корисні переходи:
-              <a href="zhinochi-parfumy.html">жіночі аромати</a>,
-              <a href="cholovichi-parfumy.html">чоловічі аромати</a>,
-              <a href="uniseks-parfumy.html">унісекс композиції</a> та
-              <a href="dostavka-i-oplata.html">доставка й оплата</a>.
+              <a href="zhinochi-parfumy.html">жіночі парфуми на розлив</a>,
+              <a href="cholovichi-parfumy.html">чоловічі парфуми на розлив</a>,
+              <a href="uniseks-parfumy.html">унісекс парфуми BK Parfume</a> та
+              <a href="dostavka-i-oplata.html"
+                >умови доставки парфумів і оплати</a
+              >.
             </p>
+          </div>
+        </article>
+        <article class="article-featured">
+          <div class="article-featured__content">
+            <h2 class="article-featured__title">Як почати оптове замовлення</h2>
+            <p class="article-featured__excerpt">
+              Найпростіший сценарій для старту оптового замовлення: спочатку
+              визначити, які категорії ароматів вам потрібні, потім звірити
+              популярні позиції і лише після цього узгодити кількість та
+              відправку. Це дозволяє зібрати не випадковий набір, а більш
+              керований асортимент під реальний попит.
+            </p>
+            <ul class="article-featured__excerpt">
+              <li>
+                перегляньте <a href="zhinochi-parfumy.html">жіночі парфуми</a>,
+                <a href="cholovichi-parfumy.html">чоловічі парфуми</a> та
+                <a href="uniseks-parfumy.html">унісекс парфуми</a> категорії;
+              </li>
+              <li>
+                визначте 10-20 позицій, які потрібні для старту або дозакупівлі;
+              </li>
+              <li>
+                уточніть умови через
+                <a href="contacts.html">контакти для оптового замовлення</a> або
+                email;
+              </li>
+              <li>
+                перевірте
+                <a href="dostavka-i-oplata.html"
+                  >умови доставки парфумів і оплати</a
+                >
+                перед підтвердженням замовлення.
+              </li>
+            </ul>
+            <p class="article-featured__excerpt">
+              Якщо потрібна допомога зі змішаним набором ароматів, ми можемо
+              підказати популярні жіночі, чоловічі та універсальні позиції для
+              закупівлі в одному замовленні.
+            </p>
+          </div>
+        </article>
+        <article class="article-featured">
+          <div class="article-featured__content">
+            <h2 class="article-featured__title">
+              Що ще шукають для оптового замовлення
+            </h2>
+            <p class="article-featured__excerpt">
+              Низькочастотні запити в опті зазвичай пов'язані не просто з ціною,
+              а зі сценарієм закупівлі: стартовий набір ароматів, змішане
+              замовлення жіночих і чоловічих позицій, подарункові набори або
+              добірка бестселерів для повторної закупівлі.
+            </p>
+            <ul class="article-featured__excerpt">
+              <li>
+                <a href="zhinochi-parfumy.html"
+                  >жіночі парфуми для оптового набору</a
+                >
+                як база для популярного асортименту;
+              </li>
+              <li>
+                <a href="cholovichi-parfumy.html"
+                  >чоловічі парфуми для дозакупівлі</a
+                >
+                під щоденний і вечірній попит;
+              </li>
+              <li>
+                <a href="uniseks-parfumy.html"
+                  >унісекс аромати для змішаного замовлення</a
+                >
+                як універсальні позиції в наборі;
+              </li>
+              <li>
+                <a href="dostavka-i-oplata.html"
+                  >умови відправки оптових замовлень</a
+                >
+                перед погодженням кількості.
+              </li>
+            </ul>
           </div>
         </article>
         <article class="article-featured">
@@ -219,9 +383,9 @@
             <p class="article-featured__excerpt">
               <strong>Де подивитися асортимент?</strong><br />Почніть з
               <a href="index.html#catalog">каталогу ароматів</a> або окремих
-              сторінок <a href="zhinochi-parfumy.html">жіночих</a>,
-              <a href="cholovichi-parfumy.html">чоловічих</a> та
-              <a href="uniseks-parfumy.html">унісекс</a> ароматів.
+              сторінок <a href="zhinochi-parfumy.html">жіночих парфумів</a>,
+              <a href="cholovichi-parfumy.html">чоловічих парфумів</a> та
+              <a href="uniseks-parfumy.html">унісекс парфумів</a>.
             </p>
           </div>
         </article>
@@ -238,8 +402,8 @@
         </p>
         <div class="footer__contacts">
           <a href="contacts.html">Контакти</a
-          ><a href="dostavka-i-oplata.html">Доставка</a
-          ><a href="index.html#catalog">Каталог</a>
+          ><a href="dostavka-i-oplata.html">Доставка й оплата</a
+          ><a href="index.html#catalog">Каталог ароматів</a>
         </div>
       </div>
     </footer>

@@ -3,13 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Наливна парфумерія в Україні, жіночі, чоловічі та унісекс аромати | BK
-      Parfume
-    </title>
+    <title>Парфуми на розлив і наливна парфумерія в Україні | BK Parfume</title>
     <meta
       name="description"
-      content="BK Parfume — наливна парфумерія в Україні: жіночі, чоловічі та унісекс аромати, оптові ціни, доставка Новою поштою та понад 155 ароматів у наявності."
+      content="BK Parfume — парфуми на розлив і наливна парфумерія в Україні: понад 155 жіночих, чоловічих та унісекс ароматів, оптові ціни і доставка Новою поштою."
     />
     <meta
       name="keywords"
@@ -48,11 +45,11 @@
     <meta property="og:site_name" content="BK Parfume" />
     <meta
       property="og:title"
-      content="Наливна парфумерія в Україні | BK Parfume"
+      content="Парфуми на розлив і наливна парфумерія в Україні | BK Parfume"
     />
     <meta
       property="og:description"
-      content="Жіночі, чоловічі та унісекс парфуми на розлив, оптові ціни та доставка по Україні."
+      content="Понад 155 жіночих, чоловічих та унісекс парфумів на розлив, оптові ціни і доставка по Україні від BK Parfume."
     />
     <meta property="og:url" content="https://bkparfume.site/" />
     <meta
@@ -69,11 +66,11 @@
     <meta name="twitter:creator" content="@bkparfume" />
     <meta
       name="twitter:title"
-      content="Наливна парфумерія в Україні | BK Parfume"
+      content="Парфуми на розлив і наливна парфумерія в Україні | BK Parfume"
     />
     <meta
       name="twitter:description"
-      content="Жіночі, чоловічі та унісекс парфуми на розлив, оптові ціни та доставка по Україні."
+      content="Понад 155 жіночих, чоловічих та унісекс парфумів на розлив, оптові ціни і доставка по Україні від BK Parfume."
     />
     <meta
       name="twitter:image"
@@ -99,57 +96,98 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "BK Parfume",
-        "url": "https://bkparfume.site/",
-        "description": "Наливна парфумерія BK Parfume з доставкою по Україні, широкий вибір ароматів та вигідні ціни.",
-        "inLanguage": "uk-UA",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://bkparfume.site/?search={search_term_string}"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://bkparfume.site/#organization",
+            "name": "BK Parfume",
+            "url": "https://bkparfume.site/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
+            },
+            "email": "bkparfume@ukr.net",
+            "telephone": "+380683313339",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "UA",
+              "addressRegion": "Україна",
+              "addressLocality": "Україна"
+            },
+            "sameAs": ["https://bkparfume.site/"],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "Customer Support",
+              "telephone": "+380683313339",
+              "email": "bkparfume@ukr.net",
+              "availableLanguage": ["uk", "ru"]
+            }
           },
-          "query-input": "required name=search_term_string"
-        },
-        "image": "https://bkparfume.site/images/products/armand-basi-in-red.png",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Customer Support",
-          "telephone": "+380683313339",
-          "email": "bkparfume@ukr.net",
-          "availableLanguage": ["uk", "ru"]
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "BK Parfume",
-          "url": "https://bkparfume.site/",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
+          {
+            "@type": "WebSite",
+            "@id": "https://bkparfume.site/#website",
+            "url": "https://bkparfume.site/",
+            "name": "BK Parfume",
+            "description": "Наливна парфумерія BK Parfume з доставкою по Україні, широкий вибір ароматів та вигідні ціни.",
+            "inLanguage": "uk-UA",
+            "publisher": {
+              "@id": "https://bkparfume.site/#organization"
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://bkparfume.site/?search={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
           },
-          "email": "bkparfume@ukr.net",
-          "telephone": "+380683313339",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "UA",
-            "addressRegion": "Україна",
-            "addressLocality": "Україна"
+          {
+            "@type": "Store",
+            "@id": "https://bkparfume.site/#store",
+            "name": "BK Parfume",
+            "url": "https://bkparfume.site/",
+            "description": "Наливна парфумерія з жіночими, чоловічими та унісекс ароматами, оптовими цінами і доставкою по Україні.",
+            "image": "https://bkparfume.site/images/products/armand-basi-in-red.png",
+            "priceRange": "100-500 UAH",
+            "areaServed": "UA",
+            "parentOrganization": {
+              "@id": "https://bkparfume.site/#organization"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "UA"
+            }
           },
-          "sameAs": "https://bkparfume.site/"
-        },
-        "mainEntity": {
-          "@type": "Store",
-          "name": "BK Parfume",
-          "url": "https://bkparfume.site/",
-          "description": "Наливна парфумерія - широкий вибір ароматів та парфумів",
-          "priceRange": "100-500 UAH",
-          "areaServed": "UA",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "UA"
+          {
+            "@type": "CollectionPage",
+            "@id": "https://bkparfume.site/#webpage",
+            "url": "https://bkparfume.site/",
+            "name": "Наливна парфумерія в Україні, жіночі, чоловічі та унісекс аромати | BK Parfume",
+            "description": "BK Parfume — наливна парфумерія в Україні: жіночі, чоловічі та унісекс аромати, оптові ціни, доставка Новою поштою та понад 155 ароматів у наявності.",
+            "inLanguage": "uk-UA",
+            "isPartOf": {
+              "@id": "https://bkparfume.site/#website"
+            },
+            "about": {
+              "@id": "https://bkparfume.site/#store"
+            },
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
+            },
+            "mainEntity": {
+              "@id": "https://bkparfume.site/#featured-products"
+            },
+            "significantLink": [
+              "https://bkparfume.site/zhinochi-parfumy.html",
+              "https://bkparfume.site/cholovichi-parfumy.html",
+              "https://bkparfume.site/uniseks-parfumy.html",
+              "https://bkparfume.site/optova-parfumeriya.html",
+              "https://bkparfume.site/dostavka-i-oplata.html"
+            ]
           }
-        }
+        ]
       }
     </script>
     <link
@@ -667,6 +705,11 @@
       {
         "@context": "https://schema.org",
         "@type": "ItemList",
+        "@id": "https://bkparfume.site/#featured-products",
+        "name": "Популярні сторінки ароматів BK Parfume",
+        "url": "https://bkparfume.site/#featured-products",
+        "itemListOrder": "https://schema.org/ItemListOrderAscending",
+        "numberOfItems": 6,
         "itemListElement": [
           {
             "@type": "ListItem",
@@ -834,7 +877,7 @@
           <button
             class="btn-icon search-toggle"
             id="searchToggle"
-            aria-label="Пошук"
+            aria-label="Відкрити пошук ароматів"
             aria-expanded="false"
             aria-controls="searchBar"
           >
@@ -851,7 +894,7 @@
           <button
             class="btn-icon cart-toggle"
             id="cartToggle"
-            aria-label="Кошик"
+            aria-label="Відкрити кошик із парфумами"
             aria-expanded="false"
             aria-controls="cartPanel"
           >
@@ -870,7 +913,7 @@
           <button
             class="burger"
             id="burgerBtn"
-            aria-label="Меню"
+            aria-label="Відкрити меню сайту"
             aria-expanded="false"
             aria-controls="nav"
           >
@@ -893,7 +936,7 @@
             type="button"
             class="btn-icon search-close"
             id="searchClose"
-            aria-label="Закрити пошук"
+            aria-label="Закрити пошук ароматів"
           >
             <svg
               viewBox="0 0 24 24"
@@ -922,7 +965,7 @@
             Від 110 мл за доступною ціною.
           </p>
           <a href="#catalog" class="btn btn--primary hero__btn"
-            >Переглянути колекцію</a
+            >Дивитися каталог ароматів</a
           >
         </div>
         <div class="hero__decor">
@@ -996,7 +1039,7 @@
               </div>
             </a>
             <a class="pricing-card" href="optova-parfumeriya.html">
-              <div class="pricing-card__qty">Опт</div>
+              <div class="pricing-card__qty">Оптова парфумерія</div>
               <div class="pricing-card__price">
                 <span>Ціни для закупівель від 10 і 25 штук</span>
               </div>
@@ -1030,13 +1073,13 @@
               hidden
             >
               <a class="pricing-card" href="products/giorgio-armani-si.html">
-                <div class="pricing-card__qty">BKparfume Si</div>
+                <div class="pricing-card__qty">Giorgio Armani Si</div>
                 <div class="pricing-card__price">
                   <span>Жіночий аромат на кожен день і вечір</span>
                 </div>
               </a>
               <a class="pricing-card" href="products/gucci-flora.html">
-                <div class="pricing-card__qty">BKparfume Flora</div>
+                <div class="pricing-card__qty">Gucci Flora</div>
                 <div class="pricing-card__price">
                   <span>Квітковий жіночий аромат для подарунка</span>
                 </div>
@@ -1045,7 +1088,7 @@
                 class="pricing-card"
                 href="products/lanco-me-la-vie-est-belle.html"
               >
-                <div class="pricing-card__qty">BKparfume La Vie Est Belle</div>
+                <div class="pricing-card__qty">Lancome La Vie Est Belle</div>
                 <div class="pricing-card__price">
                   <span>Солодкий популярний жіночий аромат</span>
                 </div>
@@ -1054,7 +1097,7 @@
                 class="pricing-card"
                 href="products/yves-saint-laurent-black-opium.html"
               >
-                <div class="pricing-card__qty">BKparfume Black Opium</div>
+                <div class="pricing-card__qty">YSL Black Opium</div>
                 <div class="pricing-card__price">
                   <span>Вечірня композиція з кавовими нотами</span>
                 </div>
@@ -1063,7 +1106,7 @@
                 class="pricing-card"
                 href="products/paco-rabanne-lady-million.html"
               >
-                <div class="pricing-card__qty">BKparfume Lady Million</div>
+                <div class="pricing-card__qty">Paco Rabanne Lady Million</div>
                 <div class="pricing-card__price">
                   <span>Яскравий жіночий аромат з виразним шлейфом</span>
                 </div>
@@ -1072,7 +1115,7 @@
                 class="pricing-card"
                 href="products/versace-bright-crystal.html"
               >
-                <div class="pricing-card__qty">BKparfume Bright Crystal</div>
+                <div class="pricing-card__qty">Versace Bright Crystal</div>
                 <div class="pricing-card__price">
                   <span>Свіжий кришталевий аромат з гранатом і лотосом</span>
                 </div>
@@ -1081,7 +1124,9 @@
                 class="pricing-card"
                 href="products/dolce-and-gabbana-imperatrice-3.html"
               >
-                <div class="pricing-card__qty">BKparfume Imperatrice</div>
+                <div class="pricing-card__qty">
+                  Dolce & Gabbana Imperatrice 3
+                </div>
                 <div class="pricing-card__price">
                   <span
                     >Фруктово-квіткова композиція для легкого щоденного
@@ -1093,7 +1138,7 @@
                 class="pricing-card"
                 href="products/carolina-herrera-good-girl.html"
               >
-                <div class="pricing-card__qty">BKparfume Good Girl</div>
+                <div class="pricing-card__qty">Carolina Herrera Good Girl</div>
                 <div class="pricing-card__price">
                   <span
                     >Спокусливий жасминово-кавовий аромат для вечора і
@@ -1110,6 +1155,42 @@
                   <span>Ще більше статичних SEO-сторінок у категорії</span>
                 </div>
               </a>
+            </div>
+
+            <div class="pricing-banner__subsection">
+              <h2 class="pricing-banner__title">Що ще шукають про парфуми</h2>
+              <div class="pricing-grid">
+                <a class="pricing-card" href="index.html#catalog">
+                  <div class="pricing-card__qty">Парфуми 110 мл</div>
+                  <div class="pricing-card__price">
+                    <span>Основний формат наливної парфумерії BK Parfume</span>
+                  </div>
+                </a>
+                <a class="pricing-card" href="article-10.html">
+                  <div class="pricing-card__qty">Парфуми на подарунок</div>
+                  <div class="pricing-card__price">
+                    <span>Поради, як вибрати аромат без помилки</span>
+                  </div>
+                </a>
+                <a class="pricing-card" href="dostavka-i-oplata.html">
+                  <div class="pricing-card__qty">
+                    Доставка парфумів по Україні
+                  </div>
+                  <div class="pricing-card__price">
+                    <span>Умови замовлення, оплати та відправки</span>
+                  </div>
+                </a>
+                <a class="pricing-card" href="optova-parfumeriya.html">
+                  <div class="pricing-card__qty">
+                    Парфумерія оптом від 10 штук
+                  </div>
+                  <div class="pricing-card__price">
+                    <span
+                      >Умови для закупівель і змішаних наборів ароматів</span
+                    >
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -1328,6 +1409,63 @@
           </div>
         </div>
       </section>
+
+      <section class="articles-section">
+        <div class="articles-section__inner">
+          <article class="article-featured">
+            <div class="article-featured__content">
+              <h2 class="article-featured__title">Куди перейти за запитом</h2>
+              <p class="article-featured__excerpt">
+                Якщо ви прийшли з пошуку не просто подивитися каталог, а швидко
+                знайти потрібний тип аромату, переходьте на окремі комерційні
+                сторінки. Вони допомагають швидше відкрити релевантний розділ і
+                краще орієнтують у жіночих, чоловічих, унісекс та оптових
+                запитах.
+              </p>
+              <ul class="article-featured__excerpt">
+                <li>
+                  <a href="zhinochi-parfumy.html">Жіночі парфуми купити</a>
+                </li>
+                <li>
+                  <a href="cholovichi-parfumy.html">Чоловічі парфуми купити</a>
+                </li>
+                <li>
+                  <a href="uniseks-parfumy.html">Унісекс парфуми купити</a>
+                </li>
+                <li>
+                  <a href="optova-parfumeriya.html"
+                    >Оптова наливна парфумерія</a
+                  >
+                </li>
+                <li>
+                  <a href="products/giorgio-armani-si.html"
+                    >Сторінка аромату Si</a
+                  >
+                </li>
+                <li>
+                  <a href="products/carolina-herrera-good-girl.html"
+                    >Сторінка аромату Good Girl</a
+                  >
+                </li>
+                <li>
+                  <a href="products/yves-saint-laurent-black-opium.html"
+                    >Сторінка аромату Black Opium</a
+                  >
+                </li>
+                <li>
+                  <a href="dostavka-i-oplata.html">Умови доставки й оплати</a>
+                </li>
+                <li><a href="contacts.html">Контакти для консультації</a></li>
+              </ul>
+              <p class="article-featured__excerpt">
+                Така перелінковка підсилює комерційні сторінки сайту, а для
+                користувача спрощує перехід від загального запиту до конкретної
+                категорії або товару.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
 
     <!-- FOOTER -->
@@ -1353,7 +1491,7 @@
       id="modalOverlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Деталі товару"
+      aria-label="Деталі аромату"
       aria-hidden="true"
       hidden
     >
@@ -1362,7 +1500,7 @@
           type="button"
           class="modal__close"
           id="modalClose"
-          aria-label="Закрити"
+          aria-label="Закрити картку аромату"
         >
           <svg
             viewBox="0 0 24 24"
@@ -1379,7 +1517,7 @@
             class="modal__image"
             id="modalImage"
             src="images/products/favicon-32.png"
-            alt="Переглянути зображення аромату"
+            alt="Зображення вибраного аромату"
             loading="lazy"
           />
           <div class="modal__badge-wrap" id="modalBadgeWrap"></div>
@@ -1415,7 +1553,7 @@
                 min="1"
                 max="99"
                 placeholder="1"
-                title="Кількість"
+                title="Кількість товару"
                 readonly=""
               />
               <button type="button" class="qty-btn qty-btn--plus" id="qtyPlus">
@@ -1440,7 +1578,7 @@
     <aside
       class="cart-panel"
       id="cartPanel"
-      aria-label="Кошик"
+      aria-label="Панель кошика"
       tabindex="-1"
       inert
       hidden
@@ -1450,7 +1588,7 @@
         <button
           class="btn-icon cart-panel-close"
           id="cartPanelClose"
-          aria-label="Закрити кошик"
+          aria-label="Закрити кошик із парфумами"
         >
           <svg
             viewBox="0 0 24 24"

@@ -18,11 +18,12 @@ const STYLE_VERSION = "20260508-1";
 const CATEGORY_META = {
   women: {
     label: "жіночі парфуми",
-    titleLabel: "жіночі парфуми",
+    titleLabel: "жіночі парфуми на розлив",
+    relatedTitleLabel: "унісекс парфуми BK Parfume",
     catalogUrl: "index.html?category=women#catalog",
     categoryUrl: "zhinochi-parfumy.html",
     relatedUrl: "uniseks-parfumy.html",
-    relatedLabel: "унісекс ароматами",
+    relatedLabel: "унісекс парфумами BK Parfume",
     audience:
       "для жінок, які шукають аромат на кожен день, побачення або особливу подію",
     usage:
@@ -30,11 +31,12 @@ const CATEGORY_META = {
   },
   men: {
     label: "чоловічі парфуми",
-    titleLabel: "чоловічі парфуми",
+    titleLabel: "чоловічі парфуми на розлив",
+    relatedTitleLabel: "унісекс парфуми BK Parfume",
     catalogUrl: "index.html?category=men#catalog",
     categoryUrl: "cholovichi-parfumy.html",
     relatedUrl: "uniseks-parfumy.html",
-    relatedLabel: "унісекс ароматами",
+    relatedLabel: "унісекс парфумами BK Parfume",
     audience:
       "для чоловіків, яким потрібен аромат на роботу, щодень або вечірній вихід",
     usage:
@@ -42,11 +44,12 @@ const CATEGORY_META = {
   },
   unisex: {
     label: "унісекс аромати",
-    titleLabel: "унісекс парфуми",
+    titleLabel: "унісекс парфуми BK Parfume",
+    relatedTitleLabel: "жіночі парфуми на розлив",
     catalogUrl: "index.html?category=unisex#catalog",
     categoryUrl: "uniseks-parfumy.html",
     relatedUrl: "zhinochi-parfumy.html",
-    relatedLabel: "жіночими ароматами",
+    relatedLabel: "жіночими парфумами на розлив",
     audience:
       "для тих, хто шукає універсальне звучання без жорсткої прив'язки до класичної жіночої або чоловічої групи",
     usage:
@@ -151,16 +154,46 @@ function displayName(name) {
   return normalizeProductName(name);
 }
 
+function seoProductName(product) {
+  const name = shortName(product.name);
+  const brand = String(product.brand || "").trim();
+
+  if (!brand) {
+    return name;
+  }
+
+  return name.toLowerCase().startsWith(brand.toLowerCase())
+    ? name
+    : `${brand} ${name}`;
+}
+
+function buildMetaNotes(product) {
+  const profile = product.notesProfile || {};
+  const allNotes = [
+    ...(Array.isArray(profile.topNotes) ? profile.topNotes : []),
+    ...(Array.isArray(profile.heartNotes) ? profile.heartNotes : []),
+    ...(Array.isArray(profile.baseNotes) ? profile.baseNotes : []),
+  ]
+    .map((note) => String(note || "").trim())
+    .filter(Boolean);
+
+  return allNotes.slice(0, 3);
+}
+
 function buildMetaTitle(product, categoryMeta) {
-  return `${displayName(product.name)} купити в Україні, ${categoryMeta.titleLabel} | BK Parfume`;
+  return `${seoProductName(product)} ${product.volume} - ${capitalize(categoryMeta.titleLabel)} | BK Parfume`;
 }
 
 function buildMetaDescription(product, categoryMeta) {
-  if (product.metaDescription) {
-    return product.metaDescription;
-  }
+  const notes = buildMetaNotes(product);
+  const notesText = notes.length ? ` Ноти: ${notes.join(", ")}.` : "";
 
-  return `${displayName(product.name)} у BK Parfume: ${categoryMeta.label}, об'єм ${product.volume}, ціна ${product.price} грн та доставка по Україні.`;
+  return `${seoProductName(product)} в BK Parfume: ${categoryMeta.titleLabel}, ${product.volume}, ${product.price} грн, доставка по Україні.${notesText}`;
+}
+
+function capitalize(value) {
+  const text = String(value || "");
+  return text ? `${text.charAt(0).toUpperCase()}${text.slice(1)}` : "";
 }
 
 function buildFaq(product, categoryMeta) {
@@ -340,7 +373,7 @@ function renderProductPage(product, products) {
       <div class="articles-section__inner">
         <article class="article-featured">
           <div class="article-featured__media">
-            <img src="../${escapeHtml(product.image)}" alt="${escapeHtml(productName)}" />
+            <img src="../${escapeHtml(product.image)}" alt="Флакон аромату ${escapeHtml(productName)}" />
           </div>
           <div class="article-featured__content">
             <p class="article-featured__excerpt"><strong>Бренд:</strong> ${STORE_BRAND}</p>
@@ -349,15 +382,15 @@ function renderProductPage(product, products) {
             <p class="article-featured__excerpt"><strong>Ціна:</strong> ${escapeHtml(String(product.price))} грн</p>
             <p class="article-featured__excerpt">${escapeHtml(product.longDescription || product.description)}</p>
             <p class="article-featured__excerpt">${escapeHtml(productName)} добре працює ${escapeHtml(categoryMeta.audience)}. Завдяки формату ${escapeHtml(product.volume)} цей аромат зручно брати як основний варіант на сезон або додавати до особистої колекції для окремих ситуацій.</p>
-            <p class="article-featured__excerpt">${escapeHtml(categoryMeta.usage)} Якщо ви підбираєте схожі композиції, перегляньте також сторінку з ${escapeHtml(categoryMeta.relatedLabel)} та повний каталог BK Parfume.</p>
+            <p class="article-featured__excerpt">${escapeHtml(categoryMeta.usage)} Якщо ви підбираєте схожі композиції, перегляньте також <a href="../${escapeHtml(categoryMeta.relatedUrl)}">сторінку з ${escapeHtml(categoryMeta.relatedLabel)}</a> та <a href="../${escapeHtml(categoryMeta.catalogUrl)}">каталог ароматів BK Parfume</a>.</p>
             <div class="article-featured__catalog-actions">
-              <a class="btn btn--primary" href="../${escapeHtml(categoryMeta.catalogUrl)}">Перейти в каталог</a>
+              <a class="btn btn--primary" href="../${escapeHtml(categoryMeta.catalogUrl)}">Дивитися ${escapeHtml(categoryMeta.titleLabel)} в каталозі</a>
               <button
                 type="button"
                 class="article-featured__quick-add"
                 id="productAddToCart"
-                aria-label="Додати ${escapeHtml(productName)} до кошика"
-                title="Додати до кошика"
+                aria-label="Додати аромат ${escapeHtml(productName)} до кошика"
+                title="Додати аромат ${escapeHtml(productName)} до кошика"
               >
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="9" cy="21" r="1"></circle>
@@ -386,7 +419,7 @@ ${faqMarkup}
           <div class="article-featured__content">
             <h2 class="article-featured__title">Схожі аромати</h2>
             <ul class="article-featured__excerpt">${relatedMarkup}</ul>
-            <p class="article-featured__excerpt">Також подивіться <a href="../${escapeHtml(categoryMeta.categoryUrl)}">сторінку категорії</a>, <a href="../${escapeHtml(categoryMeta.relatedUrl)}">суміжну підбірку</a> та <a href="../dostavka-i-oplata.html">умови доставки й оплати</a>.</p>
+            <p class="article-featured__excerpt">Також подивіться <a href="../${escapeHtml(categoryMeta.categoryUrl)}">${escapeHtml(categoryMeta.titleLabel)} в каталозі</a>, <a href="../${escapeHtml(categoryMeta.relatedUrl)}">${escapeHtml(categoryMeta.relatedTitleLabel)} в каталозі</a> та <a href="../dostavka-i-oplata.html">умови доставки парфумів і оплати</a>.</p>
           </div>
         </article>
       </div>
@@ -413,12 +446,12 @@ ${faqMarkup}
         function markAdded() {
           if (!button) return;
           button.classList.add("is-added");
-          button.setAttribute("aria-label", "Товар додано до кошика");
-          button.setAttribute("title", "Товар додано до кошика");
+            button.setAttribute("aria-label", "Аромат ${escapeHtml(productName)} додано до кошика");
+            button.setAttribute("title", "Аромат ${escapeHtml(productName)} додано до кошика");
           window.setTimeout(() => {
             button.classList.remove("is-added");
-            button.setAttribute("aria-label", "Додати товар до кошика");
-            button.setAttribute("title", "Додати до кошика");
+            button.setAttribute("aria-label", "Додати аромат ${escapeHtml(productName)} до кошика");
+            button.setAttribute("title", "Додати аромат ${escapeHtml(productName)} до кошика");
           }, 1400);
         }
 

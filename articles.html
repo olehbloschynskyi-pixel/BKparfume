@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Статті про парфуми та підбір ароматів | BK Parfume</title>
+    <title>Статті BK Parfume: парфуми, підбір ароматів, ноти та тренди</title>
     <meta
       name="description"
-      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
+      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі й унісекс аромати, ноти, стійкість, подарунковий вибір і тренди ароматів."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://bkparfume.site/articles.html" />
@@ -15,11 +15,11 @@
     <meta property="og:site_name" content="BK Parfume" />
     <meta
       property="og:title"
-      content="Статті про парфуми та підбір ароматів | BK Parfume"
+      content="Статті BK Parfume: парфуми, підбір ароматів, ноти та тренди"
     />
     <meta
       property="og:description"
-      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
+      content="Поради BK Parfume про підбір парфумів, ноти, стійкість аромату, жіночі, чоловічі та унісекс композиції."
     />
     <meta property="og:url" content="https://bkparfume.site/articles.html" />
     <meta
@@ -29,11 +29,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Статті про парфуми та підбір ароматів | BK Parfume"
+      content="Статті BK Parfume: парфуми, підбір ароматів, ноти та тренди"
     />
     <meta
       name="twitter:description"
-      content="Статті BK Parfume про підбір парфумів, жіночі, чоловічі та унісекс аромати, тренди, ноти та поради щодо вибору."
+      content="Поради BK Parfume про підбір парфумів, ноти, стійкість аромату, жіночі, чоловічі та унісекс композиції."
     />
     <meta
       name="twitter:image"
@@ -53,9 +53,23 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/products/favicon-16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/products/favicon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/products/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/products/favicon-16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/products/favicon-32.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/products/apple-touch-icon.png"
+    />
     <link rel="humans" href="https://bkparfume.site/humans.txt" />
     <meta name="AdsBot-Google" content="index, follow" />
     <meta name="Slurp" content="index, follow" />
@@ -81,23 +95,34 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "BK Parfume",
-        "url": "https://bkparfume.site/",
-        "description": "Наливна парфумерія BK Parfume з доставкою по Україні, широкий вибір ароматів та вигідні ціни.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "BK Parfume",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "UA",
-            "addressRegion": "Україна"
+        "@graph": [
+          {
+            "@type": "Blog",
+            "@id": "https://bkparfume.site/articles.html#blog",
+            "name": "Статті BK Parfume",
+            "url": "https://bkparfume.site/articles.html",
+            "description": "Статті BK Parfume про підбір парфумів, ноти, стійкість аромату, жіночі, чоловічі й унісекс композиції та тренди парфумерії.",
+            "inLanguage": "uk-UA",
+            "publisher": {
+              "@id": "https://bkparfume.site/#organization"
+            }
           },
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
+          {
+            "@type": "Organization",
+            "@id": "https://bkparfume.site/#organization",
+            "name": "BK Parfume",
+            "url": "https://bkparfume.site/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://bkparfume.site/images/products/armand-basi-in-red.png"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "UA",
+              "addressRegion": "Україна"
+            }
           }
-        }
+        ]
       }
     </script>
     <link rel="stylesheet" href="css/style.min.css?v=20260505-3" />
@@ -139,7 +164,7 @@
             type="button"
             class="btn-icon search-toggle"
             id="searchToggle"
-            aria-label="Пошук"
+            aria-label="Відкрити пошук статей"
           >
             <svg
               viewBox="0 0 24 24"
@@ -151,7 +176,12 @@
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
-          <button type="button" class="burger" id="burgerBtn" aria-label="Меню">
+          <button
+            type="button"
+            class="burger"
+            id="burgerBtn"
+            aria-label="Відкрити меню сайту"
+          >
             <span></span><span></span><span></span>
           </button>
         </div>
@@ -170,7 +200,7 @@
             type="button"
             class="btn-icon search-close"
             id="searchClose"
-            aria-label="Закрити пошук"
+            aria-label="Закрити пошук статей"
           >
             <svg
               viewBox="0 0 24 24"
@@ -207,11 +237,13 @@
             </h2>
             <p class="article-featured__excerpt">
               Шукаєте конкретний тип парфумів? Перейдіть на сторінки
-              <a href="zhinochi-parfumy.html">жіночих ароматів</a>,
-              <a href="cholovichi-parfumy.html">чоловічих парфумів</a>,
-              <a href="uniseks-parfumy.html">унісекс композицій</a>,
-              <a href="optova-parfumeriya.html">оптових замовлень</a> або
-              <a href="dostavka-i-oplata.html">доставки й оплати</a>.
+              <a href="zhinochi-parfumy.html">жіночих парфумів на розлив</a>,
+              <a href="cholovichi-parfumy.html">чоловічих парфумів на розлив</a
+              >, <a href="uniseks-parfumy.html">унісекс парфумів BK Parfume</a>,
+              <a href="optova-parfumeriya.html">оптової парфумерії</a> або
+              <a href="dostavka-i-oplata.html"
+                >умов доставки парфумів і оплати</a
+              >.
             </p>
           </div>
         </article>
@@ -231,7 +263,7 @@
               та народження парфумерної столиці світу.
             </p>
             <a href="article-13.html" class="article-featured__link"
-              >Читати далі</a
+              >Читати про історію парфумерії</a
             >
           </div>
         </article>
@@ -269,7 +301,9 @@
                 Від ароматизованих рукавичок до курорту Грасс: ключові віхи
                 розвитку європейської парфумерії.
               </p>
-              <a href="article-13.html" class="article-card__link">Читати</a>
+              <a href="article-13.html" class="article-card__link"
+                >Читати про Грасс і історію парфумерії</a
+              >
             </div>
           </article>
 
@@ -299,7 +333,9 @@
                 Десятка легендарних ароматів для чоловіків — Aventus, Sauvage,
                 Bleu de Chanel та інші.
               </p>
-              <a href="article-12.html" class="article-card__link">Читати</a>
+              <a href="article-12.html" class="article-card__link"
+                >Читати топ чоловічих ароматів</a
+              >
             </div>
           </article>
 
@@ -329,7 +365,9 @@
                 Добірка легких фруктових, квіткових і свіжих ароматів для
                 весняного настрою.
               </p>
-              <a href="article-11.html" class="article-card__link">Читати</a>
+              <a href="article-11.html" class="article-card__link"
+                >Читати про аромати весни</a
+              >
             </div>
           </article>
 
@@ -358,7 +396,9 @@
                 Добірка найпопулярніших квіткових і свіжих композицій для
                 щоденного використання.
               </p>
-              <a href="article-1.html" class="article-card__link">Читати</a>
+              <a href="article-1.html" class="article-card__link"
+                >Читати про ціну парфумів</a
+              >
             </div>
           </article>
 
@@ -387,7 +427,9 @@
                 Коротко про переваги: доступна ціна, гнучкий обʼєм і великий
                 вибір ароматів.
               </p>
-              <a href="article-2.html" class="article-card__link">Читати</a>
+              <a href="article-2.html" class="article-card__link"
+                >Читати про вигоду наливної парфумерії</a
+              >
             </div>
           </article>
 
@@ -415,7 +457,9 @@
               <p class="article-card__excerpt">
                 Розбираємо різні аромати та коли їх краще носити.
               </p>
-              <a href="article-3.html" class="article-card__link">Читати</a>
+              <a href="article-3.html" class="article-card__link"
+                >Читати про легкі та ніжні аромати</a
+              >
             </div>
           </article>
 
@@ -445,7 +489,9 @@
                 Пояснюємо 5 золотих правил зберігання парфумів, щоб аромат не
                 втрачав стійкість і звучав як задумано.
               </p>
-              <a href="article-4.html" class="article-card__link">Читати</a>
+              <a href="article-4.html" class="article-card__link"
+                >Читати про зберігання парфумів</a
+              >
             </div>
           </article>
 
@@ -475,7 +521,9 @@
                 Найкращі зони нанесення і прості кроки, щоб аромат тримався
                 довше протягом дня.
               </p>
-              <a href="article-5.html" class="article-card__link">Читати</a>
+              <a href="article-5.html" class="article-card__link"
+                >Читати про стійкість аромату</a
+              >
             </div>
           </article>
 
@@ -504,7 +552,9 @@
                 Рейтинг солодких композицій BK Parfume з детальним описом
                 характеру, шлейфу та настрою кожного аромату.
               </p>
-              <a href="article-6.html" class="article-card__link">Читати</a>
+              <a href="article-6.html" class="article-card__link"
+                >Читати про солодкі жіночі аромати</a
+              >
             </div>
           </article>
 
@@ -534,7 +584,9 @@
                 Просте і цікаве пояснення, чому аромат змінюється з часом, та як
                 розкриваються верхні, серцеві й базові ноти.
               </p>
-              <a href="article-7.html" class="article-card__link">Читати</a>
+              <a href="article-7.html" class="article-card__link"
+                >Читати про верхні, серцеві та базові ноти</a
+              >
             </div>
           </article>
 
@@ -563,7 +615,9 @@
                 Золоті правила парфумерного етикету: доречність, сезонність,
                 точки нанесення та секрети стійкості.
               </p>
-              <a href="article-8.html" class="article-card__link">Читати</a>
+              <a href="article-8.html" class="article-card__link"
+                >Читати про правила користування парфумами</a
+              >
             </div>
           </article>
 
@@ -593,7 +647,9 @@
                 Практичний гід із вибору аромату для офісу, побачення та
                 подорожей: ноти, доречність і приклади парфумів.
               </p>
-              <a href="article-9.html" class="article-card__link">Читати</a>
+              <a href="article-9.html" class="article-card__link"
+                >Читати про вибір аромату під ситуацію</a
+              >
             </div>
           </article>
 
@@ -623,7 +679,9 @@
                 Покроковий алгоритм вибору аромату на подарунок: від аналізу
                 вподобань до тестування та безпечного вручення.
               </p>
-              <a href="article-10.html" class="article-card__link">Читати</a>
+              <a href="article-10.html" class="article-card__link"
+                >Читати про вибір парфуму на подарунок</a
+              >
             </div>
           </article>
         </div>
@@ -642,6 +700,7 @@
         <div class="footer__contacts">
           <a href="tel:0683313339">068-331-33-39</a>
           <a href="mailto:bkparfume@ukr.net">bkparfume@ukr.net</a>
+          <a href="contacts.html">Контакти BK Parfume</a>
         </div>
       </div>
     </footer>
