@@ -1785,6 +1785,16 @@ function generateProductSchema() {
       },
     },
   };
+  const merchantReturnPolicy = {
+    "@type": "MerchantReturnPolicy",
+    applicableCountry: "UA",
+    returnPolicyCategory:
+      "https://schema.org/MerchantReturnFiniteReturnWindow",
+    merchantReturnDays: 14,
+    returnMethod: "https://schema.org/ReturnByMail",
+    returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+    merchantReturnLink: `${siteUrl}/dostavka-i-oplata.html`,
+  };
 
   const itemListElement = products.map((p, index) => {
     const productUrl = p.seoPage
@@ -1803,35 +1813,36 @@ function generateProductSchema() {
     }
 
     listItem.item = {
-        "@type": "Product",
-        "@id": `${productUrl}#product`,
-        name: p.name,
+      "@type": "Product",
+      "@id": `${productUrl}#product`,
+      name: p.name,
+      url: productUrl,
+      brand: {
+        "@type": "Brand",
+        name: "BK Parfume",
+      },
+      image: [`${siteUrl}${normalizeCatalogImagePath(p.image)}`],
+      description: p.description,
+      sku: String(p.id),
+      mpn: p.slug,
+      category: CATEGORY_LABELS[p.category] || p.category,
+      offers: {
+        "@type": "Offer",
         url: productUrl,
-        brand: {
-          "@type": "Brand",
+        price: String(p.price),
+        priceCurrency: "UAH",
+        priceValidUntil: "2026-12-31",
+        availability: "https://schema.org/InStock",
+        itemCondition: "https://schema.org/NewCondition",
+        shippingDetails: shippingDetails,
+        hasMerchantReturnPolicy: merchantReturnPolicy,
+        seller: {
+          "@type": "Organization",
           name: "BK Parfume",
+          url: siteUrl,
         },
-        image: [`${siteUrl}${normalizeCatalogImagePath(p.image)}`],
-        description: p.description,
-        sku: String(p.id),
-        mpn: p.slug,
-        category: CATEGORY_LABELS[p.category] || p.category,
-        offers: {
-          "@type": "Offer",
-          url: productUrl,
-          price: String(p.price),
-          priceCurrency: "UAH",
-          priceValidUntil: "2026-12-31",
-          availability: "https://schema.org/InStock",
-          itemCondition: "https://schema.org/NewCondition",
-          shippingDetails: shippingDetails,
-          seller: {
-            "@type": "Organization",
-            name: "BK Parfume",
-            url: siteUrl,
-          },
-        },
-      };
+      },
+    };
 
     return listItem;
   });
