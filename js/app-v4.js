@@ -1769,11 +1769,18 @@ function generateProductSchema() {
       ? `${siteUrl}/products/${p.slug}.html`
       : categoryUrls[p.category] || `${siteUrl}/#catalog`;
 
-    return {
+    const listItem = {
       "@type": "ListItem",
       position: index + 1,
       url: productUrl,
-      item: {
+      name: p.name,
+    };
+
+    if (!p.seoPage) {
+      return listItem;
+    }
+
+    listItem.item = {
         "@type": "Product",
         "@id": `${productUrl}#product`,
         name: p.name,
@@ -1801,8 +1808,9 @@ function generateProductSchema() {
             url: siteUrl,
           },
         },
-      },
-    };
+      };
+
+    return listItem;
   });
 
   const schema = {

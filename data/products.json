@@ -9,7 +9,7 @@
     "image": "images/products/armand-basi-in-red.png",
     "badge": "",
     "slug": "armand-basi-in-red",
-    "seoPage": false,
+    "seoPage": true,
     "fragranceId": "armand-basi-in-red-profile",
     "contentId": "armand-basi-in-red-content"
   },
@@ -1241,7 +1241,7 @@
     "image": "images/products/attar-hayati.png",
     "badge": "Люкс",
     "slug": "attar-collection-hayati",
-    "seoPage": false,
+    "seoPage": true,
     "fragranceId": "attar-collection-hayati-profile",
     "contentId": "attar-collection-hayati-content"
   },
@@ -1689,7 +1689,7 @@
     "image": "images/products/banderas-blue-seduction.png",
     "badge": "",
     "slug": "antonio-banderas-blue-seduction",
-    "seoPage": false,
+    "seoPage": true,
     "fragranceId": "antonio-banderas-blue-seduction-profile",
     "contentId": "antonio-banderas-blue-seduction-content"
   },
