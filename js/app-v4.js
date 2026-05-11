@@ -1763,6 +1763,28 @@ function generateProductSchema() {
     men: `${siteUrl}/cholovichi-parfumy.html`,
     unisex: `${siteUrl}/uniseks-parfumy.html`,
   };
+  const shippingDetails = {
+    "@type": "OfferShippingDetails",
+    shippingDestination: {
+      "@type": "DefinedRegion",
+      addressCountry: "UA",
+    },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      handlingTime: {
+        "@type": "QuantitativeValue",
+        minValue: 0,
+        maxValue: 2,
+        unitCode: "DAY",
+      },
+      transitTime: {
+        "@type": "QuantitativeValue",
+        minValue: 1,
+        maxValue: 5,
+        unitCode: "DAY",
+      },
+    },
+  };
 
   const itemListElement = products.map((p, index) => {
     const productUrl = p.seoPage
@@ -1802,6 +1824,7 @@ function generateProductSchema() {
           priceValidUntil: "2026-12-31",
           availability: "https://schema.org/InStock",
           itemCondition: "https://schema.org/NewCondition",
+          shippingDetails: shippingDetails,
           seller: {
             "@type": "Organization",
             name: "BK Parfume",

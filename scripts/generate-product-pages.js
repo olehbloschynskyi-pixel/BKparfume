@@ -15,6 +15,28 @@ const OFFER_AVAILABILITY = "https://schema.org/InStock";
 const ITEM_CONDITION = "https://schema.org/NewCondition";
 const PRICE_VALID_UNTIL = "2026-12-31";
 const MERCHANT_RETURN_POLICY_URL = `${SITE_URL}/dostavka-i-oplata.html`;
+const SHIPPING_DETAILS = {
+  "@type": "OfferShippingDetails",
+  shippingDestination: {
+    "@type": "DefinedRegion",
+    addressCountry: "UA",
+  },
+  deliveryTime: {
+    "@type": "ShippingDeliveryTime",
+    handlingTime: {
+      "@type": "QuantitativeValue",
+      minValue: 0,
+      maxValue: 2,
+      unitCode: "DAY",
+    },
+    transitTime: {
+      "@type": "QuantitativeValue",
+      minValue: 1,
+      maxValue: 5,
+      unitCode: "DAY",
+    },
+  },
+};
 const STYLE_VERSION = "20260508-1";
 const CATEGORY_META = {
   women: {
@@ -229,6 +251,7 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
           priceValidUntil: PRICE_VALID_UNTIL,
           availability: OFFER_AVAILABILITY,
           itemCondition: ITEM_CONDITION,
+          shippingDetails: SHIPPING_DETAILS,
           hasMerchantReturnPolicy: {
             "@type": "MerchantReturnPolicy",
             applicableCountry: "UA",
