@@ -1769,6 +1769,11 @@ function generateProductSchema() {
       "@type": "DefinedRegion",
       addressCountry: "UA",
     },
+    shippingRate: {
+      "@type": "MonetaryAmount",
+      value: "0",
+      currency: "UAH",
+    },
     deliveryTime: {
       "@type": "ShippingDeliveryTime",
       handlingTime: {

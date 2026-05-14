@@ -21,6 +21,11 @@ const SHIPPING_DETAILS = {
     "@type": "DefinedRegion",
     addressCountry: "UA",
   },
+  shippingRate: {
+    "@type": "MonetaryAmount",
+    value: "0",
+    currency: STORE_CURRENCY,
+  },
   deliveryTime: {
     "@type": "ShippingDeliveryTime",
     handlingTime: {
