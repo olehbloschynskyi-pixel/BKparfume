@@ -526,12 +526,10 @@ ${faqMarkup}
 
 function main() {
   const products = readProducts();
-  const pageProducts = products.filter((product) => product.seoPage);
+  const pageProducts = products;
 
   if (!pageProducts.length) {
-    throw new Error(
-      "No products marked with seoPage=true in data/products.json",
-    );
+    throw new Error("No products found in data/products.json");
   }
 
   ensureDir(OUTPUT_DIR);

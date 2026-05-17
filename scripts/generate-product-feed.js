@@ -148,7 +148,7 @@ function renderFeed(products) {
 }
 
 function main() {
-  const products = readProducts().filter((product) => product.seoPage);
+  const products = readProducts();
   fs.writeFileSync(OUTPUT_FILE, renderFeed(products), "utf8");
   console.log(`Generated product feed with ${products.length} items`);
 }
