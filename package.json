@@ -6,8 +6,9 @@
     "build:js": "node scripts/build-app-js.js",
     "catalog:add": "node scripts/import-product.js",
     "catalog:normalize": "node scripts/normalize-product-data.js",
-    "catalog:build": "npm run catalog:normalize && npm run build:js && npm run generate:products && npm run generate:sitemap",
+    "catalog:build": "npm run catalog:normalize && npm run build:js && npm run generate:products && npm run generate:sitemap && npm run generate:feed",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "generate:feed": "node scripts/generate-product-feed.js",
     "generate:products": "node scripts/generate-product-pages.js",
     "generate:sitemap": "node scripts/generate-sitemap.js"
   },
