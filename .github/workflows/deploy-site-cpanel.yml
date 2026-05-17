@@ -17,6 +17,7 @@ on:
       - manifest.json
       - robots.txt
       - sitemap.xml
+      - product-feed.xml
       - humans.txt
       - .htaccess
       - openai-policy.txt
