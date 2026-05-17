@@ -10,6 +10,8 @@ const OUTPUT_FILE = path.join(ROOT_DIR, "product-feed.xml");
 const SITE_URL = "https://bkparfume.site";
 const STORE_NAME = "BK Parfume";
 const STORE_CURRENCY = "UAH";
+const GOOGLE_PRODUCT_CATEGORY =
+  "Health & Beauty > Personal Care > Cosmetics > Perfume & Cologne";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -92,8 +94,13 @@ function productCategory(product) {
   return categories[product.category] || "Парфуми BK Parfume";
 }
 
+function productBrand(product) {
+  return normalizeWhitespace(product.brand) || STORE_NAME;
+}
+
 function feedDescription(product) {
-  const description = product.metaDescription || product.description || product.longDescription;
+  const description =
+    product.metaDescription || product.description || product.longDescription;
   return normalizeWhitespace(description);
 }
 
@@ -111,8 +118,10 @@ function renderItem(product) {
     `    <g:availability>in stock</g:availability>`,
     `    <g:condition>new</g:condition>`,
     `    <g:price>${escapeXml(`${product.price} ${STORE_CURRENCY}`)}</g:price>`,
-    `    <g:brand>${escapeXml(STORE_NAME)}</g:brand>`,
+    `    <g:brand>${escapeXml(productBrand(product))}</g:brand>`,
     `    <g:product_type>${escapeXml(productCategory(product))}</g:product_type>`,
+    `    <g:google_product_category>${escapeXml(GOOGLE_PRODUCT_CATEGORY)}</g:google_product_category>`,
+    `    <g:identifier_exists>false</g:identifier_exists>`,
     "  </item>",
   ].join("\n");
 }
