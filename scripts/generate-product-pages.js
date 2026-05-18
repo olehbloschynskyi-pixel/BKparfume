@@ -230,6 +230,7 @@ function buildFaq(product, categoryMeta) {
 
 function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
   const productImageUrl = `${SITE_URL}/${product.image}`;
+  const productBrand = String(product.brand || STORE_NAME).trim() || STORE_NAME;
 
   return {
     "@context": "https://schema.org",
@@ -241,7 +242,7 @@ function buildSchema(product, categoryMeta, canonicalUrl, faqItems) {
         url: canonicalUrl,
         brand: {
           "@type": "Brand",
-          name: STORE_NAME,
+          name: productBrand,
         },
         image: [productImageUrl],
         description: product.description,
