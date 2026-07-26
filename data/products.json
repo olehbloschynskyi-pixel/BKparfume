@@ -42,20 +42,6 @@
     "contentId": "giorgio-armani-si-passione-content"
   },
   {
-    "id": 4,
-    "name": "BKparfume Incandessence",
-    "brand": "Avon",
-    "category": "women",
-    "volume": "110 мл",
-    "price": 160,
-    "image": "images/products/avon-incandessence.png",
-    "badge": "",
-    "slug": "avon-incandessence",
-    "seoPage": false,
-    "fragranceId": "avon-incandessence-profile",
-    "contentId": "avon-incandessence-content"
-  },
-  {
     "id": 5,
     "name": "BKparfume Weekend",
     "brand": "Burberry",
