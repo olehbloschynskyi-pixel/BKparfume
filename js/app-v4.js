@@ -18,13 +18,11 @@ const PRICING = [
 ];
 
 const BASE_UNIT_PRICE = 160;
-const PAYMENT_LINK_BASE = "https://send.monobank.ua/jar/7EqpnmhGqJ";
 const STORE_EMAIL = "bkparfume@ukr.net";
 const ORDER_EMAIL_PROXY_ENDPOINT =
   window.BK_CONFIG?.orderWorkerEndpoint?.trim() || "";
 const ORDER_EMAIL_FALLBACK_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const IP_LOOKUP_TIMEOUT_MS = 2000;
-const EMAIL_BEFORE_REDIRECT_TIMEOUT_MS = 1500;
 const CUSTOMER_EMAIL_STORAGE_KEY = "bk_customer_email";
 const PRODUCTS_DATA_URL = "/data/products.json";
 const FRAGRANCE_PROFILES_URL = "/data/fragrance-profiles.json";
@@ -883,9 +881,8 @@ function resetCartCheckout() {
   DOM.cartCheckoutForm.classList.remove("open");
   DOM.cartCheckoutForm.reset();
   applyRememberedEmail();
-  DOM.checkoutPayBtn.href = "#";
-  DOM.checkoutPayBtn.classList.add("disabled");
-  DOM.checkoutPayBtn.setAttribute("aria-disabled", "true");
+  DOM.checkoutPayBtn.disabled = true;
+  DOM.checkoutPayBtn.textContent = "Підтвердити замовлення";
   currentCheckoutOrderId = null;
 
   [
@@ -972,23 +969,6 @@ function validateCartCheckoutForm(showErrors = true) {
   }
 
   return isValid;
-}
-
-function buildCheckoutPaymentUrl() {
-  const { total } = getCartPricing();
-  const paymentUrl = new URL(PAYMENT_LINK_BASE);
-  const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
-  const deliveryAddress = DOM.checkoutAddress?.value.trim() || "не вказано";
-
-  currentCheckoutOrderId = orderId;
-
-  paymentUrl.searchParams.set("amount", String(total));
-  paymentUrl.searchParams.set(
-    "comment",
-    `Замовлення ${orderId}: ${DOM.checkoutName.value.trim()}, ${DOM.checkoutPhone.value.trim()}, email клієнта: ${DOM.checkoutEmail.value.trim() || "не вказано"}, адреса: ${deliveryAddress}, НП: ${DOM.checkoutNpBranch.value.trim()}, email магазину: ${STORE_EMAIL}`,
-  );
-
-  return paymentUrl.toString();
 }
 
 function getCartItemsSummary() {
@@ -1161,16 +1141,7 @@ function updateCartCheckoutPaymentButton(showErrors = false) {
   const isValid = validateCartCheckoutForm(showErrors);
   const { total } = getCartPricing();
 
-  if (isValid && total > 0) {
-    DOM.checkoutPayBtn.href = buildCheckoutPaymentUrl();
-    DOM.checkoutPayBtn.classList.remove("disabled");
-    DOM.checkoutPayBtn.setAttribute("aria-disabled", "false");
-    return;
-  }
-
-  DOM.checkoutPayBtn.href = "#";
-  DOM.checkoutPayBtn.classList.add("disabled");
-  DOM.checkoutPayBtn.setAttribute("aria-disabled", "true");
+  DOM.checkoutPayBtn.disabled = !(isValid && total > 0);
 }
 
 function addToCart(productId, qty) {
@@ -1416,23 +1387,14 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
     return;
   }
 
-  const paymentUrl = buildCheckoutPaymentUrl();
-  DOM.checkoutPayBtn.href = paymentUrl;
+  DOM.checkoutPayBtn.disabled = true;
+  DOM.checkoutPayBtn.textContent = "Відправляємо…";
 
-  DOM.checkoutPayBtn.classList.add("disabled");
-  DOM.checkoutPayBtn.setAttribute("aria-disabled", "true");
+  await notifyOrderByEmail();
 
-  try {
-    await Promise.race([
-      notifyOrderByEmail(),
-      new Promise((resolve) =>
-        setTimeout(resolve, EMAIL_BEFORE_REDIRECT_TIMEOUT_MS),
-      ),
-    ]);
-  } finally {
-    clearCartAfterCheckout();
-    window.location.assign(paymentUrl);
-  }
+  DOM.checkoutPayBtn.textContent = "✓ Замовлення прийнято!";
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  clearCartAfterCheckout();
 });
 
 [
@@ -1793,8 +1755,7 @@ function generateProductSchema() {
   const merchantReturnPolicy = {
     "@type": "MerchantReturnPolicy",
     applicableCountry: "UA",
-    returnPolicyCategory:
-      "https://schema.org/MerchantReturnFiniteReturnWindow",
+    returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
     merchantReturnDays: 14,
     returnMethod: "https://schema.org/ReturnByMail",
     returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",

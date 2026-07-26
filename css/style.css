@@ -1448,7 +1448,8 @@ ul { list-style: none; }
   width: 100%;
 }
 
-.cart-checkout__pay-btn.disabled {
+.cart-checkout__pay-btn.disabled,
+.cart-checkout__pay-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
