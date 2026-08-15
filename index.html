@@ -1019,7 +1019,10 @@
         aria-labelledby="popular-directions-title"
       >
         <div class="pricing-banner__inner">
-          <h2 class="pricing-banner__title pricing-banner__title--toggle" id="popular-directions-title">
+          <h2
+            class="pricing-banner__title pricing-banner__title--toggle"
+            id="popular-directions-title"
+          >
             <button
               type="button"
               class="pricing-banner__toggle"
@@ -1028,7 +1031,9 @@
               aria-controls="popularDirectionsContent"
             >
               <span>Популярні напрямки для пошуку</span>
-              <span class="pricing-banner__toggle-icon" aria-hidden="true">+</span>
+              <span class="pricing-banner__toggle-icon" aria-hidden="true"
+                >+</span
+              >
             </button>
           </h2>
           <div
@@ -1695,10 +1700,11 @@
           type="button"
           class="btn btn--primary cart-order-btn"
           id="cartOrderBtn"
+          style="display:none"
         >
           Оформити замовлення
         </button>
-        <form class="cart-checkout" id="cartCheckoutForm" novalidate>
+        <form class="cart-checkout open" id="cartCheckoutForm" novalidate>
           <div class="form-group cart-checkout__group">
             <input
               type="text"
@@ -1723,25 +1729,14 @@
           </div>
           <div class="form-group cart-checkout__group">
             <input
-              type="email"
-              id="checkoutEmail"
-              name="email"
-              placeholder=" "
-              autocomplete="email"
-              inputmode="email"
-            />
-            <label for="checkoutEmail">Email</label>
-            <span class="form-error" id="checkoutEmailError"></span>
-          </div>
-          <div class="form-group cart-checkout__group">
-            <input
               type="text"
-              id="checkoutAddress"
-              name="checkoutAddress"
+              id="checkoutCity"
+              name="checkoutCity"
               placeholder=" "
-              autocomplete="street-address"
+              autocomplete="address-level2"
             />
-            <label for="checkoutAddress">Адреса доставки</label>
+            <label for="checkoutCity">Місто *</label>
+            <span class="form-error" id="checkoutCityError"></span>
           </div>
           <div class="form-group cart-checkout__group">
             <input
@@ -1820,13 +1815,20 @@
         searchQueriesContent.hidden = isExpanded;
       });
 
-      const popularDirectionsToggle = document.getElementById("popularDirectionsToggle");
-      const popularDirectionsContent = document.getElementById("popularDirectionsContent");
+      const popularDirectionsToggle = document.getElementById(
+        "popularDirectionsToggle",
+      );
+      const popularDirectionsContent = document.getElementById(
+        "popularDirectionsContent",
+      );
 
       popularDirectionsToggle?.addEventListener("click", () => {
         const isExpanded =
           popularDirectionsToggle.getAttribute("aria-expanded") === "true";
-        popularDirectionsToggle.setAttribute("aria-expanded", String(!isExpanded));
+        popularDirectionsToggle.setAttribute(
+          "aria-expanded",
+          String(!isExpanded),
+        );
         popularDirectionsContent.hidden = isExpanded;
       });
     </script>

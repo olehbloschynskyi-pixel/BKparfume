@@ -138,14 +138,13 @@ const DOM = {
   cartCheckoutForm: $("cartCheckoutForm"),
   checkoutName: $("checkoutName"),
   checkoutPhone: $("checkoutPhone"),
-  checkoutEmail: $("checkoutEmail"),
-  checkoutAddress: $("checkoutAddress"),
+  checkoutCity: $("checkoutCity"),
+  checkoutCityError: $("checkoutCityError"),
   checkoutNpBranch: $("checkoutNpBranch"),
   checkoutAmount: $("checkoutAmount"),
   checkoutPayBtn: $("checkoutPayBtn"),
   checkoutNameError: $("checkoutNameError"),
   checkoutPhoneError: $("checkoutPhoneError"),
-  checkoutEmailError: $("checkoutEmailError"),
   checkoutNpError: $("checkoutNpError"),
 
   // Form
@@ -879,9 +878,7 @@ function generateCheckoutOrderId() {
 function resetCartCheckout() {
   if (!DOM.cartCheckoutForm) return;
 
-  DOM.cartCheckoutForm.classList.remove("open");
   DOM.cartCheckoutForm.reset();
-  applyRememberedEmail();
   DOM.checkoutPayBtn.disabled = true;
   DOM.checkoutPayBtn.textContent = "Підтвердити замовлення";
   currentCheckoutOrderId = null;
@@ -889,7 +886,7 @@ function resetCartCheckout() {
   [
     [DOM.checkoutName, DOM.checkoutNameError],
     [DOM.checkoutPhone, DOM.checkoutPhoneError],
-    [DOM.checkoutEmail, DOM.checkoutEmailError],
+    [DOM.checkoutCity, DOM.checkoutCityError],
     [DOM.checkoutNpBranch, DOM.checkoutNpError],
   ].forEach(([input, errorEl]) => {
     clearError(input, errorEl);
@@ -936,23 +933,14 @@ function validateCartCheckoutForm(showErrors = true) {
     clearError(DOM.checkoutPhone, DOM.checkoutPhoneError);
   }
 
-  const checkoutEmail = DOM.checkoutEmail.value.trim();
-  if (checkoutEmail) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(checkoutEmail)) {
-      if (showErrors) {
-        setError(
-          DOM.checkoutEmail,
-          DOM.checkoutEmailError,
-          "Введіть коректну email-адресу",
-        );
-      }
-      isValid = false;
-    } else {
-      clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
+  const city = DOM.checkoutCity.value.trim();
+  if (city.length < 2) {
+    if (showErrors) {
+      setError(DOM.checkoutCity, DOM.checkoutCityError, "Вкажіть місто");
     }
+    isValid = false;
   } else {
-    clearError(DOM.checkoutEmail, DOM.checkoutEmailError);
+    clearError(DOM.checkoutCity, DOM.checkoutCityError);
   }
 
   const npBranch = DOM.checkoutNpBranch.value.trim();
@@ -991,8 +979,7 @@ async function notifyOrderByEmail() {
   const orderId = currentCheckoutOrderId || generateCheckoutOrderId();
   currentCheckoutOrderId = orderId;
   const browserClientIp = await getClientIpAddress();
-  const customerEmail = DOM.checkoutEmail.value.trim();
-  const deliveryAddress = DOM.checkoutAddress?.value.trim() || "";
+  const city = DOM.checkoutCity.value.trim();
 
   const pageUrl = window.location.href;
   const referrer = document.referrer || "Прямий вхід";
@@ -1005,15 +992,8 @@ async function notifyOrderByEmail() {
   const payload = {
     _subject: `Нове замовлення ${orderId}`,
     name: DOM.checkoutName.value.trim(),
-    ...(customerEmail
-      ? {
-          email: customerEmail,
-          _replyto: customerEmail,
-          customer_email: customerEmail,
-        }
-      : {}),
     phone: DOM.checkoutPhone.value.trim(),
-    address: deliveryAddress,
+    city,
     np_branch: DOM.checkoutNpBranch.value.trim(),
     client_ip: browserClientIp,
     browser_client_ip: browserClientIp,
@@ -1027,8 +1007,7 @@ async function notifyOrderByEmail() {
       `Номер замовлення: ${orderId}\n` +
       `Клієнт: ${DOM.checkoutName.value.trim()}\n` +
       `Телефон: ${DOM.checkoutPhone.value.trim()}\n` +
-      `Email: ${DOM.checkoutEmail.value.trim() || "Не вказано"}\n` +
-      `Адреса доставки: ${deliveryAddress || "Не вказано"}\n` +
+      `Місто: ${city}\n` +
       `Відділення НП: ${DOM.checkoutNpBranch.value.trim()}\n` +
       `IP клієнта (browser): ${browserClientIp}\n` +
       `Мова: ${language}\n` +
@@ -1332,6 +1311,10 @@ function openCartPanel() {
   DOM.cartOverlay.setAttribute("aria-hidden", "false");
   DOM.cartToggle.setAttribute("aria-expanded", "true");
   document.body.style.overflow = "hidden";
+  if (!currentCheckoutOrderId) {
+    currentCheckoutOrderId = generateCheckoutOrderId();
+  }
+  updateCartCheckoutPaymentButton();
   setTimeout(() => DOM.cartPanelClose.focus(), 50);
 }
 
@@ -1364,21 +1347,8 @@ DOM.cartToggle.addEventListener("click", () => {
 DOM.cartPanelClose.addEventListener("click", closeCartPanel);
 DOM.cartOverlay.addEventListener("click", closeCartPanel);
 
-// Order button → close cart & scroll to form
-DOM.cartOrderBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (!cart.length) return;
-  if (!currentCheckoutOrderId) {
-    currentCheckoutOrderId = generateCheckoutOrderId();
-  }
-  syncCheckoutEmail();
-  DOM.cartCheckoutForm.classList.toggle("open");
-  updateCartCheckoutPaymentButton();
-
-  if (DOM.cartCheckoutForm.classList.contains("open")) {
-    DOM.checkoutName.focus();
-  }
-});
+// Order button hidden — form always open; generate ID when cart opens
+DOM.cartOrderBtn?.addEventListener("click", () => {});
 
 DOM.checkoutPayBtn.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -1401,7 +1371,7 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
 [
   DOM.checkoutName,
   DOM.checkoutPhone,
-  DOM.checkoutEmail,
+  DOM.checkoutCity,
   DOM.checkoutNpBranch,
 ].forEach((input) => {
   input.addEventListener("blur", () => {
