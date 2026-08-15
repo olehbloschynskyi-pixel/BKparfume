@@ -283,8 +283,8 @@
       }
       .logo {
         display: flex;
-        align-items: baseline;
-        gap: 4px;
+        align-items: center;
+        gap: 0;
         flex-shrink: 0;
       }
       .logo__bk {
@@ -293,6 +293,8 @@
         font-weight: 600;
         color: var(--gold);
         line-height: 1;
+        padding-right: 12px;
+        border-right: 1px solid rgba(201, 169, 110, 0.4);
       }
       .logo__store {
         font-size: 0.65rem;
@@ -300,18 +302,17 @@
         letter-spacing: 0.3em;
         color: var(--white);
         text-transform: uppercase;
-        align-self: flex-end;
-        margin-bottom: 3px;
+        padding-left: 12px;
       }
       .logo__sub {
         display: none;
-        font-size: 0.5rem;
+        font-size: 0.48rem;
         color: var(--text-muted);
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        align-self: flex-end;
-        margin-bottom: 2px;
-        margin-left: 4px;
+        margin-left: 10px;
+        padding-left: 10px;
+        border-left: 1px solid rgba(201, 169, 110, 0.2);
       }
       .nav {
         flex: 1;
@@ -1163,8 +1164,23 @@
             </div>
 
             <div class="pricing-banner__subsection">
-              <h2 class="pricing-banner__title">Що ще шукають про парфуми</h2>
-              <div class="pricing-grid">
+              <h2 class="pricing-banner__title pricing-banner__title--toggle">
+                <button
+                  type="button"
+                  class="pricing-banner__toggle"
+                  id="searchQueriesToggle"
+                  aria-expanded="false"
+                  aria-controls="searchQueriesContent"
+                >
+                  <span>Що ще шукають про парфуми</span>
+                  <span class="pricing-banner__toggle-icon" aria-hidden="true">+</span>
+                </button>
+              </h2>
+              <div
+                class="pricing-grid pricing-grid--collapsible"
+                id="searchQueriesContent"
+                hidden
+              >
                 <a class="pricing-card" href="index.html#catalog">
                   <div class="pricing-card__qty">Парфуми 110 мл</div>
                   <div class="pricing-card__price">
@@ -1773,6 +1789,16 @@
           String(!isExpanded),
         );
         featuredProductsContent.hidden = isExpanded;
+      });
+
+      const searchQueriesToggle = document.getElementById("searchQueriesToggle");
+      const searchQueriesContent = document.getElementById("searchQueriesContent");
+
+      searchQueriesToggle?.addEventListener("click", () => {
+        const isExpanded =
+          searchQueriesToggle.getAttribute("aria-expanded") === "true";
+        searchQueriesToggle.setAttribute("aria-expanded", String(!isExpanded));
+        searchQueriesContent.hidden = isExpanded;
       });
     </script>
 
