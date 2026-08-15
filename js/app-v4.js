@@ -13,8 +13,9 @@ const PRICING = [
   { min: 1, max: 2, price: 160 },
   { min: 3, max: 4, price: 150 },
   { min: 5, max: 9, price: 140 },
-  { min: 10, max: 24, price: 130 },
-  { min: 25, max: Infinity, price: 120 },
+  { min: 10, max: 29, price: 135 },
+  { min: 30, max: 49, price: 130 },
+  { min: 50, max: Infinity, price: 120 },
 ];
 
 const BASE_UNIT_PRICE = 160;
