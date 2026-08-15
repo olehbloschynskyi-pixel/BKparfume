@@ -147,17 +147,19 @@ ul { list-style: none; }
 /* Logo */
 .logo {
   display: flex;
-  align-items: baseline;
-  gap: 4px;
+  align-items: center;
+  gap: 0;
   flex-shrink: 0;
   text-decoration: none;
 }
 .logo__bk {
   font-family: var(--font-serif);
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 300;
   color: var(--gold);
   line-height: 1;
+  padding-right: 12px;
+  border-right: 1px solid rgba(201, 169, 110, 0.4);
 }
 .logo__store {
   font-size: 0.65rem;
@@ -165,18 +167,17 @@ ul { list-style: none; }
   letter-spacing: 0.3em;
   color: var(--white);
   text-transform: uppercase;
-  align-self: flex-end;
-  margin-bottom: 3px;
+  padding-left: 12px;
 }
 .logo__sub {
   display: none;
-  font-size: 0.5rem;
+  font-size: 0.48rem;
   color: var(--text-muted);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  align-self: flex-end;
-  margin-bottom: 2px;
-  margin-left: 4px;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(201, 169, 110, 0.2);
 }
 
 @media (min-width: 768px) {
