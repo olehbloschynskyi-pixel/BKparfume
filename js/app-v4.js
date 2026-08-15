@@ -1161,7 +1161,7 @@ function removeFromCart(productId, cartItemEl = null) {
   }
 
   DOM.cartEmpty.style.display = "none";
-  DOM.cartFooter.style.display = "";
+  DOM.cartFooter.style.display = "block";
   updateCartQtyDisplay();
 }
 
@@ -1227,7 +1227,7 @@ function renderCart() {
   }
 
   DOM.cartEmpty.style.display = "none";
-  DOM.cartFooter.style.display = "";
+  DOM.cartFooter.style.display = "block";
 
   // Render items
   DOM.cartBody.innerHTML = "";
