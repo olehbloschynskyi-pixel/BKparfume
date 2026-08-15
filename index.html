@@ -1019,10 +1019,23 @@
         aria-labelledby="popular-directions-title"
       >
         <div class="pricing-banner__inner">
-          <h2 class="pricing-banner__title" id="popular-directions-title">
-            Популярні напрямки для пошуку
+          <h2 class="pricing-banner__title pricing-banner__title--toggle" id="popular-directions-title">
+            <button
+              type="button"
+              class="pricing-banner__toggle"
+              id="popularDirectionsToggle"
+              aria-expanded="false"
+              aria-controls="popularDirectionsContent"
+            >
+              <span>Популярні напрямки для пошуку</span>
+              <span class="pricing-banner__toggle-icon" aria-hidden="true">+</span>
+            </button>
           </h2>
-          <div class="pricing-grid">
+          <div
+            class="pricing-grid pricing-grid--collapsible"
+            id="popularDirectionsContent"
+            hidden
+          >
             <a
               class="pricing-card pricing-card--highlight"
               href="zhinochi-parfumy.html"
@@ -1173,7 +1186,9 @@
                   aria-controls="searchQueriesContent"
                 >
                   <span>Що ще шукають про парфуми</span>
-                  <span class="pricing-banner__toggle-icon" aria-hidden="true">+</span>
+                  <span class="pricing-banner__toggle-icon" aria-hidden="true"
+                    >+</span
+                  >
                 </button>
               </h2>
               <div
@@ -1791,14 +1806,28 @@
         featuredProductsContent.hidden = isExpanded;
       });
 
-      const searchQueriesToggle = document.getElementById("searchQueriesToggle");
-      const searchQueriesContent = document.getElementById("searchQueriesContent");
+      const searchQueriesToggle = document.getElementById(
+        "searchQueriesToggle",
+      );
+      const searchQueriesContent = document.getElementById(
+        "searchQueriesContent",
+      );
 
       searchQueriesToggle?.addEventListener("click", () => {
         const isExpanded =
           searchQueriesToggle.getAttribute("aria-expanded") === "true";
         searchQueriesToggle.setAttribute("aria-expanded", String(!isExpanded));
         searchQueriesContent.hidden = isExpanded;
+      });
+
+      const popularDirectionsToggle = document.getElementById("popularDirectionsToggle");
+      const popularDirectionsContent = document.getElementById("popularDirectionsContent");
+
+      popularDirectionsToggle?.addEventListener("click", () => {
+        const isExpanded =
+          popularDirectionsToggle.getAttribute("aria-expanded") === "true";
+        popularDirectionsToggle.setAttribute("aria-expanded", String(!isExpanded));
+        popularDirectionsContent.hidden = isExpanded;
       });
     </script>
 
