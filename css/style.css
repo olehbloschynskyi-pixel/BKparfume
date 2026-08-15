@@ -2042,7 +2042,7 @@ ul { list-style: none; }
   }
   .pricing-grid { grid-template-columns: 1fr 1fr; }
   /* centre orphaned last card only in the nav/links grid (has <a> children) */
-  .pricing-grid:has(a) .pricing-card:last-child {
+  .pricing-grid:has(a) .pricing-card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
     justify-self: center;
     width: min(100%, 220px);
