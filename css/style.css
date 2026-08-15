@@ -433,7 +433,7 @@ ul { list-style: none; }
 }
 
 .pricing-banner__subsection {
-  padding-top: 28px;
+  padding-top: 10px;
 }
 
 .pricing-banner__title--toggle {
@@ -442,22 +442,32 @@ ul { list-style: none; }
 
 .pricing-banner__toggle {
   width: 100%;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 12px;
   color: var(--gold);
   font: inherit;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
 }
 
 .pricing-banner__toggle:hover {
-  color: var(--gold-light);
+  border-color: rgba(201, 169, 110, 0.5);
+  background: var(--dark-4);
 }
 
 .pricing-banner__toggle-icon {
   font-family: var(--font-sans);
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  font-weight: 300;
   line-height: 1;
+  flex-shrink: 0;
   transition: transform 0.3s ease;
 }
 
@@ -471,10 +481,10 @@ ul { list-style: none; }
 
 .pricing-banner__title {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 300;
-  text-align: center;
-  margin-bottom: 24px;
+  text-align: left;
+  margin-bottom: 0;
   color: var(--gold);
 }
 
