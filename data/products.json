@@ -2058,20 +2058,6 @@
     "contentId": "paco-rabanne-x-black-content"
   },
   {
-    "id": 229,
-    "name": "BKparfume Rossa Sport",
-    "brand": "Prada",
-    "category": "men",
-    "volume": "110 мл",
-    "price": 160,
-    "image": "images/products/prada-luna-rossa-sport.png",
-    "badge": "",
-    "slug": "prada-rossa-sport",
-    "seoPage": false,
-    "fragranceId": "prada-rossa-sport-profile",
-    "contentId": "prada-rossa-sport-content"
-  },
-  {
     "id": 230,
     "name": "BKparfume RL Polo Sport",
     "brand": "Ralph Lauren",
