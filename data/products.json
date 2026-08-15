@@ -1651,20 +1651,7 @@
     "fragranceId": "zarkoperfume-pink-09009-profile",
     "contentId": "zarkoperfume-pink-09009-content"
   },
-  {
-    "id": 132,
-    "name": "BKparfume & Rozen Black Pepper & Amber Neroli",
-    "brand": "Zielinski & Rozen",
-    "category": "unisex",
-    "volume": "110 мл",
-    "price": 160,
-    "image": "images/products/zielinski-black-pepper.png",
-    "badge": "",
-    "slug": "zielinski-and-rozen-and-rozen-black-pepper-and-amber-neroli",
-    "seoPage": false,
-    "fragranceId": "zielinski-and-rozen-and-rozen-black-pepper-and-amber-neroli-profile",
-    "contentId": "zielinski-and-rozen-and-rozen-black-pepper-and-amber-neroli-content"
-  },
+
   {
     "id": 201,
     "name": "BKparfume Blue Seduction",
