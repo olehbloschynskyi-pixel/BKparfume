@@ -1334,9 +1334,13 @@ ul { list-style: none; }
   font-weight: 400;
 }
 
-.cart-panel__body {
+.cart-panel__scroll {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
+}
+
+.cart-panel__body {
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -1403,7 +1407,6 @@ ul { list-style: none; }
 .cart-item__remove:hover { color: var(--error); }
 
 .cart-panel__footer {
-  display: none;
   border-top: 1px solid var(--border);
   padding: 20px 24px;
   flex-shrink: 0;
