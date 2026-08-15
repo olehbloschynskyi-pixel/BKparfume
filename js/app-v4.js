@@ -1152,6 +1152,7 @@ function removeFromCart(productId, cartItemEl = null) {
     DOM.cartBody.innerHTML = "";
     DOM.cartBody.appendChild(DOM.cartEmpty);
     DOM.cartEmpty.style.display = "block";
+    DOM.cartFooter.style.display = "none";
     DOM.cartBadge.textContent = "0";
     DOM.cartBadge.classList.remove("visible");
     resetCartCheckout();
@@ -1160,6 +1161,7 @@ function removeFromCart(productId, cartItemEl = null) {
   }
 
   DOM.cartEmpty.style.display = "none";
+  DOM.cartFooter.style.display = "";
   updateCartQtyDisplay();
 }
 
@@ -1219,11 +1221,13 @@ function renderCart() {
     DOM.cartBody.innerHTML = "";
     DOM.cartBody.appendChild(DOM.cartEmpty);
     DOM.cartEmpty.style.display = "block";
+    DOM.cartFooter.style.display = "none";
     resetCartCheckout();
     return;
   }
 
   DOM.cartEmpty.style.display = "none";
+  DOM.cartFooter.style.display = "";
 
   // Render items
   DOM.cartBody.innerHTML = "";
