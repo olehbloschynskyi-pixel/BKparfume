@@ -1676,94 +1676,94 @@
         </button>
       </div>
       <div class="cart-panel__scroll">
-      <div class="cart-panel__body" id="cartBody">
-        <p class="cart-empty" id="cartEmpty">Кошик порожній 🛒</p>
-      </div>
-      <div class="cart-panel__footer" id="cartFooter">
-        <div class="cart-summary">
-          <div class="cart-summary__row">
-            <span>Кількість:</span>
-            <span id="cartTotalQty">0 шт</span>
-          </div>
-          <div class="cart-summary__row cart-summary__row--price">
-            <span>Ціна за шт:</span>
-            <span id="cartUnitPrice">160 грн</span>
-          </div>
-          <div class="cart-summary__row cart-summary__row--total">
-            <span>Разом:</span>
-            <span id="cartTotal">0 грн</span>
-          </div>
-          <div class="cart-discount" id="cartDiscount">
-            <span id="cartDiscountText"></span>
-          </div>
+        <div class="cart-panel__body" id="cartBody">
+          <p class="cart-empty" id="cartEmpty">Кошик порожній 🛒</p>
         </div>
-        <button
-          type="button"
-          class="btn btn--primary cart-order-btn"
-          id="cartOrderBtn"
-          style="display: none"
-        >
-          Оформити замовлення
-        </button>
-        <form class="cart-checkout open" id="cartCheckoutForm" novalidate>
-          <div class="form-group cart-checkout__group">
-            <input
-              type="text"
-              id="checkoutName"
-              name="checkoutName"
-              placeholder=" "
-              autocomplete="name"
-            />
-            <label for="checkoutName">Ім'я *</label>
-            <span class="form-error" id="checkoutNameError"></span>
-          </div>
-          <div class="form-group cart-checkout__group">
-            <input
-              type="tel"
-              id="checkoutPhone"
-              name="checkoutPhone"
-              placeholder=" "
-              autocomplete="tel"
-            />
-            <label for="checkoutPhone">Телефон *</label>
-            <span class="form-error" id="checkoutPhoneError"></span>
-          </div>
-          <div class="form-group cart-checkout__group">
-            <input
-              type="text"
-              id="checkoutCity"
-              name="checkoutCity"
-              placeholder=" "
-              autocomplete="address-level2"
-            />
-            <label for="checkoutCity">Місто *</label>
-            <span class="form-error" id="checkoutCityError"></span>
-          </div>
-          <div class="form-group cart-checkout__group">
-            <input
-              type="text"
-              id="checkoutNpBranch"
-              name="checkoutNpBranch"
-              placeholder=" "
-              autocomplete="off"
-            />
-            <label for="checkoutNpBranch">Відділення Нової пошти *</label>
-            <span class="form-error" id="checkoutNpError"></span>
-          </div>
-          <div class="cart-checkout__amount-row">
-            <span>Сума замовлення:</span>
-            <strong id="checkoutAmount">0 грн</strong>
+        <div class="cart-panel__footer" id="cartFooter">
+          <div class="cart-summary">
+            <div class="cart-summary__row">
+              <span>Кількість:</span>
+              <span id="cartTotalQty">0 шт</span>
+            </div>
+            <div class="cart-summary__row cart-summary__row--price">
+              <span>Ціна за шт:</span>
+              <span id="cartUnitPrice">160 грн</span>
+            </div>
+            <div class="cart-summary__row cart-summary__row--total">
+              <span>Разом:</span>
+              <span id="cartTotal">0 грн</span>
+            </div>
+            <div class="cart-discount" id="cartDiscount">
+              <span id="cartDiscountText"></span>
+            </div>
           </div>
           <button
             type="button"
-            class="btn btn--primary cart-checkout__pay-btn"
-            id="checkoutPayBtn"
-            disabled
+            class="btn btn--primary cart-order-btn"
+            id="cartOrderBtn"
+            style="display: none"
           >
-            Підтвердити замовлення
+            Оформити замовлення
           </button>
-        </form>
-      </div>
+          <form class="cart-checkout open" id="cartCheckoutForm" novalidate>
+            <div class="form-group cart-checkout__group">
+              <input
+                type="text"
+                id="checkoutName"
+                name="checkoutName"
+                placeholder=" "
+                autocomplete="name"
+              />
+              <label for="checkoutName">Ім'я *</label>
+              <span class="form-error" id="checkoutNameError"></span>
+            </div>
+            <div class="form-group cart-checkout__group">
+              <input
+                type="tel"
+                id="checkoutPhone"
+                name="checkoutPhone"
+                placeholder=" "
+                autocomplete="tel"
+              />
+              <label for="checkoutPhone">Телефон *</label>
+              <span class="form-error" id="checkoutPhoneError"></span>
+            </div>
+            <div class="form-group cart-checkout__group">
+              <input
+                type="text"
+                id="checkoutCity"
+                name="checkoutCity"
+                placeholder=" "
+                autocomplete="address-level2"
+              />
+              <label for="checkoutCity">Місто *</label>
+              <span class="form-error" id="checkoutCityError"></span>
+            </div>
+            <div class="form-group cart-checkout__group">
+              <input
+                type="text"
+                id="checkoutNpBranch"
+                name="checkoutNpBranch"
+                placeholder=" "
+                autocomplete="off"
+              />
+              <label for="checkoutNpBranch">Відділення Нової пошти *</label>
+              <span class="form-error" id="checkoutNpError"></span>
+            </div>
+            <div class="cart-checkout__amount-row">
+              <span>Сума замовлення:</span>
+              <strong id="checkoutAmount">0 грн</strong>
+            </div>
+            <button
+              type="button"
+              class="btn btn--primary cart-checkout__pay-btn"
+              id="checkoutPayBtn"
+              disabled
+            >
+              Підтвердити замовлення
+            </button>
+          </form>
+        </div>
       </div>
     </aside>
 
