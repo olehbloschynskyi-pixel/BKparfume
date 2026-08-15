@@ -17,6 +17,7 @@ const STATIC_FILES = [
   "/css/critical.min.css",
   "/js/app-v4.js",
   "/js/app-v4.min.js",
+  "/js/app-v4.min.js?v=20260816-1",
   "/data/products.json",
   "/data/fragrance-profiles.json",
   "/data/product-content.json",
