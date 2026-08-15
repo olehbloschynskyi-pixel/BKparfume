@@ -484,7 +484,7 @@ ul { list-style: none; }
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 16px;
 }
 
@@ -2025,7 +2025,8 @@ ul { list-style: none; }
     white-space: nowrap;
   }
   .pricing-grid { grid-template-columns: 1fr 1fr; }
-  .pricing-grid .pricing-card:last-child {
+  /* centre orphaned last card only in the nav/links grid (has <a> children) */
+  .pricing-grid:has(a) .pricing-card:last-child {
     grid-column: 1 / -1;
     justify-self: center;
     width: min(100%, 220px);
