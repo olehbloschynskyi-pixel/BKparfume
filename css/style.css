@@ -426,6 +426,7 @@ ul { list-style: none; }
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 40px 16px;
+  margin-bottom: 40px;
 }
 .pricing-banner__inner {
   max-width: 980px;
@@ -490,7 +491,7 @@ ul { list-style: none; }
   font-weight: 300;
   text-align: left;
   margin-bottom: 0;
-  color: var(--gold);
+  color: var(--white);
 }
 
 #popular-directions-title {
@@ -547,7 +548,7 @@ ul { list-style: none; }
 .pricing-card__price {
   font-family: var(--font-serif);
   font-size: 2.5rem;
-  color: var(--gold);
+  color: var(--white);
   line-height: 1;
   margin-bottom: 8px;
 }
