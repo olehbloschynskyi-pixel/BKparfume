@@ -201,20 +201,6 @@
     <g:identifier_exists>false</g:identifier_exists>
   </item>
   <item>
-    <g:id>16</g:id>
-    <g:title>BKparfume Love Story 110 мл</g:title>
-    <g:description>Love Story купити в BK Parfume: жіночих парфумів, 110 мл, 160 грн. Ноти: апельсинова квітка, грейпфрут, жасмин.</g:description>
-    <g:link>https://bkparfume.site/products/chloe-love-story.html</g:link>
-    <g:image_link>https://bkparfume.site/images/products/chloe-love-story.png</g:image_link>
-    <g:availability>in stock</g:availability>
-    <g:condition>new</g:condition>
-    <g:price>160 UAH</g:price>
-    <g:brand>Chloé</g:brand>
-    <g:product_type>Жіночі парфуми на розлив</g:product_type>
-    <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne</g:google_product_category>
-    <g:identifier_exists>false</g:identifier_exists>
-  </item>
-  <item>
     <g:id>17</g:id>
     <g:title>BKparfume Light Blue 110 мл</g:title>
     <g:description>Light Blue купити в BK Parfume: жіночих парфумів, 110 мл, 160 грн. Ноти: сицилійський лимон, яблуко, жасмин.</g:description>
@@ -224,20 +210,6 @@
     <g:condition>new</g:condition>
     <g:price>160 UAH</g:price>
     <g:brand>Dolce &amp; Gabbana</g:brand>
-    <g:product_type>Жіночі парфуми на розлив</g:product_type>
-    <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne</g:google_product_category>
-    <g:identifier_exists>false</g:identifier_exists>
-  </item>
-  <item>
-    <g:id>18</g:id>
-    <g:title>BKparfume Cool Water 110 мл</g:title>
-    <g:description>Cool Water купити в BK Parfume: жіночих парфумів, 110 мл, 160 грн. Ноти: ананас, фрезія, морські ноти.</g:description>
-    <g:link>https://bkparfume.site/products/davidoff-cool-water.html</g:link>
-    <g:image_link>https://bkparfume.site/images/products/davidoff-cool-water-w.png</g:image_link>
-    <g:availability>in stock</g:availability>
-    <g:condition>new</g:condition>
-    <g:price>160 UAH</g:price>
-    <g:brand>Davidoff</g:brand>
     <g:product_type>Жіночі парфуми на розлив</g:product_type>
     <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne</g:google_product_category>
     <g:identifier_exists>false</g:identifier_exists>
@@ -1656,7 +1628,6 @@
     <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne</g:google_product_category>
     <g:identifier_exists>false</g:identifier_exists>
   </item>
-
   <item>
     <g:id>201</g:id>
     <g:title>BKparfume Blue Seduction 110 мл</g:title>

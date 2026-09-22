@@ -735,22 +735,10 @@ ul { list-style: none; }
 .product-card__footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   border-top: 1px solid var(--border);
   margin-top: 12px;
   padding-top: 14px;
-}
-.product-card__price {
-  font-family: var(--font-serif);
-  font-size: 1.4rem;
-  color: var(--white);
-  line-height: 1;
-}
-.product-card__price-hint {
-  font-size: 0.62rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  letter-spacing: 0.05em;
 }
 .product-card__quick-add {
   width: 36px; height: 36px;
@@ -797,14 +785,6 @@ ul { list-style: none; }
   
   .product-card__image-wrap {
     padding-top: 100%;
-  }
-  
-  .product-card__price {
-    font-size: 0.9rem;
-  }
-  
-  .product-card__price-hint {
-    font-size: 0.6rem;
   }
   
   .product-card__quick-add {

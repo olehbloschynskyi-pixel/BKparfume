@@ -196,20 +196,6 @@
     "contentId": "chloe-chloe-content"
   },
   {
-    "id": 16,
-    "name": "BKparfume Love Story",
-    "brand": "Chloé",
-    "category": "women",
-    "volume": "110 мл",
-    "price": 160,
-    "image": "images/products/chloe-love-story.png",
-    "badge": "",
-    "slug": "chloe-love-story",
-    "seoPage": false,
-    "fragranceId": "chloe-love-story-profile",
-    "contentId": "chloe-love-story-content"
-  },
-  {
     "id": 17,
     "name": "BKparfume Light Blue",
     "brand": "Dolce & Gabbana",
@@ -222,20 +208,6 @@
     "seoPage": false,
     "fragranceId": "dolce-and-gabbana-light-blue-profile",
     "contentId": "dolce-and-gabbana-light-blue-content"
-  },
-  {
-    "id": 18,
-    "name": "BKparfume Cool Water",
-    "brand": "Davidoff",
-    "category": "women",
-    "volume": "110 мл",
-    "price": 160,
-    "image": "images/products/davidoff-cool-water-w.png",
-    "badge": "",
-    "slug": "davidoff-cool-water",
-    "seoPage": false,
-    "fragranceId": "davidoff-cool-water-profile",
-    "contentId": "davidoff-cool-water-content"
   },
   {
     "id": 19,
