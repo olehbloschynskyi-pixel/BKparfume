@@ -1,34 +1,10 @@
 name: Deploy Site To cPanel
 
-# Manual redeploy trigger marker: updated to force a fresh cPanel deploy via GitHub Actions secrets.
+# Hosting moved to GitHub Pages; this workflow is now manual-only (run via workflow_dispatch).
+# Re-add a push trigger here if cPanel is ever needed again as a mirror/fallback.
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - index.html
-      - about.html
-      - articles.html
-      - article-*.html
-      - contacts.html
-      - ga4-analytics.html
-      - manifest.json
-      - robots.txt
-      - sitemap.xml
-      - product-feed.xml
-      - humans.txt
-      - .htaccess
-      - openai-policy.txt
-      - ai-index.conf
-      - service-worker.js
-      - css/**
-      - data/**
-      - images/**
-      - js/**
-      - products/**
-      - .github/workflows/deploy-site-cpanel.yml
 
 jobs:
   deploy:
