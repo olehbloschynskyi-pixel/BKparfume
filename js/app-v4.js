@@ -327,6 +327,7 @@ function createCard(p, delay = 0) {
       <p class="product-card__category">${catLabel}</p>
       <h3 class="product-card__name">${p.name}</h3>
       <div class="product-card__footer">
+        <span class="product-card__volume">110 мл</span>
         <button type="button" class="product-card__quick-add" data-id="${p.id}" aria-label="Швидко додати до кошика">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"></circle>
