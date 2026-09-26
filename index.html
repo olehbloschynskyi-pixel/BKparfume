@@ -1836,11 +1836,13 @@
           observer.observe(heroVideo);
         };
         const scheduleVideo = () => {
-          if ("requestIdleCallback" in window) {
-            window.requestIdleCallback(observeHero, { timeout: 2500 });
-          } else {
-            window.setTimeout(observeHero, 1200);
-          }
+          window.setTimeout(() => {
+            if ("requestIdleCallback" in window) {
+              window.requestIdleCallback(observeHero, { timeout: 2500 });
+            } else {
+              observeHero();
+            }
+          }, 1800);
         };
 
         if (document.readyState === "complete") {
