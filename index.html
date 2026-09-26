@@ -442,6 +442,15 @@
           ),
           linear-gradient(135deg, #090909 0%, #111111 46%, #17120b 100%);
       }
+      .hero__video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.28;
+        pointer-events: none;
+      }
       .hero::before {
         content: "";
         position: absolute;
@@ -956,6 +965,16 @@
     <main id="main-content">
       <!-- HERO -->
       <section class="hero">
+        <video
+          class="hero__video"
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+          tabindex="-1"
+          data-src="images/products/hero-perfume-cellular.mp4"
+        ></video>
         <div class="hero__content">
           <p class="hero__label">Колекція 2026</p>
           <h1 class="hero__title">
@@ -1785,6 +1804,52 @@
     </button>
 
     <script>
+      const heroVideo = document.querySelector(".hero__video");
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const saveDataEnabled = navigator.connection?.saveData === true;
+
+      if (heroVideo && !prefersReducedMotion && !saveDataEnabled) {
+        const loadHeroVideo = () => {
+          if (!heroVideo.dataset.src || heroVideo.src) return;
+
+          heroVideo.src = heroVideo.dataset.src;
+          heroVideo.load();
+          heroVideo.play().catch(() => {});
+        };
+        const observeHero = () => {
+          if (!("IntersectionObserver" in window)) {
+            loadHeroVideo();
+            return;
+          }
+
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                loadHeroVideo();
+                observer.disconnect();
+              }
+            },
+            { rootMargin: "120px" },
+          );
+          observer.observe(heroVideo);
+        };
+        const scheduleVideo = () => {
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(observeHero, { timeout: 2500 });
+          } else {
+            window.setTimeout(observeHero, 1200);
+          }
+        };
+
+        if (document.readyState === "complete") {
+          scheduleVideo();
+        } else {
+          window.addEventListener("load", scheduleVideo, { once: true });
+        }
+      }
+
       const featuredProductsToggle = document.getElementById(
         "featuredProductsToggle",
       );
