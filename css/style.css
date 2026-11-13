@@ -1665,6 +1665,11 @@ ul { list-style: none; }
   font-weight: 600;
 }
 
+/* Глобальний reset обнуляє padding, тож цифри списку виходять за рамку */
+ol.article-featured__excerpt {
+  padding-left: 1.6em;
+}
+
 .article-featured__link {
   display: inline-flex;
   align-items: center;
