@@ -20,9 +20,7 @@ const PRICING = [
 
 const BASE_UNIT_PRICE = 160;
 const STORE_EMAIL = "bkparfume@ukr.net";
-const ORDER_EMAIL_PROXY_ENDPOINT =
-  window.BK_CONFIG?.orderWorkerEndpoint?.trim() || "";
-const ORDER_EMAIL_FALLBACK_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
+const ORDER_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const IP_LOOKUP_TIMEOUT_MS = 2000;
 const PRODUCTS_DATA_URL = "/data/products.json";
 const FRAGRANCE_PROFILES_URL = "/data/fragrance-profiles.json";
@@ -1016,16 +1014,7 @@ async function notifyOrderByEmail() {
 }
 
 async function sendOrderEmail(payload) {
-  if (ORDER_EMAIL_PROXY_ENDPOINT) {
-    try {
-      await postOrderEmail(ORDER_EMAIL_PROXY_ENDPOINT, payload);
-      return;
-    } catch (error) {
-      console.error("Не вдалося надіслати через Worker:", error);
-    }
-  }
-
-  await postOrderEmail(ORDER_EMAIL_FALLBACK_ENDPOINT, payload);
+  await postOrderEmail(ORDER_EMAIL_ENDPOINT, payload);
 }
 
 async function postOrderEmail(endpoint, payload) {
