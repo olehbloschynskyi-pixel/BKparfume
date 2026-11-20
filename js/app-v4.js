@@ -24,7 +24,6 @@ const ORDER_EMAIL_PROXY_ENDPOINT =
   window.BK_CONFIG?.orderWorkerEndpoint?.trim() || "";
 const ORDER_EMAIL_FALLBACK_ENDPOINT = `https://formsubmit.co/ajax/${STORE_EMAIL}`;
 const IP_LOOKUP_TIMEOUT_MS = 2000;
-const CUSTOMER_EMAIL_STORAGE_KEY = "bk_customer_email";
 const PRODUCTS_DATA_URL = "/data/products.json";
 const FRAGRANCE_PROFILES_URL = "/data/fragrance-profiles.json";
 const PRODUCT_CONTENT_URL = "/data/product-content.json";
@@ -151,13 +150,11 @@ const DOM = {
   contactForm: $("contactForm"),
   formName: $("formName"),
   formPhone: $("formPhone"),
-  formEmail: $("formEmail"),
   formMessage: $("formMessage"),
   formSubmit: $("formSubmit"),
   formSuccess: $("formSuccess"),
   nameError: $("nameError"),
   phoneError: $("phoneError"),
-  emailError: $("emailError"),
 
   // Misc
   backToTop: $("backToTop"),
@@ -1378,12 +1375,10 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
   DOM.checkoutNpBranch,
 ].forEach((input) => {
   input.addEventListener("blur", () => {
-    rememberCustomerEmail();
     validateCartCheckoutForm(true);
     updateCartCheckoutPaymentButton();
   });
   input.addEventListener("input", () => {
-    rememberCustomerEmail();
     if (input.closest(".form-group")?.classList.contains("error")) {
       validateCartCheckoutForm(true);
     }
@@ -1463,20 +1458,6 @@ function validateForm() {
     clearError(DOM.formPhone, DOM.phoneError);
   }
 
-  // Email (optional but validate if filled)
-  const emailVal = DOM.formEmail.value.trim();
-  if (emailVal) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailVal)) {
-      setError(DOM.formEmail, DOM.emailError, "Введіть коректну email-адресу");
-      valid = false;
-    } else {
-      clearError(DOM.formEmail, DOM.emailError);
-    }
-  } else {
-    clearError(DOM.formEmail, DOM.emailError);
-  }
-
   return valid;
 }
 
@@ -1491,12 +1472,9 @@ function clearError(input, errorEl) {
 }
 
 // Live validation
-[DOM.formName, DOM.formPhone, DOM.formEmail].forEach((input) => {
+[DOM.formName, DOM.formPhone].forEach((input) => {
   input.addEventListener("blur", validateForm);
   input.addEventListener("input", () => {
-    if (input === DOM.formEmail) {
-      rememberCustomerEmail();
-    }
     if (input.closest(".form-group").classList.contains("error")) {
       validateForm();
     }
@@ -1513,8 +1491,6 @@ DOM.formPhone.addEventListener("input", (e) => {
 DOM.contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!validateForm()) return;
-
-  rememberCustomerEmail();
 
   // Show loading state
   const btnText = DOM.formSubmit.querySelector(".btn-text");
@@ -1536,14 +1512,12 @@ DOM.contactForm.addEventListener("submit", async (e) => {
       _subject: "Повідомлення з сайту",
       name: DOM.formName.value.trim(),
       phone: DOM.formPhone.value.trim(),
-      email: DOM.formEmail.value.trim(),
       page_url: window.location.href,
       message: DOM.formMessage.value.trim() + cartInfo,
     });
 
     // Reset & success
     DOM.contactForm.reset();
-    applyRememberedEmail();
     DOM.formSuccess.style.display = "block";
 
     setTimeout(() => {
@@ -1558,64 +1532,6 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     DOM.formSubmit.disabled = false;
   }
 });
-
-function getRememberedEmail() {
-  return localStorage.getItem(CUSTOMER_EMAIL_STORAGE_KEY)?.trim() || "";
-}
-
-function setRememberedEmail(email) {
-  const normalizedEmail = String(email || "").trim();
-
-  if (!normalizedEmail) {
-    localStorage.removeItem(CUSTOMER_EMAIL_STORAGE_KEY);
-    return;
-  }
-
-  localStorage.setItem(CUSTOMER_EMAIL_STORAGE_KEY, normalizedEmail);
-}
-
-function rememberCustomerEmail() {
-  const email =
-    DOM.checkoutEmail?.value.trim() || DOM.formEmail?.value.trim() || "";
-
-  if (!email) {
-    return;
-  }
-
-  setRememberedEmail(email);
-}
-
-function applyRememberedEmail() {
-  const rememberedEmail = getRememberedEmail();
-
-  if (!rememberedEmail) {
-    return;
-  }
-
-  if (DOM.checkoutEmail && !DOM.checkoutEmail.value.trim()) {
-    DOM.checkoutEmail.value = rememberedEmail;
-  }
-
-  if (DOM.formEmail && !DOM.formEmail.value.trim()) {
-    DOM.formEmail.value = rememberedEmail;
-  }
-}
-
-function syncCheckoutEmail() {
-  if (!DOM.checkoutEmail) {
-    return;
-  }
-
-  if (!DOM.checkoutEmail.value.trim() && DOM.formEmail?.value.trim()) {
-    DOM.checkoutEmail.value = DOM.formEmail.value.trim();
-  }
-
-  if (!DOM.checkoutEmail.value.trim()) {
-    DOM.checkoutEmail.value = getRememberedEmail();
-  }
-}
-
-applyRememberedEmail();
 
 /* ============================================
    SCROLL REVEAL (Intersection Observer)
