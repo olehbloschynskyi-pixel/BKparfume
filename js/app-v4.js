@@ -1015,20 +1015,20 @@ async function notifyOrderByEmail() {
       `Разом: ${totalQty} шт × ${unitPrice} грн = ${total} грн`,
   };
 
+  await sendOrderEmail(payload);
+}
+
+async function sendOrderEmail(payload) {
   if (ORDER_EMAIL_PROXY_ENDPOINT) {
     try {
       await postOrderEmail(ORDER_EMAIL_PROXY_ENDPOINT, payload);
       return;
     } catch (error) {
-      console.error("Не вдалося надіслати замовлення через Worker:", error);
+      console.error("Не вдалося надіслати через Worker:", error);
     }
   }
 
-  try {
-    await postOrderEmail(ORDER_EMAIL_FALLBACK_ENDPOINT, payload);
-  } catch (fallbackError) {
-    console.error("Не вдалося надіслати замовлення на пошту:", fallbackError);
-  }
+  await postOrderEmail(ORDER_EMAIL_FALLBACK_ENDPOINT, payload);
 }
 
 async function postOrderEmail(endpoint, payload) {
@@ -1357,7 +1357,14 @@ DOM.checkoutPayBtn.addEventListener("click", async (e) => {
   DOM.checkoutPayBtn.disabled = true;
   DOM.checkoutPayBtn.textContent = "Відправляємо…";
 
-  await notifyOrderByEmail();
+  try {
+    await notifyOrderByEmail();
+  } catch (error) {
+    console.error("Не вдалося надіслати замовлення:", error);
+    DOM.checkoutPayBtn.disabled = false;
+    DOM.checkoutPayBtn.textContent = "Не вдалося надіслати, спробуйте ще раз";
+    return;
+  }
 
   DOM.checkoutPayBtn.textContent = "✓ Замовлення прийнято!";
   await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -1512,14 +1519,12 @@ DOM.contactForm.addEventListener("submit", async (e) => {
   // Show loading state
   const btnText = DOM.formSubmit.querySelector(".btn-text");
   const btnLoader = DOM.formSubmit.querySelector(".btn-loader");
+  btnText.textContent = "Надіслати";
   btnText.style.display = "none";
   btnLoader.style.display = "inline-block";
   DOM.formSubmit.disabled = true;
 
   try {
-    // Simulate async submission (replace with real backend)
-    await new Promise((r) => setTimeout(r, 1500));
-
     // Include cart info in message (optional bonus)
     const totalQty = getTotalCartQty();
     const cartInfo =
@@ -1527,12 +1532,13 @@ DOM.contactForm.addEventListener("submit", async (e) => {
         ? `\n\nКошик: ${totalQty} шт × ${getPriceByQty(totalQty)} грн = ${totalQty * getPriceByQty(totalQty)} грн`
         : "";
 
-    console.log("Form submitted:", {
-      name: DOM.formName.value,
-      phone: DOM.formPhone.value,
-      email: DOM.formEmail.value,
-      message: DOM.formMessage.value + cartInfo,
-      cartItems: cart,
+    await sendOrderEmail({
+      _subject: "Повідомлення з сайту",
+      name: DOM.formName.value.trim(),
+      phone: DOM.formPhone.value.trim(),
+      email: DOM.formEmail.value.trim(),
+      page_url: window.location.href,
+      message: DOM.formMessage.value.trim() + cartInfo,
     });
 
     // Reset & success
@@ -1543,6 +1549,9 @@ DOM.contactForm.addEventListener("submit", async (e) => {
     setTimeout(() => {
       DOM.formSuccess.style.display = "none";
     }, 6000);
+  } catch (error) {
+    console.error("Не вдалося надіслати повідомлення:", error);
+    btnText.textContent = "Не вдалося надіслати, спробуйте ще раз";
   } finally {
     btnText.style.display = "inline";
     btnLoader.style.display = "none";
